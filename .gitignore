@@ -1,0 +1,5 @@
+src/app/data/
+inbox/
+.DS_Store
+src/app/public/_ref/
+.workflows/

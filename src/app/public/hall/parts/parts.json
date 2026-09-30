@@ -1,0 +1,3624 @@
+{
+ "generated": "2026-09-29T01:12:33.942Z",
+ "generator": "hall/parts/extract.mjs",
+ "mujoco": "3.3.8",
+ "note": "Parts cut from the official MuJoCo Menagerie MJCF files (unmodified). {P} is the per-instance name prefix placeholder. Class, material and mesh names are namespaced with the source robot key (go2__knee). Mesh files are relative to the robot model dir.",
+ "sources": {
+  "go2": {
+   "label": "Unitree Go2",
+   "vendor": "Unitree",
+   "dir": "menagerie/unitree_go2",
+   "file": "go2.xml",
+   "option": {
+    "cone": "elliptic",
+    "impratio": "100"
+   },
+   "defaults": "<default class=\"go2__go2\">\n  <geom friction=\"0.6\" margin=\"0.001\" condim=\"1\"/>\n  <joint axis=\"0 1 0\" damping=\"2\" armature=\"0.01\" frictionloss=\"0.2\"/>\n  <motor ctrlrange=\"-23.7 23.7\"/>\n  <default class=\"go2__abduction\">\n    <joint axis=\"1 0 0\" range=\"-1.0472 1.0472\"/>\n  </default>\n  <default class=\"go2__hip\">\n    <default class=\"go2__front_hip\">\n      <joint range=\"-1.5708 3.4907\"/>\n    </default>\n    <default class=\"go2__back_hip\">\n      <joint range=\"-0.5236 4.5379\"/>\n    </default>\n  </default>\n  <default class=\"go2__knee\">\n    <joint range=\"-2.7227 -0.83776\"/>\n    <motor ctrlrange=\"-45.43 45.43\"/>\n  </default>\n  <default class=\"go2__visual\">\n    <geom type=\"mesh\" contype=\"0\" conaffinity=\"0\" group=\"2\"/>\n  </default>\n  <default class=\"go2__collision\">\n    <geom group=\"3\"/>\n    <default class=\"go2__foot\">\n      <geom size=\"0.022\" pos=\"-0.002 0 -0.213\" priority=\"1\" solimp=\"0.015 1 0.022\" condim=\"6\" friction=\"0.8 0.02 0.01\"/>\n    </default>\n  </default>\n</default>",
+   "materials": "<material name=\"go2__metal\" rgba=\".9 .95 .95 1\"/>\n<material name=\"go2__black\" rgba=\"0 0 0 1\"/>\n<material name=\"go2__white\" rgba=\"1 1 1 1\"/>\n<material name=\"go2__gray\" rgba=\"0.671705 0.692426 0.774270 1\"/>",
+   "meshes": {
+    "go2__base_0": "assets/base_0.obj",
+    "go2__base_1": "assets/base_1.obj",
+    "go2__base_2": "assets/base_2.obj",
+    "go2__base_3": "assets/base_3.obj",
+    "go2__base_4": "assets/base_4.obj",
+    "go2__hip_0": "assets/hip_0.obj",
+    "go2__hip_1": "assets/hip_1.obj",
+    "go2__thigh_0": "assets/thigh_0.obj",
+    "go2__thigh_1": "assets/thigh_1.obj",
+    "go2__thigh_mirror_0": "assets/thigh_mirror_0.obj",
+    "go2__thigh_mirror_1": "assets/thigh_mirror_1.obj",
+    "go2__calf_0": "assets/calf_0.obj",
+    "go2__calf_1": "assets/calf_1.obj",
+    "go2__calf_mirror_0": "assets/calf_mirror_0.obj",
+    "go2__calf_mirror_1": "assets/calf_mirror_1.obj",
+    "go2__foot": "assets/foot.obj"
+   },
+   "files": [
+    "assets/base_0.obj",
+    "assets/base_1.obj",
+    "assets/base_2.obj",
+    "assets/base_3.obj",
+    "assets/base_4.obj",
+    "assets/calf_0.obj",
+    "assets/calf_1.obj",
+    "assets/calf_mirror_0.obj",
+    "assets/calf_mirror_1.obj",
+    "assets/foot.obj",
+    "assets/hip_0.obj",
+    "assets/hip_1.obj",
+    "assets/thigh_0.obj",
+    "assets/thigh_1.obj",
+    "assets/thigh_mirror_0.obj",
+    "assets/thigh_mirror_1.obj"
+   ]
+  },
+  "spot": {
+   "label": "Boston Dynamics Spot",
+   "vendor": "Boston Dynamics",
+   "dir": "menagerie/boston_dynamics_spot",
+   "file": "spot.xml",
+   "option": {
+    "integrator": "implicitfast",
+    "cone": "elliptic",
+    "impratio": "100"
+   },
+   "defaults": "<default class=\"spot__spot\">\n  <geom solref=\"0.004 1\"/>\n  <joint actuatorfrcrange=\"-1000 1000\"/>\n  <position kp=\"500\" kv=\"40\" inheritrange=\"1\"/>\n  <default class=\"spot__visual\">\n    <geom group=\"2\" type=\"mesh\" contype=\"0\" conaffinity=\"0\"/>\n  </default>\n  <default class=\"spot__collision\">\n    <geom group=\"3\" type=\"mesh\"/>\n    <default class=\"spot__foot\">\n      <geom type=\"sphere\" size=\"0.036\" pos=\"0 0 -0.3365\" priority=\"1\" condim=\"6\" solimp=\"0.015 1 0.036\" friction=\"0.8 0.02 0.01\"/>\n    </default>\n  </default>\n</default>",
+   "materials": "<material name=\"spot__BlackAbs\" rgba=\"0.1 0.1 0.1 1\"/>\n<material name=\"spot__wrap\" rgba=\"0.878431 0.666666 0.227450 1\"/>",
+   "meshes": {
+    "spot__body_0": "assets/body_0.obj",
+    "spot__body_1": "assets/body_1.obj",
+    "spot__front_left_hip": "assets/front_left_hip.obj",
+    "spot__front_left_upper_leg_0": "assets/front_left_upper_leg_0.obj",
+    "spot__front_left_upper_leg_1": "assets/front_left_upper_leg_1.obj",
+    "spot__front_left_lower_leg": "assets/front_left_lower_leg.obj",
+    "spot__front_right_hip": "assets/front_right_hip.obj",
+    "spot__front_right_upper_leg_0": "assets/front_right_upper_leg_0.obj",
+    "spot__front_right_upper_leg_1": "assets/front_right_upper_leg_1.obj",
+    "spot__front_right_lower_leg": "assets/front_right_lower_leg.obj",
+    "spot__rear_left_hip": "assets/rear_left_hip.obj",
+    "spot__rear_left_upper_leg_0": "assets/rear_left_upper_leg_0.obj",
+    "spot__rear_left_upper_leg_1": "assets/rear_left_upper_leg_1.obj",
+    "spot__rear_left_lower_leg": "assets/rear_left_lower_leg.obj",
+    "spot__rear_right_hip": "assets/rear_right_hip.obj",
+    "spot__rear_right_upper_leg_0": "assets/rear_right_upper_leg_0.obj",
+    "spot__rear_right_upper_leg_1": "assets/rear_right_upper_leg_1.obj",
+    "spot__body_collision": "assets/body_collision.obj",
+    "spot__left_upper_leg_collision": "assets/left_upper_leg_collision.obj",
+    "spot__left_lower_leg_collision": "assets/left_lower_leg_collision.obj",
+    "spot__right_upper_leg_collision": "assets/right_upper_leg_collision.obj",
+    "spot__right_lower_leg_collision": "assets/right_lower_leg_collision.obj"
+   },
+   "files": [
+    "assets/body_0.obj",
+    "assets/body_1.obj",
+    "assets/body_collision.obj",
+    "assets/front_left_hip.obj",
+    "assets/front_left_lower_leg.obj",
+    "assets/front_left_upper_leg_0.obj",
+    "assets/front_left_upper_leg_1.obj",
+    "assets/front_right_hip.obj",
+    "assets/front_right_lower_leg.obj",
+    "assets/front_right_upper_leg_0.obj",
+    "assets/front_right_upper_leg_1.obj",
+    "assets/left_lower_leg_collision.obj",
+    "assets/left_upper_leg_collision.obj",
+    "assets/rear_left_hip.obj",
+    "assets/rear_left_lower_leg.obj",
+    "assets/rear_left_upper_leg_0.obj",
+    "assets/rear_left_upper_leg_1.obj",
+    "assets/rear_right_hip.obj",
+    "assets/rear_right_upper_leg_0.obj",
+    "assets/rear_right_upper_leg_1.obj",
+    "assets/right_lower_leg_collision.obj",
+    "assets/right_upper_leg_collision.obj"
+   ]
+  },
+  "h1": {
+   "label": "Unitree H1",
+   "vendor": "Unitree",
+   "dir": "menagerie/unitree_h1",
+   "file": "h1.xml",
+   "option": {},
+   "defaults": "<default class=\"h1__h1\">\n  <joint damping=\"1\" armature=\"0.1\"/>\n  <default class=\"h1__visual\">\n    <geom type=\"mesh\" contype=\"0\" conaffinity=\"0\" group=\"2\" material=\"h1__black\"/>\n  </default>\n  <default class=\"h1__collision\">\n    <geom group=\"3\" mass=\"0\" density=\"0\"/>\n    <default class=\"h1__foot\">\n      <geom type=\"capsule\" size=\".014\"/>\n      <default class=\"h1__foot1\">\n        <geom fromto=\"-.035 0 -0.056 .02 0 -0.045\"/>\n      </default>\n      <default class=\"h1__foot2\">\n        <geom fromto=\".02 0 -0.045 .115 0 -0.056\"/>\n      </default>\n      <default class=\"h1__foot3\">\n        <geom fromto=\".14 -.03 -0.056 .14 .03 -0.056\"/>\n      </default>\n    </default>\n  </default>\n  <site size=\"0.001\" rgba=\"0.5 0.5 0.5 0.3\" group=\"4\"/>\n</default>",
+   "materials": "<material name=\"h1__black\" rgba=\"0.1 0.1 0.1 1\"/>\n<material name=\"h1__white\" rgba=\"1 1 1 1\"/>",
+   "meshes": {
+    "h1__pelvis": "assets/pelvis.stl",
+    "h1__left_hip_yaw_link": "assets/left_hip_yaw_link.stl",
+    "h1__left_hip_roll_link": "assets/left_hip_roll_link.stl",
+    "h1__left_hip_pitch_link": "assets/left_hip_pitch_link.stl",
+    "h1__left_knee_link": "assets/left_knee_link.stl",
+    "h1__left_ankle_link": "assets/left_ankle_link.stl",
+    "h1__right_hip_yaw_link": "assets/right_hip_yaw_link.stl",
+    "h1__right_hip_roll_link": "assets/right_hip_roll_link.stl",
+    "h1__right_hip_pitch_link": "assets/right_hip_pitch_link.stl",
+    "h1__right_knee_link": "assets/right_knee_link.stl",
+    "h1__right_ankle_link": "assets/right_ankle_link.stl",
+    "h1__torso_link": "assets/torso_link.stl",
+    "h1__left_shoulder_pitch_link": "assets/left_shoulder_pitch_link.stl",
+    "h1__left_shoulder_roll_link": "assets/left_shoulder_roll_link.stl",
+    "h1__left_shoulder_yaw_link": "assets/left_shoulder_yaw_link.stl",
+    "h1__left_elbow_link": "assets/left_elbow_link.stl",
+    "h1__right_shoulder_pitch_link": "assets/right_shoulder_pitch_link.stl",
+    "h1__right_shoulder_roll_link": "assets/right_shoulder_roll_link.stl",
+    "h1__right_shoulder_yaw_link": "assets/right_shoulder_yaw_link.stl",
+    "h1__right_elbow_link": "assets/right_elbow_link.stl",
+    "h1__logo_link": "assets/logo_link.stl"
+   },
+   "files": [
+    "assets/left_ankle_link.stl",
+    "assets/left_elbow_link.stl",
+    "assets/left_hip_pitch_link.stl",
+    "assets/left_hip_roll_link.stl",
+    "assets/left_hip_yaw_link.stl",
+    "assets/left_knee_link.stl",
+    "assets/left_shoulder_pitch_link.stl",
+    "assets/left_shoulder_roll_link.stl",
+    "assets/left_shoulder_yaw_link.stl",
+    "assets/logo_link.stl",
+    "assets/pelvis.stl",
+    "assets/right_ankle_link.stl",
+    "assets/right_elbow_link.stl",
+    "assets/right_hip_pitch_link.stl",
+    "assets/right_hip_roll_link.stl",
+    "assets/right_hip_yaw_link.stl",
+    "assets/right_knee_link.stl",
+    "assets/right_shoulder_pitch_link.stl",
+    "assets/right_shoulder_roll_link.stl",
+    "assets/right_shoulder_yaw_link.stl",
+    "assets/torso_link.stl"
+   ]
+  },
+  "g1": {
+   "label": "Unitree G1",
+   "vendor": "Unitree",
+   "dir": "menagerie/unitree_g1",
+   "file": "g1.xml",
+   "option": {
+    "integrator": "implicitfast"
+   },
+   "defaults": "<default class=\"g1__g1\">\n  <site rgba=\"1 0 0 1\" size=\"0.01\" group=\"5\"/>\n  <joint armature=\"0.01\" frictionloss=\"0.3\"/>\n  <position kp=\"500\" dampratio=\"1\" inheritrange=\"1\"/>\n  <default class=\"g1__visual\">\n    <geom group=\"2\" type=\"mesh\" contype=\"0\" conaffinity=\"0\" density=\"0\" material=\"g1__metal\"/>\n  </default>\n  <default class=\"g1__collision\">\n    <geom group=\"3\" type=\"mesh\"/>\n    <default class=\"g1__foot\">\n      <geom type=\"sphere\" size=\"0.005\" priority=\"1\" friction=\"0.6\" condim=\"3\"/>\n    </default>\n  </default>\n</default>",
+   "materials": "<material name=\"g1__black\" rgba=\"0.2 0.2 0.2 1\"/>\n<material name=\"g1__metal\" rgba=\"0.7 0.7 0.7 1\"/>",
+   "meshes": {
+    "g1__pelvis": "assets/pelvis.STL",
+    "g1__pelvis_contour_link": "assets/pelvis_contour_link.STL",
+    "g1__left_hip_pitch_link": "assets/left_hip_pitch_link.STL",
+    "g1__left_hip_roll_link": "assets/left_hip_roll_link.STL",
+    "g1__left_hip_yaw_link": "assets/left_hip_yaw_link.STL",
+    "g1__left_knee_link": "assets/left_knee_link.STL",
+    "g1__left_ankle_pitch_link": "assets/left_ankle_pitch_link.STL",
+    "g1__left_ankle_roll_link": "assets/left_ankle_roll_link.STL",
+    "g1__right_hip_pitch_link": "assets/right_hip_pitch_link.STL",
+    "g1__right_hip_roll_link": "assets/right_hip_roll_link.STL",
+    "g1__right_hip_yaw_link": "assets/right_hip_yaw_link.STL",
+    "g1__right_knee_link": "assets/right_knee_link.STL",
+    "g1__right_ankle_pitch_link": "assets/right_ankle_pitch_link.STL",
+    "g1__right_ankle_roll_link": "assets/right_ankle_roll_link.STL",
+    "g1__waist_yaw_link": "assets/waist_yaw_link_rev_1_0.STL",
+    "g1__waist_roll_link": "assets/waist_roll_link_rev_1_0.STL",
+    "g1__torso_link": "assets/torso_link_rev_1_0.STL",
+    "g1__logo_link": "assets/logo_link.STL",
+    "g1__head_link": "assets/head_link.STL",
+    "g1__left_shoulder_pitch_link": "assets/left_shoulder_pitch_link.STL",
+    "g1__left_shoulder_roll_link": "assets/left_shoulder_roll_link.STL",
+    "g1__left_shoulder_yaw_link": "assets/left_shoulder_yaw_link.STL",
+    "g1__left_elbow_link": "assets/left_elbow_link.STL",
+    "g1__left_wrist_roll_link": "assets/left_wrist_roll_link.STL",
+    "g1__left_wrist_pitch_link": "assets/left_wrist_pitch_link.STL",
+    "g1__left_wrist_yaw_link": "assets/left_wrist_yaw_link.STL",
+    "g1__left_rubber_hand": "assets/left_rubber_hand.STL",
+    "g1__right_shoulder_pitch_link": "assets/right_shoulder_pitch_link.STL",
+    "g1__right_shoulder_roll_link": "assets/right_shoulder_roll_link.STL",
+    "g1__right_shoulder_yaw_link": "assets/right_shoulder_yaw_link.STL",
+    "g1__right_elbow_link": "assets/right_elbow_link.STL",
+    "g1__right_wrist_roll_link": "assets/right_wrist_roll_link.STL",
+    "g1__right_wrist_pitch_link": "assets/right_wrist_pitch_link.STL",
+    "g1__right_wrist_yaw_link": "assets/right_wrist_yaw_link.STL",
+    "g1__right_rubber_hand": "assets/right_rubber_hand.STL"
+   },
+   "files": [
+    "assets/head_link.STL",
+    "assets/left_ankle_pitch_link.STL",
+    "assets/left_ankle_roll_link.STL",
+    "assets/left_elbow_link.STL",
+    "assets/left_hip_pitch_link.STL",
+    "assets/left_hip_roll_link.STL",
+    "assets/left_hip_yaw_link.STL",
+    "assets/left_knee_link.STL",
+    "assets/left_rubber_hand.STL",
+    "assets/left_shoulder_pitch_link.STL",
+    "assets/left_shoulder_roll_link.STL",
+    "assets/left_shoulder_yaw_link.STL",
+    "assets/left_wrist_pitch_link.STL",
+    "assets/left_wrist_roll_link.STL",
+    "assets/left_wrist_yaw_link.STL",
+    "assets/logo_link.STL",
+    "assets/pelvis.STL",
+    "assets/pelvis_contour_link.STL",
+    "assets/right_ankle_pitch_link.STL",
+    "assets/right_ankle_roll_link.STL",
+    "assets/right_elbow_link.STL",
+    "assets/right_hip_pitch_link.STL",
+    "assets/right_hip_roll_link.STL",
+    "assets/right_hip_yaw_link.STL",
+    "assets/right_knee_link.STL",
+    "assets/right_rubber_hand.STL",
+    "assets/right_shoulder_pitch_link.STL",
+    "assets/right_shoulder_roll_link.STL",
+    "assets/right_shoulder_yaw_link.STL",
+    "assets/right_wrist_pitch_link.STL",
+    "assets/right_wrist_roll_link.STL",
+    "assets/right_wrist_yaw_link.STL",
+    "assets/torso_link_rev_1_0.STL",
+    "assets/waist_roll_link_rev_1_0.STL",
+    "assets/waist_yaw_link_rev_1_0.STL"
+   ]
+  },
+  "ur5e": {
+   "label": "Universal Robots UR5e",
+   "vendor": "Universal Robots",
+   "dir": "menagerie/universal_robots_ur5e",
+   "file": "ur5e.xml",
+   "option": {
+    "integrator": "implicitfast"
+   },
+   "defaults": "<default class=\"ur5e__ur5e\">\n  <material specular=\"0.5\" shininess=\"0.25\"/>\n  <joint axis=\"0 1 0\" range=\"-6.28319 6.28319\" armature=\"0.1\"/>\n  <general gaintype=\"fixed\" biastype=\"affine\" ctrlrange=\"-6.2831 6.2831\" gainprm=\"2000\" biasprm=\"0 -2000 -400\" forcerange=\"-150 150\"/>\n  <default class=\"ur5e__size3\">\n    <default class=\"ur5e__size3_limited\">\n      <joint range=\"-3.1415 3.1415\"/>\n      <general ctrlrange=\"-3.1415 3.1415\"/>\n    </default>\n  </default>\n  <default class=\"ur5e__size1\">\n    <general gainprm=\"500\" biasprm=\"0 -500 -100\" forcerange=\"-28 28\"/>\n  </default>\n  <default class=\"ur5e__visual\">\n    <geom type=\"mesh\" contype=\"0\" conaffinity=\"0\" group=\"2\"/>\n  </default>\n  <default class=\"ur5e__collision\">\n    <geom type=\"capsule\" group=\"3\"/>\n    <default class=\"ur5e__eef_collision\">\n      <geom type=\"cylinder\"/>\n    </default>\n  </default>\n  <site size=\"0.001\" rgba=\"0.5 0.5 0.5 0.3\" group=\"4\"/>\n</default>",
+   "materials": "<material class=\"ur5e__ur5e\" name=\"ur5e__black\" rgba=\"0.033 0.033 0.033 1\"/>\n<material class=\"ur5e__ur5e\" name=\"ur5e__jointgray\" rgba=\"0.278 0.278 0.278 1\"/>\n<material class=\"ur5e__ur5e\" name=\"ur5e__linkgray\" rgba=\"0.82 0.82 0.82 1\"/>\n<material class=\"ur5e__ur5e\" name=\"ur5e__urblue\" rgba=\"0.49 0.678 0.8 1\"/>",
+   "meshes": {
+    "ur5e__base_0": "assets/base_0.obj",
+    "ur5e__base_1": "assets/base_1.obj",
+    "ur5e__shoulder_0": "assets/shoulder_0.obj",
+    "ur5e__shoulder_1": "assets/shoulder_1.obj",
+    "ur5e__shoulder_2": "assets/shoulder_2.obj",
+    "ur5e__upperarm_0": "assets/upperarm_0.obj",
+    "ur5e__upperarm_1": "assets/upperarm_1.obj",
+    "ur5e__upperarm_2": "assets/upperarm_2.obj",
+    "ur5e__upperarm_3": "assets/upperarm_3.obj",
+    "ur5e__forearm_0": "assets/forearm_0.obj",
+    "ur5e__forearm_1": "assets/forearm_1.obj",
+    "ur5e__forearm_2": "assets/forearm_2.obj",
+    "ur5e__forearm_3": "assets/forearm_3.obj",
+    "ur5e__wrist1_0": "assets/wrist1_0.obj",
+    "ur5e__wrist1_1": "assets/wrist1_1.obj",
+    "ur5e__wrist1_2": "assets/wrist1_2.obj",
+    "ur5e__wrist2_0": "assets/wrist2_0.obj",
+    "ur5e__wrist2_1": "assets/wrist2_1.obj",
+    "ur5e__wrist2_2": "assets/wrist2_2.obj",
+    "ur5e__wrist3": "assets/wrist3.obj"
+   },
+   "files": [
+    "assets/base_0.obj",
+    "assets/base_1.obj",
+    "assets/forearm_0.obj",
+    "assets/forearm_1.obj",
+    "assets/forearm_2.obj",
+    "assets/forearm_3.obj",
+    "assets/shoulder_0.obj",
+    "assets/shoulder_1.obj",
+    "assets/shoulder_2.obj",
+    "assets/upperarm_0.obj",
+    "assets/upperarm_1.obj",
+    "assets/upperarm_2.obj",
+    "assets/upperarm_3.obj",
+    "assets/wrist1_0.obj",
+    "assets/wrist1_1.obj",
+    "assets/wrist1_2.obj",
+    "assets/wrist2_0.obj",
+    "assets/wrist2_1.obj",
+    "assets/wrist2_2.obj",
+    "assets/wrist3.obj"
+   ]
+  }
+ },
+ "parts": [
+  {
+   "id": "go2_base",
+   "vendor": "Unitree",
+   "kind": "torso",
+   "label": "Unitree Go2 base",
+   "source": "go2",
+   "sourceFile": "menagerie/unitree_go2/go2.xml",
+   "mountType": "root",
+   "mass": 6.921,
+   "dof": 0,
+   "joints": [],
+   "bodies": [
+    "base"
+   ],
+   "rootBody": "base",
+   "leg_mounts": {
+    "quad": [
+     {
+      "pos": [
+       0.1934,
+       0.0465,
+       0
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "base",
+      "end": "F",
+      "side": "L",
+      "from": "go2.xml FL_hip"
+     },
+     {
+      "pos": [
+       0.1934,
+       -0.0465,
+       0
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "base",
+      "end": "F",
+      "side": "R",
+      "from": "go2.xml FR_hip"
+     },
+     {
+      "pos": [
+       -0.1934,
+       0.0465,
+       0
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "base",
+      "end": "R",
+      "side": "L",
+      "from": "go2.xml RL_hip"
+     },
+     {
+      "pos": [
+       -0.1934,
+       -0.0465,
+       0
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "base",
+      "end": "R",
+      "side": "R",
+      "from": "go2.xml RR_hip"
+     }
+    ],
+    "hex": [
+     {
+      "pos": [
+       0.23208,
+       0.0465,
+       0
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "base",
+      "end": "F",
+      "side": "L",
+      "from": "derived: original hip y/z, x spread 1.2x the original hip x"
+     },
+     {
+      "pos": [
+       0.23208,
+       -0.0465,
+       0
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "base",
+      "end": "F",
+      "side": "R",
+      "from": "derived: original hip y/z, x spread 1.2x the original hip x"
+     },
+     {
+      "pos": [
+       0,
+       0.0465,
+       0
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "base",
+      "end": "M",
+      "side": "L",
+      "from": "derived: original hip y/z, x spread 1.2x the original hip x"
+     },
+     {
+      "pos": [
+       0,
+       -0.0465,
+       0
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "base",
+      "end": "M",
+      "side": "R",
+      "from": "derived: original hip y/z, x spread 1.2x the original hip x"
+     },
+     {
+      "pos": [
+       -0.23208,
+       0.0465,
+       0
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "base",
+      "end": "R",
+      "side": "L",
+      "from": "derived: original hip y/z, x spread 1.2x the original hip x"
+     },
+     {
+      "pos": [
+       -0.23208,
+       -0.0465,
+       0
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "base",
+      "end": "R",
+      "side": "R",
+      "from": "derived: original hip y/z, x spread 1.2x the original hip x"
+     }
+    ],
+    "biped": [
+     {
+      "pos": [
+       0,
+       0.0465,
+       0
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "base",
+      "end": "F",
+      "side": "L",
+      "from": "derived: original hip y/z at x=0"
+     },
+     {
+      "pos": [
+       0,
+       -0.0465,
+       0
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "base",
+      "end": "F",
+      "side": "R",
+      "from": "derived: original hip y/z at x=0"
+     }
+    ]
+   },
+   "arm_mounts": [],
+   "top_mount": {
+    "pos": [
+     0.021112,
+     0,
+     0.065996
+    ],
+    "quat": [
+     1,
+     0,
+     0,
+     0
+    ],
+    "body": "base",
+    "from": "measured: top of visual mesh near the COM line"
+   },
+   "xml": "<body name=\"{P}base\" childclass=\"go2__go2\">\n  <inertial pos=\"0.021112 0 -0.005366\" quat=\"-0.000543471 0.713435 -0.00173769 0.700719\" mass=\"6.921\" diaginertia=\"0.107027 0.0980771 0.0244531\"/>\n  <geom mesh=\"go2__base_0\" material=\"go2__black\" class=\"go2__visual\"/>\n  <geom mesh=\"go2__base_1\" material=\"go2__black\" class=\"go2__visual\"/>\n  <geom mesh=\"go2__base_2\" material=\"go2__black\" class=\"go2__visual\"/>\n  <geom mesh=\"go2__base_3\" material=\"go2__white\" class=\"go2__visual\"/>\n  <geom mesh=\"go2__base_4\" material=\"go2__gray\" class=\"go2__visual\"/>\n  <geom size=\"0.1881 0.04675 0.057\" type=\"box\" class=\"go2__collision\"/>\n  <geom size=\"0.05 0.045\" pos=\"0.285 0 0.01\" type=\"cylinder\" class=\"go2__collision\"/>\n  <geom size=\"0.047\" pos=\"0.293 0 -0.06\" class=\"go2__collision\"/>\n  <site name=\"{P}imu\" pos=\"-0.02557 0 0.04232\"/>\n</body>",
+   "actuatorXml": "",
+   "meshes": [
+    "go2__base_0",
+    "go2__base_1",
+    "go2__base_2",
+    "go2__base_3",
+    "go2__base_4"
+   ],
+   "files": [
+    "assets/base_0.obj",
+    "assets/base_1.obj",
+    "assets/base_2.obj",
+    "assets/base_3.obj",
+    "assets/base_4.obj"
+   ]
+  },
+  {
+   "id": "spot_body",
+   "vendor": "Boston Dynamics",
+   "kind": "torso",
+   "label": "Boston Dynamics Spot body",
+   "source": "spot",
+   "sourceFile": "menagerie/boston_dynamics_spot/spot.xml",
+   "mountType": "root",
+   "mass": 32.86,
+   "dof": 0,
+   "joints": [],
+   "bodies": [
+    "body"
+   ],
+   "rootBody": "body",
+   "leg_mounts": {
+    "quad": [
+     {
+      "pos": [
+       0.29785,
+       0.055,
+       0
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "body",
+      "end": "F",
+      "side": "L",
+      "from": "spot.xml fl_hip"
+     },
+     {
+      "pos": [
+       0.29785,
+       -0.055,
+       0
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "body",
+      "end": "F",
+      "side": "R",
+      "from": "spot.xml fr_hip"
+     },
+     {
+      "pos": [
+       -0.29785,
+       0.055,
+       0
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "body",
+      "end": "R",
+      "side": "L",
+      "from": "spot.xml hl_hip"
+     },
+     {
+      "pos": [
+       -0.29785,
+       -0.055,
+       0
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "body",
+      "end": "R",
+      "side": "R",
+      "from": "spot.xml hr_hip"
+     }
+    ],
+    "hex": [
+     {
+      "pos": [
+       0.29785,
+       0.055,
+       0
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "body",
+      "end": "F",
+      "side": "L",
+      "from": "derived: original hip y/z, x spread 1x the original hip x"
+     },
+     {
+      "pos": [
+       0.29785,
+       -0.055,
+       0
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "body",
+      "end": "F",
+      "side": "R",
+      "from": "derived: original hip y/z, x spread 1x the original hip x"
+     },
+     {
+      "pos": [
+       0,
+       0.055,
+       0
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "body",
+      "end": "M",
+      "side": "L",
+      "from": "derived: original hip y/z, x spread 1x the original hip x"
+     },
+     {
+      "pos": [
+       0,
+       -0.055,
+       0
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "body",
+      "end": "M",
+      "side": "R",
+      "from": "derived: original hip y/z, x spread 1x the original hip x"
+     },
+     {
+      "pos": [
+       -0.29785,
+       0.055,
+       0
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "body",
+      "end": "R",
+      "side": "L",
+      "from": "derived: original hip y/z, x spread 1x the original hip x"
+     },
+     {
+      "pos": [
+       -0.29785,
+       -0.055,
+       0
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "body",
+      "end": "R",
+      "side": "R",
+      "from": "derived: original hip y/z, x spread 1x the original hip x"
+     }
+    ],
+    "biped": [
+     {
+      "pos": [
+       0,
+       0.055,
+       0
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "body",
+      "end": "F",
+      "side": "L",
+      "from": "derived: original hip y/z at x=0"
+     },
+     {
+      "pos": [
+       0,
+       -0.055,
+       0
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "body",
+      "end": "F",
+      "side": "R",
+      "from": "derived: original hip y/z at x=0"
+     }
+    ]
+   },
+   "arm_mounts": [],
+   "top_mount": {
+    "pos": [
+     0.292,
+     0,
+     0.188
+    ],
+    "quat": [
+     1,
+     0,
+     0,
+     0
+    ],
+    "body": "body",
+    "from": "spot_arm.xml arm_link_sh0"
+   },
+   "xml": "<body name=\"{P}body\" childclass=\"spot__spot\">\n  <inertial pos=\"0.0063944 -9.81216e-05 0.000911379\" mass=\"32.86\" diaginertia=\"0.13144 0.13144 0.13144\"/>\n  <geom mesh=\"spot__body_0\" material=\"spot__BlackAbs\" class=\"spot__visual\"/>\n  <geom mesh=\"spot__body_1\" material=\"spot__wrap\" class=\"spot__visual\"/>\n  <geom mesh=\"spot__body_collision\" class=\"spot__collision\"/>\n</body>",
+   "actuatorXml": "",
+   "meshes": [
+    "spot__body_0",
+    "spot__body_1",
+    "spot__body_collision"
+   ],
+   "files": [
+    "assets/body_0.obj",
+    "assets/body_1.obj",
+    "assets/body_collision.obj"
+   ]
+  },
+  {
+   "id": "h1_torso",
+   "vendor": "Unitree",
+   "kind": "torso",
+   "label": "Unitree H1 pelvis + torso",
+   "source": "h1",
+   "sourceFile": "menagerie/unitree_h1/h1.xml",
+   "mountType": "root",
+   "mass": 23.179,
+   "dof": 1,
+   "joints": [
+    {
+     "name": "torso",
+     "role": "waist",
+     "range": [
+      -2.35,
+      2.35
+     ],
+     "home": 0,
+     "torque": 200
+    }
+   ],
+   "bodies": [
+    "pelvis",
+    "torso_link"
+   ],
+   "rootBody": "pelvis",
+   "leg_mounts": {
+    "biped": [
+     {
+      "pos": [
+       0,
+       0.0875,
+       -0.1742
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "pelvis",
+      "end": "F",
+      "side": "L",
+      "from": "h1.xml left_hip_yaw_link"
+     },
+     {
+      "pos": [
+       0,
+       -0.0875,
+       -0.1742
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "pelvis",
+      "end": "F",
+      "side": "R",
+      "from": "h1.xml right_hip_yaw_link"
+     }
+    ],
+    "quad": [
+     {
+      "pos": [
+       0.12,
+       0.0875,
+       -0.1742
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "pelvis",
+      "end": "F",
+      "side": "L",
+      "from": "derived: original hip y/z, x = ±0.12"
+     },
+     {
+      "pos": [
+       0.12,
+       -0.0875,
+       -0.1742
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "pelvis",
+      "end": "F",
+      "side": "R",
+      "from": "derived: original hip y/z, x = ±0.12"
+     },
+     {
+      "pos": [
+       -0.12,
+       0.0875,
+       -0.1742
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "pelvis",
+      "end": "R",
+      "side": "L",
+      "from": "derived: original hip y/z, x = ±0.12"
+     },
+     {
+      "pos": [
+       -0.12,
+       -0.0875,
+       -0.1742
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "pelvis",
+      "end": "R",
+      "side": "R",
+      "from": "derived: original hip y/z, x = ±0.12"
+     }
+    ],
+    "hex": [
+     {
+      "pos": [
+       0.15,
+       0.0875,
+       -0.1742
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "pelvis",
+      "end": "F",
+      "side": "L",
+      "from": "derived: original hip y/z, x = ±0.15, 0"
+     },
+     {
+      "pos": [
+       0.15,
+       -0.0875,
+       -0.1742
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "pelvis",
+      "end": "F",
+      "side": "R",
+      "from": "derived: original hip y/z, x = ±0.15, 0"
+     },
+     {
+      "pos": [
+       0,
+       0.0875,
+       -0.1742
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "pelvis",
+      "end": "M",
+      "side": "L",
+      "from": "derived: original hip y/z, x = ±0.15, 0"
+     },
+     {
+      "pos": [
+       0,
+       -0.0875,
+       -0.1742
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "pelvis",
+      "end": "M",
+      "side": "R",
+      "from": "derived: original hip y/z, x = ±0.15, 0"
+     },
+     {
+      "pos": [
+       -0.15,
+       0.0875,
+       -0.1742
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "pelvis",
+      "end": "R",
+      "side": "L",
+      "from": "derived: original hip y/z, x = ±0.15, 0"
+     },
+     {
+      "pos": [
+       -0.15,
+       -0.0875,
+       -0.1742
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "pelvis",
+      "end": "R",
+      "side": "R",
+      "from": "derived: original hip y/z, x = ±0.15, 0"
+     }
+    ]
+   },
+   "arm_mounts": [
+    {
+     "pos": [
+      0.0055,
+      0.15535,
+      0.42999
+     ],
+     "quat": [
+      0.976296,
+      0.216438,
+      0,
+      0
+     ],
+     "body": "torso_link",
+     "side": "L",
+     "from": "h1.xml left_shoulder_pitch_link"
+    },
+    {
+     "pos": [
+      0.0055,
+      -0.15535,
+      0.42999
+     ],
+     "quat": [
+      0.976296,
+      -0.216438,
+      0,
+      0
+     ],
+     "body": "torso_link",
+     "side": "R",
+     "from": "h1.xml right_shoulder_pitch_link"
+    }
+   ],
+   "top_mount": {
+    "pos": [
+     0.000489,
+     0,
+     0.75395
+    ],
+    "quat": [
+     1,
+     0,
+     0,
+     0
+    ],
+    "body": "torso_link",
+    "from": "measured: top of visual mesh near the COM line"
+   },
+   "xml": "<body name=\"{P}pelvis\" childclass=\"h1__h1\">\n  <inertial pos=\"-0.0002 4e-05 -0.04522\" quat=\"0.498303 0.499454 -0.500496 0.501741\" mass=\"5.39\" diaginertia=\"0.0490211 0.0445821 0.00824619\"/>\n  <geom class=\"h1__visual\" mesh=\"h1__pelvis\"/>\n  <body name=\"{P}torso_link\">\n    <inertial pos=\"0.000489 0.002797 0.20484\" quat=\"0.999989 -0.00130808 -0.00282289 -0.00349105\" mass=\"17.789\" diaginertia=\"0.487315 0.409628 0.127837\"/>\n    <joint name=\"{P}torso\" axis=\"0 0 1\" range=\"-2.35 2.35\"/>\n    <geom class=\"h1__visual\" mesh=\"h1__torso_link\"/>\n    <geom class=\"h1__visual\" material=\"h1__white\" mesh=\"h1__logo_link\"/>\n    <geom name=\"{P}head\" class=\"h1__collision\" type=\"capsule\" size=\"0.06\" fromto=\"0.05 0 0.68 0.05 0 0.6\"/>\n    <geom name=\"{P}helmet\" class=\"h1__collision\" type=\"sphere\" size=\"0.073\" pos=\"0.045 0 0.68\"/>\n    <geom name=\"{P}torso\" class=\"h1__collision\" type=\"box\" size=\"0.07 0.1 0.22\" pos=\"0 0 0.25\"/>\n    <geom name=\"{P}hip\" class=\"h1__collision\" type=\"capsule\" size=\"0.05\" fromto=\"0 -0.1 -0.05 0 0.1 -0.05\"/>\n    <site name=\"{P}imu\" pos=\"-0.04452 -0.01891 0.27756\"/>\n  </body>\n</body>",
+   "actuatorXml": "<motor class=\"h1__h1\" name=\"{P}torso\" joint=\"{P}torso\" ctrlrange=\"-200 200\"/>",
+   "meshes": [
+    "h1__pelvis",
+    "h1__torso_link",
+    "h1__logo_link"
+   ],
+   "files": [
+    "assets/logo_link.stl",
+    "assets/pelvis.stl",
+    "assets/torso_link.stl"
+   ]
+  },
+  {
+   "id": "g1_torso",
+   "vendor": "Unitree",
+   "kind": "torso",
+   "label": "Unitree G1 pelvis + waist + torso",
+   "source": "g1",
+   "sourceFile": "menagerie/unitree_g1/g1.xml",
+   "mountType": "root",
+   "mass": 11.931,
+   "dof": 3,
+   "joints": [
+    {
+     "name": "waist_yaw_joint",
+     "role": "waist",
+     "range": [
+      -2.618,
+      2.618
+     ],
+     "home": 0,
+     "torque": 88
+    },
+    {
+     "name": "waist_roll_joint",
+     "role": "waist",
+     "range": [
+      -0.52,
+      0.52
+     ],
+     "home": 0,
+     "torque": 50
+    },
+    {
+     "name": "waist_pitch_joint",
+     "role": "waist",
+     "range": [
+      -0.52,
+      0.52
+     ],
+     "home": 0,
+     "torque": 50
+    }
+   ],
+   "bodies": [
+    "pelvis",
+    "waist_yaw_link",
+    "waist_roll_link",
+    "torso_link"
+   ],
+   "rootBody": "pelvis",
+   "leg_mounts": {
+    "biped": [
+     {
+      "pos": [
+       0,
+       0.064452,
+       -0.1027
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "pelvis",
+      "end": "F",
+      "side": "L",
+      "from": "g1.xml left_hip_pitch_link"
+     },
+     {
+      "pos": [
+       0,
+       -0.064452,
+       -0.1027
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "pelvis",
+      "end": "F",
+      "side": "R",
+      "from": "g1.xml right_hip_pitch_link"
+     }
+    ],
+    "quad": [
+     {
+      "pos": [
+       0.12,
+       0.064452,
+       -0.1027
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "pelvis",
+      "end": "F",
+      "side": "L",
+      "from": "derived: original hip y/z, x = ±0.12"
+     },
+     {
+      "pos": [
+       0.12,
+       -0.064452,
+       -0.1027
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "pelvis",
+      "end": "F",
+      "side": "R",
+      "from": "derived: original hip y/z, x = ±0.12"
+     },
+     {
+      "pos": [
+       -0.12,
+       0.064452,
+       -0.1027
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "pelvis",
+      "end": "R",
+      "side": "L",
+      "from": "derived: original hip y/z, x = ±0.12"
+     },
+     {
+      "pos": [
+       -0.12,
+       -0.064452,
+       -0.1027
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "pelvis",
+      "end": "R",
+      "side": "R",
+      "from": "derived: original hip y/z, x = ±0.12"
+     }
+    ],
+    "hex": [
+     {
+      "pos": [
+       0.15,
+       0.064452,
+       -0.1027
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "pelvis",
+      "end": "F",
+      "side": "L",
+      "from": "derived: original hip y/z, x = ±0.15, 0"
+     },
+     {
+      "pos": [
+       0.15,
+       -0.064452,
+       -0.1027
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "pelvis",
+      "end": "F",
+      "side": "R",
+      "from": "derived: original hip y/z, x = ±0.15, 0"
+     },
+     {
+      "pos": [
+       0,
+       0.064452,
+       -0.1027
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "pelvis",
+      "end": "M",
+      "side": "L",
+      "from": "derived: original hip y/z, x = ±0.15, 0"
+     },
+     {
+      "pos": [
+       0,
+       -0.064452,
+       -0.1027
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "pelvis",
+      "end": "M",
+      "side": "R",
+      "from": "derived: original hip y/z, x = ±0.15, 0"
+     },
+     {
+      "pos": [
+       -0.15,
+       0.064452,
+       -0.1027
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "pelvis",
+      "end": "R",
+      "side": "L",
+      "from": "derived: original hip y/z, x = ±0.15, 0"
+     },
+     {
+      "pos": [
+       -0.15,
+       -0.064452,
+       -0.1027
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ],
+      "body": "pelvis",
+      "end": "R",
+      "side": "R",
+      "from": "derived: original hip y/z, x = ±0.15, 0"
+     }
+    ]
+   },
+   "arm_mounts": [
+    {
+     "pos": [
+      0.003956,
+      0.10022,
+      0.24778
+     ],
+     "quat": [
+      0.990264,
+      0.139201,
+      0.000014,
+      -0.000099
+     ],
+     "body": "torso_link",
+     "side": "L",
+     "from": "g1.xml left_shoulder_pitch_link"
+    },
+    {
+     "pos": [
+      0.003956,
+      -0.10021,
+      0.24778
+     ],
+     "quat": [
+      0.990264,
+      -0.139201,
+      0.000014,
+      0.000099
+     ],
+     "body": "torso_link",
+     "side": "R",
+     "from": "g1.xml right_shoulder_pitch_link"
+    }
+   ],
+   "top_mount": {
+    "pos": [
+     0.002032,
+     0,
+     0.486573
+    ],
+    "quat": [
+     1,
+     0,
+     0,
+     0
+    ],
+    "body": "torso_link",
+    "from": "measured: top of visual mesh near the COM line"
+   },
+   "xml": "<body name=\"{P}pelvis\" childclass=\"g1__g1\">\n  <inertial pos=\"0 0 -0.07605\" quat=\"1 0 -0.000399148 0\" mass=\"3.813\" diaginertia=\"0.010549 0.0093089 0.0079184\"/>\n  <geom class=\"g1__visual\" material=\"g1__black\" mesh=\"g1__pelvis\"/>\n  <geom class=\"g1__visual\" mesh=\"g1__pelvis_contour_link\"/>\n  <geom class=\"g1__collision\" mesh=\"g1__pelvis_contour_link\"/>\n  <site name=\"{P}imu_in_pelvis\" pos=\"0.04525 0 -0.08339\" size=\"0.01\"/>\n  <body name=\"{P}waist_yaw_link\">\n    <inertial pos=\"0.003494 0.000233 0.018034\" quat=\"0.289697 0.591001 -0.337795 0.672821\" mass=\"0.214\" diaginertia=\"0.000163531 0.000107714 0.000102205\"/>\n    <joint name=\"{P}waist_yaw_joint\" axis=\"0 0 1\" range=\"-2.618 2.618\" actuatorfrcrange=\"-88 88\"/>\n    <geom class=\"g1__visual\" mesh=\"g1__waist_yaw_link\"/>\n    <body name=\"{P}waist_roll_link\" pos=\"-0.0039635 0 0.044\">\n      <inertial pos=\"0 2.3e-05 0\" quat=\"0.5 0.5 -0.5 0.5\" mass=\"0.086\" diaginertia=\"8.245e-06 7.079e-06 6.339e-06\"/>\n      <joint name=\"{P}waist_roll_joint\" axis=\"1 0 0\" range=\"-0.52 0.52\" actuatorfrcrange=\"-50 50\"/>\n      <geom class=\"g1__visual\" mesh=\"g1__waist_roll_link\"/>\n      <body name=\"{P}torso_link\">\n        <inertial pos=\"0.00203158 0.000339683 0.184568\" quat=\"0.999803 -6.03319e-05 0.0198256 0.00131986\" mass=\"7.818\" diaginertia=\"0.121847 0.109825 0.0273735\"/>\n        <joint name=\"{P}waist_pitch_joint\" axis=\"0 1 0\" range=\"-0.52 0.52\" actuatorfrcrange=\"-50 50\"/>\n        <geom class=\"g1__visual\" mesh=\"g1__torso_link\"/>\n        <geom class=\"g1__collision\" mesh=\"g1__torso_link\"/>\n        <geom pos=\"0.0039635 0 -0.044\" quat=\"1 0 0 0\" class=\"g1__visual\" material=\"g1__black\" mesh=\"g1__logo_link\"/>\n        <geom pos=\"0.0039635 0 -0.044\" quat=\"1 0 0 0\" class=\"g1__collision\" material=\"g1__black\" mesh=\"g1__logo_link\"/>\n        <geom pos=\"0.0039635 0 -0.044\" quat=\"1 0 0 0\" class=\"g1__visual\" material=\"g1__black\" mesh=\"g1__head_link\"/>\n        <geom pos=\"0.0039635 0 -0.044\" quat=\"1 0 0 0\" class=\"g1__collision\" material=\"g1__black\" mesh=\"g1__head_link\"/>\n        <site name=\"{P}imu_in_torso\" pos=\"-0.03959 -0.00224 0.14792\" size=\"0.01\"/>\n      </body>\n    </body>\n  </body>\n</body>",
+   "actuatorXml": "<position class=\"g1__g1\" name=\"{P}waist_yaw_joint\" joint=\"{P}waist_yaw_joint\"/>\n<position class=\"g1__g1\" name=\"{P}waist_roll_joint\" joint=\"{P}waist_roll_joint\"/>\n<position class=\"g1__g1\" name=\"{P}waist_pitch_joint\" joint=\"{P}waist_pitch_joint\"/>",
+   "meshes": [
+    "g1__pelvis",
+    "g1__pelvis_contour_link",
+    "g1__waist_yaw_link",
+    "g1__waist_roll_link",
+    "g1__torso_link",
+    "g1__logo_link",
+    "g1__head_link"
+   ],
+   "homeNote": "legs: slightly bent stance (hip -0.1, knee 0.3, ankle -0.2) instead of the straight-leg \"stand\" key; arms from the original key",
+   "files": [
+    "assets/head_link.STL",
+    "assets/logo_link.STL",
+    "assets/pelvis.STL",
+    "assets/pelvis_contour_link.STL",
+    "assets/torso_link_rev_1_0.STL",
+    "assets/waist_roll_link_rev_1_0.STL",
+    "assets/waist_yaw_link_rev_1_0.STL"
+   ]
+  },
+  {
+   "id": "go2_leg",
+   "vendor": "Unitree",
+   "kind": "leg",
+   "label": "Unitree Go2 leg",
+   "source": "go2",
+   "sourceFile": "menagerie/unitree_go2/go2.xml",
+   "mountType": "hip",
+   "mass": 2.071352,
+   "dof": 3,
+   "joints": [
+    {
+     "name": "FL_hip_joint",
+     "role": "hip_abd",
+     "range": [
+      -1.0472,
+      1.0472
+     ],
+     "home": 0,
+     "torque": 23.7
+    },
+    {
+     "name": "FL_thigh_joint",
+     "role": "hip_pitch",
+     "range": [
+      -1.5708,
+      3.4907
+     ],
+     "home": 0.9,
+     "torque": 23.7
+    },
+    {
+     "name": "FL_calf_joint",
+     "role": "knee",
+     "range": [
+      -2.7227,
+      -0.83776
+     ],
+     "home": -1.8,
+     "torque": 45.43
+    }
+   ],
+   "mirror": [
+    "FL",
+    "FR",
+    "RL",
+    "RR"
+   ],
+   "variants": {
+    "FL": {
+     "root": "FL_hip",
+     "origin": {
+      "pos": [
+       0.1934,
+       0.0465,
+       0
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ]
+     },
+     "joints": [
+      {
+       "name": "FL_hip_joint",
+       "role": "hip_abd",
+       "range": [
+        -1.0472,
+        1.0472
+       ],
+       "home": 0,
+       "torque": 23.7
+      },
+      {
+       "name": "FL_thigh_joint",
+       "role": "hip_pitch",
+       "range": [
+        -1.5708,
+        3.4907
+       ],
+       "home": 0.9,
+       "torque": 23.7
+      },
+      {
+       "name": "FL_calf_joint",
+       "role": "knee",
+       "range": [
+        -2.7227,
+        -0.83776
+       ],
+       "home": -1.8,
+       "torque": 45.43
+      }
+     ],
+     "bodies": [
+      "FL_hip",
+      "FL_thigh",
+      "FL_calf"
+     ],
+     "xml": "<body name=\"{P}FL_hip\" childclass=\"go2__go2\">\n  <inertial pos=\"-0.0054 0.00194 -0.000105\" quat=\"0.497014 0.499245 0.505462 0.498237\" mass=\"0.678\" diaginertia=\"0.00088403 0.000596003 0.000479967\"/>\n  <joint name=\"{P}FL_hip_joint\" class=\"go2__abduction\"/>\n  <geom mesh=\"go2__hip_0\" material=\"go2__metal\" class=\"go2__visual\"/>\n  <geom mesh=\"go2__hip_1\" material=\"go2__gray\" class=\"go2__visual\"/>\n  <geom size=\"0.046 0.02\" pos=\"0 0.08 0\" quat=\"1 1 0 0\" type=\"cylinder\" class=\"go2__collision\"/>\n  <body name=\"{P}FL_thigh\" pos=\"0 0.0955 0\">\n    <inertial pos=\"-0.00374 -0.0223 -0.0327\" quat=\"0.829533 0.0847635 -0.0200632 0.551623\" mass=\"1.152\" diaginertia=\"0.00594973 0.00584149 0.000878787\"/>\n    <joint name=\"{P}FL_thigh_joint\" class=\"go2__front_hip\"/>\n    <geom mesh=\"go2__thigh_0\" material=\"go2__metal\" class=\"go2__visual\"/>\n    <geom mesh=\"go2__thigh_1\" material=\"go2__gray\" class=\"go2__visual\"/>\n    <geom size=\"0.1065 0.01225 0.017\" pos=\"0 0 -0.1065\" quat=\"0.707107 0 0.707107 0\" type=\"box\" class=\"go2__collision\"/>\n    <body name=\"{P}FL_calf\" pos=\"0 0 -0.213\">\n      <inertial pos=\"0.00629595 -0.000622121 -0.141417\" quat=\"0.710672 0.00154099 -0.00450087 0.703508\" mass=\"0.241352\" diaginertia=\"0.0014901 0.00146356 5.31397e-05\"/>\n      <joint name=\"{P}FL_calf_joint\" class=\"go2__knee\"/>\n      <geom mesh=\"go2__calf_0\" material=\"go2__gray\" class=\"go2__visual\"/>\n      <geom mesh=\"go2__calf_1\" material=\"go2__black\" class=\"go2__visual\"/>\n      <geom size=\"0.012 0.06\" pos=\"0.008 0 -0.06\" quat=\"0.994493 0 -0.104807 0\" type=\"cylinder\" class=\"go2__collision\"/>\n      <geom size=\"0.011 0.0325\" pos=\"0.02 0 -0.148\" quat=\"0.999688 0 0.0249974 0\" type=\"cylinder\" class=\"go2__collision\"/>\n      <geom pos=\"0 0 -0.213\" mesh=\"go2__foot\" class=\"go2__visual\" material=\"go2__black\"/>\n      <geom name=\"{P}FL\" class=\"go2__foot\"/>\n    </body>\n  </body>\n</body>",
+     "actuatorXml": "<motor class=\"go2__abduction\" name=\"{P}FL_hip\" joint=\"{P}FL_hip_joint\"/>\n<motor class=\"go2__hip\" name=\"{P}FL_thigh\" joint=\"{P}FL_thigh_joint\"/>\n<motor class=\"go2__knee\" name=\"{P}FL_calf\" joint=\"{P}FL_calf_joint\"/>",
+     "stance": {
+      "drop": 0.288373,
+      "foot": [
+       -0.001243,
+       0.0955
+      ],
+      "crouch": {
+       "hip_pitch": 1,
+       "knee": -2
+      },
+      "crouchGain": -0.338973,
+      "crouchFootGain": 0.001597,
+      "swing": {
+       "hip_pitch": -1
+      },
+      "swingGain": 0.266293
+     }
+    },
+    "FR": {
+     "root": "FR_hip",
+     "origin": {
+      "pos": [
+       0.1934,
+       -0.0465,
+       0
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ]
+     },
+     "joints": [
+      {
+       "name": "FR_hip_joint",
+       "role": "hip_abd",
+       "range": [
+        -1.0472,
+        1.0472
+       ],
+       "home": 0,
+       "torque": 23.7
+      },
+      {
+       "name": "FR_thigh_joint",
+       "role": "hip_pitch",
+       "range": [
+        -1.5708,
+        3.4907
+       ],
+       "home": 0.9,
+       "torque": 23.7
+      },
+      {
+       "name": "FR_calf_joint",
+       "role": "knee",
+       "range": [
+        -2.7227,
+        -0.83776
+       ],
+       "home": -1.8,
+       "torque": 45.43
+      }
+     ],
+     "bodies": [
+      "FR_hip",
+      "FR_thigh",
+      "FR_calf"
+     ],
+     "xml": "<body name=\"{P}FR_hip\" childclass=\"go2__go2\">\n  <inertial pos=\"-0.0054 -0.00194 -0.000105\" quat=\"0.498237 0.505462 0.499245 0.497014\" mass=\"0.678\" diaginertia=\"0.00088403 0.000596003 0.000479967\"/>\n  <joint name=\"{P}FR_hip_joint\" class=\"go2__abduction\"/>\n  <geom mesh=\"go2__hip_0\" material=\"go2__metal\" class=\"go2__visual\" quat=\"4.63268e-05 1 0 0\"/>\n  <geom mesh=\"go2__hip_1\" material=\"go2__gray\" class=\"go2__visual\" quat=\"4.63268e-05 1 0 0\"/>\n  <geom size=\"0.046 0.02\" pos=\"0 -0.08 0\" quat=\"0.707107 0.707107 0 0\" type=\"cylinder\" class=\"go2__collision\"/>\n  <body name=\"{P}FR_thigh\" pos=\"0 -0.0955 0\">\n    <inertial pos=\"-0.00374 0.0223 -0.0327\" quat=\"0.551623 -0.0200632 0.0847635 0.829533\" mass=\"1.152\" diaginertia=\"0.00594973 0.00584149 0.000878787\"/>\n    <joint name=\"{P}FR_thigh_joint\" class=\"go2__front_hip\"/>\n    <geom mesh=\"go2__thigh_mirror_0\" material=\"go2__metal\" class=\"go2__visual\"/>\n    <geom mesh=\"go2__thigh_mirror_1\" material=\"go2__gray\" class=\"go2__visual\"/>\n    <geom size=\"0.1065 0.01225 0.017\" pos=\"0 0 -0.1065\" quat=\"0.707107 0 0.707107 0\" type=\"box\" class=\"go2__collision\"/>\n    <body name=\"{P}FR_calf\" pos=\"0 0 -0.213\">\n      <inertial pos=\"0.00629595 0.000622121 -0.141417\" quat=\"0.703508 -0.00450087 0.00154099 0.710672\" mass=\"0.241352\" diaginertia=\"0.0014901 0.00146356 5.31397e-05\"/>\n      <joint name=\"{P}FR_calf_joint\" class=\"go2__knee\"/>\n      <geom mesh=\"go2__calf_mirror_0\" material=\"go2__gray\" class=\"go2__visual\"/>\n      <geom mesh=\"go2__calf_mirror_1\" material=\"go2__black\" class=\"go2__visual\"/>\n      <geom size=\"0.013 0.06\" pos=\"0.01 0 -0.06\" quat=\"0.995004 0 -0.0998334 0\" type=\"cylinder\" class=\"go2__collision\"/>\n      <geom size=\"0.011 0.0325\" pos=\"0.02 0 -0.148\" quat=\"0.999688 0 0.0249974 0\" type=\"cylinder\" class=\"go2__collision\"/>\n      <geom pos=\"0 0 -0.213\" mesh=\"go2__foot\" class=\"go2__visual\" material=\"go2__black\"/>\n      <geom name=\"{P}FR\" class=\"go2__foot\"/>\n    </body>\n  </body>\n</body>",
+     "actuatorXml": "<motor class=\"go2__abduction\" name=\"{P}FR_hip\" joint=\"{P}FR_hip_joint\"/>\n<motor class=\"go2__hip\" name=\"{P}FR_thigh\" joint=\"{P}FR_thigh_joint\"/>\n<motor class=\"go2__knee\" name=\"{P}FR_calf\" joint=\"{P}FR_calf_joint\"/>",
+     "stance": {
+      "drop": 0.288373,
+      "foot": [
+       -0.001243,
+       -0.0955
+      ],
+      "crouch": {
+       "hip_pitch": 1,
+       "knee": -2
+      },
+      "crouchGain": -0.338973,
+      "crouchFootGain": 0.001597,
+      "swing": {
+       "hip_pitch": -1
+      },
+      "swingGain": 0.266293
+     }
+    },
+    "RL": {
+     "root": "RL_hip",
+     "origin": {
+      "pos": [
+       -0.1934,
+       0.0465,
+       0
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ]
+     },
+     "joints": [
+      {
+       "name": "RL_hip_joint",
+       "role": "hip_abd",
+       "range": [
+        -1.0472,
+        1.0472
+       ],
+       "home": 0,
+       "torque": 23.7
+      },
+      {
+       "name": "RL_thigh_joint",
+       "role": "hip_pitch",
+       "range": [
+        -0.5236,
+        4.5379
+       ],
+       "home": 0.9,
+       "torque": 23.7
+      },
+      {
+       "name": "RL_calf_joint",
+       "role": "knee",
+       "range": [
+        -2.7227,
+        -0.83776
+       ],
+       "home": -1.8,
+       "torque": 45.43
+      }
+     ],
+     "bodies": [
+      "RL_hip",
+      "RL_thigh",
+      "RL_calf"
+     ],
+     "xml": "<body name=\"{P}RL_hip\" childclass=\"go2__go2\">\n  <inertial pos=\"0.0054 0.00194 -0.000105\" quat=\"0.505462 0.498237 0.497014 0.499245\" mass=\"0.678\" diaginertia=\"0.00088403 0.000596003 0.000479967\"/>\n  <joint name=\"{P}RL_hip_joint\" class=\"go2__abduction\"/>\n  <geom mesh=\"go2__hip_0\" material=\"go2__metal\" class=\"go2__visual\" quat=\"4.63268e-05 0 1 0\"/>\n  <geom mesh=\"go2__hip_1\" material=\"go2__gray\" class=\"go2__visual\" quat=\"4.63268e-05 0 1 0\"/>\n  <geom size=\"0.046 0.02\" pos=\"0 0.08 0\" quat=\"0.707107 0.707107 0 0\" type=\"cylinder\" class=\"go2__collision\"/>\n  <body name=\"{P}RL_thigh\" pos=\"0 0.0955 0\">\n    <inertial pos=\"-0.00374 -0.0223 -0.0327\" quat=\"0.829533 0.0847635 -0.0200632 0.551623\" mass=\"1.152\" diaginertia=\"0.00594973 0.00584149 0.000878787\"/>\n    <joint name=\"{P}RL_thigh_joint\" class=\"go2__back_hip\"/>\n    <geom mesh=\"go2__thigh_0\" material=\"go2__metal\" class=\"go2__visual\"/>\n    <geom mesh=\"go2__thigh_1\" material=\"go2__gray\" class=\"go2__visual\"/>\n    <geom size=\"0.1065 0.01225 0.017\" pos=\"0 0 -0.1065\" quat=\"0.707107 0 0.707107 0\" type=\"box\" class=\"go2__collision\"/>\n    <body name=\"{P}RL_calf\" pos=\"0 0 -0.213\">\n      <inertial pos=\"0.00629595 -0.000622121 -0.141417\" quat=\"0.710672 0.00154099 -0.00450087 0.703508\" mass=\"0.241352\" diaginertia=\"0.0014901 0.00146356 5.31397e-05\"/>\n      <joint name=\"{P}RL_calf_joint\" class=\"go2__knee\"/>\n      <geom mesh=\"go2__calf_0\" material=\"go2__gray\" class=\"go2__visual\"/>\n      <geom mesh=\"go2__calf_1\" material=\"go2__black\" class=\"go2__visual\"/>\n      <geom size=\"0.013 0.06\" pos=\"0.01 0 -0.06\" quat=\"0.995004 0 -0.0998334 0\" type=\"cylinder\" class=\"go2__collision\"/>\n      <geom size=\"0.011 0.0325\" pos=\"0.02 0 -0.148\" quat=\"0.999688 0 0.0249974 0\" type=\"cylinder\" class=\"go2__collision\"/>\n      <geom pos=\"0 0 -0.213\" mesh=\"go2__foot\" class=\"go2__visual\" material=\"go2__black\"/>\n      <geom name=\"{P}RL\" class=\"go2__foot\"/>\n    </body>\n  </body>\n</body>",
+     "actuatorXml": "<motor class=\"go2__abduction\" name=\"{P}RL_hip\" joint=\"{P}RL_hip_joint\"/>\n<motor class=\"go2__hip\" name=\"{P}RL_thigh\" joint=\"{P}RL_thigh_joint\"/>\n<motor class=\"go2__knee\" name=\"{P}RL_calf\" joint=\"{P}RL_calf_joint\"/>",
+     "stance": {
+      "drop": 0.288373,
+      "foot": [
+       -0.001243,
+       0.0955
+      ],
+      "crouch": {
+       "hip_pitch": 1,
+       "knee": -2
+      },
+      "crouchGain": -0.338973,
+      "crouchFootGain": 0.001597,
+      "swing": {
+       "hip_pitch": -1
+      },
+      "swingGain": 0.266293
+     }
+    },
+    "RR": {
+     "root": "RR_hip",
+     "origin": {
+      "pos": [
+       -0.1934,
+       -0.0465,
+       0
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ]
+     },
+     "joints": [
+      {
+       "name": "RR_hip_joint",
+       "role": "hip_abd",
+       "range": [
+        -1.0472,
+        1.0472
+       ],
+       "home": 0,
+       "torque": 23.7
+      },
+      {
+       "name": "RR_thigh_joint",
+       "role": "hip_pitch",
+       "range": [
+        -0.5236,
+        4.5379
+       ],
+       "home": 0.9,
+       "torque": 23.7
+      },
+      {
+       "name": "RR_calf_joint",
+       "role": "knee",
+       "range": [
+        -2.7227,
+        -0.83776
+       ],
+       "home": -1.8,
+       "torque": 45.43
+      }
+     ],
+     "bodies": [
+      "RR_hip",
+      "RR_thigh",
+      "RR_calf"
+     ],
+     "xml": "<body name=\"{P}RR_hip\" childclass=\"go2__go2\">\n  <inertial pos=\"0.0054 -0.00194 -0.000105\" quat=\"0.499245 0.497014 0.498237 0.505462\" mass=\"0.678\" diaginertia=\"0.00088403 0.000596003 0.000479967\"/>\n  <joint name=\"{P}RR_hip_joint\" class=\"go2__abduction\"/>\n  <geom mesh=\"go2__hip_0\" material=\"go2__metal\" class=\"go2__visual\" quat=\"2.14617e-09 4.63268e-05 4.63268e-05 -1\"/>\n  <geom mesh=\"go2__hip_1\" material=\"go2__gray\" class=\"go2__visual\" quat=\"2.14617e-09 4.63268e-05 4.63268e-05 -1\"/>\n  <geom size=\"0.046 0.02\" pos=\"0 -0.08 0\" quat=\"0.707107 0.707107 0 0\" type=\"cylinder\" class=\"go2__collision\"/>\n  <body name=\"{P}RR_thigh\" pos=\"0 -0.0955 0\">\n    <inertial pos=\"-0.00374 0.0223 -0.0327\" quat=\"0.551623 -0.0200632 0.0847635 0.829533\" mass=\"1.152\" diaginertia=\"0.00594973 0.00584149 0.000878787\"/>\n    <joint name=\"{P}RR_thigh_joint\" class=\"go2__back_hip\"/>\n    <geom mesh=\"go2__thigh_mirror_0\" material=\"go2__metal\" class=\"go2__visual\"/>\n    <geom mesh=\"go2__thigh_mirror_1\" material=\"go2__gray\" class=\"go2__visual\"/>\n    <geom size=\"0.1065 0.01225 0.017\" pos=\"0 0 -0.1065\" quat=\"0.707107 0 0.707107 0\" type=\"box\" class=\"go2__collision\"/>\n    <body name=\"{P}RR_calf\" pos=\"0 0 -0.213\">\n      <inertial pos=\"0.00629595 0.000622121 -0.141417\" quat=\"0.703508 -0.00450087 0.00154099 0.710672\" mass=\"0.241352\" diaginertia=\"0.0014901 0.00146356 5.31397e-05\"/>\n      <joint name=\"{P}RR_calf_joint\" class=\"go2__knee\"/>\n      <geom mesh=\"go2__calf_mirror_0\" material=\"go2__gray\" class=\"go2__visual\"/>\n      <geom mesh=\"go2__calf_mirror_1\" material=\"go2__black\" class=\"go2__visual\"/>\n      <geom size=\"0.013 0.06\" pos=\"0.01 0 -0.06\" quat=\"0.995004 0 -0.0998334 0\" type=\"cylinder\" class=\"go2__collision\"/>\n      <geom size=\"0.011 0.0325\" pos=\"0.02 0 -0.148\" quat=\"0.999688 0 0.0249974 0\" type=\"cylinder\" class=\"go2__collision\"/>\n      <geom pos=\"0 0 -0.213\" mesh=\"go2__foot\" class=\"go2__visual\" material=\"go2__black\"/>\n      <geom name=\"{P}RR\" class=\"go2__foot\"/>\n    </body>\n  </body>\n</body>",
+     "actuatorXml": "<motor class=\"go2__abduction\" name=\"{P}RR_hip\" joint=\"{P}RR_hip_joint\"/>\n<motor class=\"go2__hip\" name=\"{P}RR_thigh\" joint=\"{P}RR_thigh_joint\"/>\n<motor class=\"go2__knee\" name=\"{P}RR_calf\" joint=\"{P}RR_calf_joint\"/>",
+     "stance": {
+      "drop": 0.288373,
+      "foot": [
+       -0.001243,
+       -0.0955
+      ],
+      "crouch": {
+       "hip_pitch": 1,
+       "knee": -2
+      },
+      "crouchGain": -0.338973,
+      "crouchFootGain": 0.001597,
+      "swing": {
+       "hip_pitch": -1
+      },
+      "swingGain": 0.266293
+     }
+    }
+   },
+   "xml": "<body name=\"{P}FL_hip\" childclass=\"go2__go2\">\n  <inertial pos=\"-0.0054 0.00194 -0.000105\" quat=\"0.497014 0.499245 0.505462 0.498237\" mass=\"0.678\" diaginertia=\"0.00088403 0.000596003 0.000479967\"/>\n  <joint name=\"{P}FL_hip_joint\" class=\"go2__abduction\"/>\n  <geom mesh=\"go2__hip_0\" material=\"go2__metal\" class=\"go2__visual\"/>\n  <geom mesh=\"go2__hip_1\" material=\"go2__gray\" class=\"go2__visual\"/>\n  <geom size=\"0.046 0.02\" pos=\"0 0.08 0\" quat=\"1 1 0 0\" type=\"cylinder\" class=\"go2__collision\"/>\n  <body name=\"{P}FL_thigh\" pos=\"0 0.0955 0\">\n    <inertial pos=\"-0.00374 -0.0223 -0.0327\" quat=\"0.829533 0.0847635 -0.0200632 0.551623\" mass=\"1.152\" diaginertia=\"0.00594973 0.00584149 0.000878787\"/>\n    <joint name=\"{P}FL_thigh_joint\" class=\"go2__front_hip\"/>\n    <geom mesh=\"go2__thigh_0\" material=\"go2__metal\" class=\"go2__visual\"/>\n    <geom mesh=\"go2__thigh_1\" material=\"go2__gray\" class=\"go2__visual\"/>\n    <geom size=\"0.1065 0.01225 0.017\" pos=\"0 0 -0.1065\" quat=\"0.707107 0 0.707107 0\" type=\"box\" class=\"go2__collision\"/>\n    <body name=\"{P}FL_calf\" pos=\"0 0 -0.213\">\n      <inertial pos=\"0.00629595 -0.000622121 -0.141417\" quat=\"0.710672 0.00154099 -0.00450087 0.703508\" mass=\"0.241352\" diaginertia=\"0.0014901 0.00146356 5.31397e-05\"/>\n      <joint name=\"{P}FL_calf_joint\" class=\"go2__knee\"/>\n      <geom mesh=\"go2__calf_0\" material=\"go2__gray\" class=\"go2__visual\"/>\n      <geom mesh=\"go2__calf_1\" material=\"go2__black\" class=\"go2__visual\"/>\n      <geom size=\"0.012 0.06\" pos=\"0.008 0 -0.06\" quat=\"0.994493 0 -0.104807 0\" type=\"cylinder\" class=\"go2__collision\"/>\n      <geom size=\"0.011 0.0325\" pos=\"0.02 0 -0.148\" quat=\"0.999688 0 0.0249974 0\" type=\"cylinder\" class=\"go2__collision\"/>\n      <geom pos=\"0 0 -0.213\" mesh=\"go2__foot\" class=\"go2__visual\" material=\"go2__black\"/>\n      <geom name=\"{P}FL\" class=\"go2__foot\"/>\n    </body>\n  </body>\n</body>",
+   "actuatorXml": "<motor class=\"go2__abduction\" name=\"{P}FL_hip\" joint=\"{P}FL_hip_joint\"/>\n<motor class=\"go2__hip\" name=\"{P}FL_thigh\" joint=\"{P}FL_thigh_joint\"/>\n<motor class=\"go2__knee\" name=\"{P}FL_calf\" joint=\"{P}FL_calf_joint\"/>",
+   "meshes": [
+    "go2__hip_0",
+    "go2__hip_1",
+    "go2__thigh_0",
+    "go2__thigh_1",
+    "go2__calf_0",
+    "go2__calf_1",
+    "go2__foot",
+    "go2__thigh_mirror_0",
+    "go2__thigh_mirror_1",
+    "go2__calf_mirror_0",
+    "go2__calf_mirror_1"
+   ],
+   "stance": {
+    "drop": 0.288373,
+    "crouchGain": -0.338973
+   },
+   "files": [
+    "assets/calf_0.obj",
+    "assets/calf_1.obj",
+    "assets/calf_mirror_0.obj",
+    "assets/calf_mirror_1.obj",
+    "assets/foot.obj",
+    "assets/hip_0.obj",
+    "assets/hip_1.obj",
+    "assets/thigh_0.obj",
+    "assets/thigh_1.obj",
+    "assets/thigh_mirror_0.obj",
+    "assets/thigh_mirror_1.obj"
+   ]
+  },
+  {
+   "id": "spot_leg",
+   "vendor": "Boston Dynamics",
+   "kind": "leg",
+   "label": "Boston Dynamics Spot leg",
+   "source": "spot",
+   "sourceFile": "menagerie/boston_dynamics_spot/spot.xml",
+   "mountType": "hip",
+   "mass": 4.37,
+   "dof": 3,
+   "joints": [
+    {
+     "name": "fl_hx",
+     "role": "hip_abd",
+     "range": [
+      -0.785398,
+      0.785398
+     ],
+     "home": 0,
+     "torque": 1000
+    },
+    {
+     "name": "fl_hy",
+     "role": "hip_pitch",
+     "range": [
+      -0.898845,
+      2.29511
+     ],
+     "home": 1.04,
+     "torque": 1000
+    },
+    {
+     "name": "fl_kn",
+     "role": "knee",
+     "range": [
+      -2.7929,
+      -0.254402
+     ],
+     "home": -1.8,
+     "torque": 1000
+    }
+   ],
+   "mirror": [
+    "FL",
+    "FR",
+    "RL",
+    "RR"
+   ],
+   "variants": {
+    "FL": {
+     "root": "fl_hip",
+     "origin": {
+      "pos": [
+       0.29785,
+       0.055,
+       0
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ]
+     },
+     "joints": [
+      {
+       "name": "fl_hx",
+       "role": "hip_abd",
+       "range": [
+        -0.785398,
+        0.785398
+       ],
+       "home": 0,
+       "torque": 1000
+      },
+      {
+       "name": "fl_hy",
+       "role": "hip_pitch",
+       "range": [
+        -0.898845,
+        2.29511
+       ],
+       "home": 1.04,
+       "torque": 1000
+      },
+      {
+       "name": "fl_kn",
+       "role": "knee",
+       "range": [
+        -2.7929,
+        -0.254402
+       ],
+       "home": -1.8,
+       "torque": 1000
+      }
+     ],
+     "bodies": [
+      "fl_hip",
+      "fl_uleg",
+      "fl_lleg"
+     ],
+     "xml": "<body name=\"{P}fl_hip\" childclass=\"spot__spot\">\n  <inertial pos=\"-0.00537435 0.0128418 9.87523e-05\" quat=\"1 1 -1 1\" mass=\"1.68\" diaginertia=\"0.00226544 0.00211474 0.00181296\"/>\n  <joint name=\"{P}fl_hx\" axis=\"1 0 0\" range=\"-0.785398 0.785398\"/>\n  <geom material=\"spot__BlackAbs\" mesh=\"spot__front_left_hip\" class=\"spot__visual\"/>\n  <body name=\"{P}fl_uleg\" pos=\"0 0.1108 0\">\n    <inertial pos=\"0.00514237 -0.00243237 -0.121009\" mass=\"2.34\" diaginertia=\"0.0275596 0.0273549 0.00284815\"/>\n    <joint name=\"{P}fl_hy\" axis=\"0 1 0\" range=\"-0.898845 2.29511\"/>\n    <geom mesh=\"spot__front_left_upper_leg_0\" material=\"spot__wrap\" class=\"spot__visual\"/>\n    <geom mesh=\"spot__front_left_upper_leg_1\" material=\"spot__BlackAbs\" class=\"spot__visual\"/>\n    <geom mesh=\"spot__left_upper_leg_collision\" class=\"spot__collision\"/>\n    <body name=\"{P}fl_lleg\" pos=\"0.025 0 -0.32\">\n      <inertial pos=\"0.00225794 4.6076e-05 -0.180082\" quat=\"1 0 0 1\" mass=\"0.35\" diaginertia=\"0.00405032 0.00399902 0.00014934\"/>\n      <joint name=\"{P}fl_kn\" axis=\"0 1 0\" range=\"-2.7929 -0.254402\"/>\n      <geom material=\"spot__BlackAbs\" mesh=\"spot__front_left_lower_leg\" class=\"spot__visual\"/>\n      <geom mesh=\"spot__left_lower_leg_collision\" class=\"spot__collision\"/>\n      <geom name=\"{P}FL\" class=\"spot__foot\"/>\n    </body>\n  </body>\n</body>",
+     "actuatorXml": "<position class=\"spot__spot\" name=\"{P}fl_hx\" joint=\"{P}fl_hx\"/>\n<position class=\"spot__spot\" name=\"{P}fl_hy\" joint=\"{P}fl_hy\"/>\n<position class=\"spot__spot\" name=\"{P}fl_kn\" joint=\"{P}fl_kn\"/>",
+     "excludeWithMount": [
+      "fl_uleg"
+     ],
+     "stance": {
+      "drop": 0.463458,
+      "foot": [
+       -0.031492,
+       0.1108
+      ],
+      "crouch": {
+       "hip_pitch": 1,
+       "knee": -2
+      },
+      "crouchGain": -0.505614,
+      "crouchFootGain": 0.061119,
+      "swing": {
+       "hip_pitch": -1
+      },
+      "swingGain": 0.428067
+     }
+    },
+    "FR": {
+     "root": "fr_hip",
+     "origin": {
+      "pos": [
+       0.29785,
+       -0.055,
+       0
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ]
+     },
+     "joints": [
+      {
+       "name": "fr_hx",
+       "role": "hip_abd",
+       "range": [
+        -0.785398,
+        0.785398
+       ],
+       "home": 0,
+       "torque": 1000
+      },
+      {
+       "name": "fr_hy",
+       "role": "hip_pitch",
+       "range": [
+        -0.898845,
+        2.24363
+       ],
+       "home": 1.04,
+       "torque": 1000
+      },
+      {
+       "name": "fr_kn",
+       "role": "knee",
+       "range": [
+        -2.7929,
+        -0.255648
+       ],
+       "home": -1.8,
+       "torque": 1000
+      }
+     ],
+     "bodies": [
+      "fr_hip",
+      "fr_uleg",
+      "fr_lleg"
+     ],
+     "xml": "<body name=\"{P}fr_hip\" childclass=\"spot__spot\">\n  <inertial pos=\"-0.00537435 -0.0128418 -9.87523e-05\" quat=\"1 1 -1 1\" mass=\"1.68\" diaginertia=\"0.00226544 0.00211474 0.00181296\"/>\n  <joint name=\"{P}fr_hx\" axis=\"1 0 0\" range=\"-0.785398 0.785398\"/>\n  <geom material=\"spot__BlackAbs\" mesh=\"spot__front_right_hip\" class=\"spot__visual\"/>\n  <body name=\"{P}fr_uleg\" pos=\"0 -0.1108 0\">\n    <inertial pos=\"0.00514237 0.00243237 -0.121009\" mass=\"2.34\" diaginertia=\"0.0275596 0.0273549 0.00284815\"/>\n    <joint name=\"{P}fr_hy\" axis=\"0 1 0\" range=\"-0.898845 2.24363\"/>\n    <geom mesh=\"spot__front_right_upper_leg_0\" material=\"spot__wrap\" class=\"spot__visual\"/>\n    <geom mesh=\"spot__front_right_upper_leg_1\" material=\"spot__BlackAbs\" class=\"spot__visual\"/>\n    <geom mesh=\"spot__right_upper_leg_collision\" class=\"spot__collision\"/>\n    <body name=\"{P}fr_lleg\" pos=\"0.025 0 -0.32\">\n      <inertial pos=\"0.00225794 4.6076e-05 -0.180082\" quat=\"1 0 0 1\" mass=\"0.35\" diaginertia=\"0.00405032 0.00399902 0.00014934\"/>\n      <joint name=\"{P}fr_kn\" axis=\"0 1 0\" range=\"-2.7929 -0.255648\"/>\n      <geom material=\"spot__BlackAbs\" mesh=\"spot__front_right_lower_leg\" class=\"spot__visual\"/>\n      <geom mesh=\"spot__right_lower_leg_collision\" class=\"spot__collision\"/>\n      <geom name=\"{P}FR\" class=\"spot__foot\"/>\n    </body>\n  </body>\n</body>",
+     "actuatorXml": "<position class=\"spot__spot\" name=\"{P}fr_hx\" joint=\"{P}fr_hx\"/>\n<position class=\"spot__spot\" name=\"{P}fr_hy\" joint=\"{P}fr_hy\"/>\n<position class=\"spot__spot\" name=\"{P}fr_kn\" joint=\"{P}fr_kn\"/>",
+     "excludeWithMount": [
+      "fr_uleg"
+     ],
+     "stance": {
+      "drop": 0.463458,
+      "foot": [
+       -0.031492,
+       -0.1108
+      ],
+      "crouch": {
+       "hip_pitch": 1,
+       "knee": -2
+      },
+      "crouchGain": -0.505614,
+      "crouchFootGain": 0.061119,
+      "swing": {
+       "hip_pitch": -1
+      },
+      "swingGain": 0.428067
+     }
+    },
+    "RL": {
+     "root": "hl_hip",
+     "origin": {
+      "pos": [
+       -0.29785,
+       0.055,
+       0
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ]
+     },
+     "joints": [
+      {
+       "name": "hl_hx",
+       "role": "hip_abd",
+       "range": [
+        -0.785398,
+        0.785398
+       ],
+       "home": 0,
+       "torque": 1000
+      },
+      {
+       "name": "hl_hy",
+       "role": "hip_pitch",
+       "range": [
+        -0.898845,
+        2.29511
+       ],
+       "home": 1.04,
+       "torque": 1000
+      },
+      {
+       "name": "hl_kn",
+       "role": "knee",
+       "range": [
+        -2.7929,
+        -0.247067
+       ],
+       "home": -1.8,
+       "torque": 1000
+      }
+     ],
+     "bodies": [
+      "hl_hip",
+      "hl_uleg",
+      "hl_lleg"
+     ],
+     "xml": "<body name=\"{P}hl_hip\" childclass=\"spot__spot\">\n  <inertial pos=\"0.00537435 0.0128418 -9.87523e-05\" quat=\"1 1 -1 1\" mass=\"1.68\" diaginertia=\"0.00226544 0.00211474 0.00181296\"/>\n  <joint name=\"{P}hl_hx\" axis=\"1 0 0\" range=\"-0.785398 0.785398\"/>\n  <geom material=\"spot__BlackAbs\" mesh=\"spot__rear_left_hip\" class=\"spot__visual\"/>\n  <body name=\"{P}hl_uleg\" pos=\"0 0.1108 0\">\n    <inertial pos=\"0.00514237 -0.00243237 -0.121009\" mass=\"2.34\" diaginertia=\"0.0275596 0.0273549 0.00284815\"/>\n    <joint name=\"{P}hl_hy\" axis=\"0 1 0\" range=\"-0.898845 2.29511\"/>\n    <geom mesh=\"spot__rear_left_upper_leg_0\" material=\"spot__wrap\" class=\"spot__visual\"/>\n    <geom mesh=\"spot__rear_left_upper_leg_1\" material=\"spot__BlackAbs\" class=\"spot__visual\"/>\n    <geom mesh=\"spot__left_upper_leg_collision\" class=\"spot__collision\"/>\n    <body name=\"{P}hl_lleg\" pos=\"0.025 0 -0.32\">\n      <inertial pos=\"0.00225794 4.6076e-05 -0.180082\" quat=\"1 0 0 1\" mass=\"0.35\" diaginertia=\"0.00405032 0.00399902 0.00014934\"/>\n      <joint name=\"{P}hl_kn\" axis=\"0 1 0\" range=\"-2.7929 -0.247067\"/>\n      <geom material=\"spot__BlackAbs\" mesh=\"spot__rear_left_lower_leg\" class=\"spot__visual\"/>\n      <geom mesh=\"spot__left_lower_leg_collision\" class=\"spot__collision\"/>\n      <geom name=\"{P}HL\" class=\"spot__foot\"/>\n    </body>\n  </body>\n</body>",
+     "actuatorXml": "<position class=\"spot__spot\" name=\"{P}hl_hx\" joint=\"{P}hl_hx\"/>\n<position class=\"spot__spot\" name=\"{P}hl_hy\" joint=\"{P}hl_hy\"/>\n<position class=\"spot__spot\" name=\"{P}hl_kn\" joint=\"{P}hl_kn\"/>",
+     "excludeWithMount": [
+      "hl_uleg"
+     ],
+     "stance": {
+      "drop": 0.463458,
+      "foot": [
+       -0.031492,
+       0.1108
+      ],
+      "crouch": {
+       "hip_pitch": 1,
+       "knee": -2
+      },
+      "crouchGain": -0.505614,
+      "crouchFootGain": 0.061119,
+      "swing": {
+       "hip_pitch": -1
+      },
+      "swingGain": 0.428067
+     }
+    },
+    "RR": {
+     "root": "hr_hip",
+     "origin": {
+      "pos": [
+       -0.29785,
+       -0.055,
+       0
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ]
+     },
+     "joints": [
+      {
+       "name": "hr_hx",
+       "role": "hip_abd",
+       "range": [
+        -0.785398,
+        0.785398
+       ],
+       "home": 0,
+       "torque": 1000
+      },
+      {
+       "name": "hr_hy",
+       "role": "hip_pitch",
+       "range": [
+        -0.898845,
+        2.29511
+       ],
+       "home": 1.04,
+       "torque": 1000
+      },
+      {
+       "name": "hr_kn",
+       "role": "knee",
+       "range": [
+        -2.7929,
+        -0.248282
+       ],
+       "home": -1.8,
+       "torque": 1000
+      }
+     ],
+     "bodies": [
+      "hr_hip",
+      "hr_uleg",
+      "hr_lleg"
+     ],
+     "xml": "<body name=\"{P}hr_hip\" childclass=\"spot__spot\">\n  <inertial pos=\"0.00537435 -0.0128418 9.87523e-05\" quat=\"1 1 -1 1\" mass=\"1.68\" diaginertia=\"0.00226544 0.00211474 0.00181296\"/>\n  <joint name=\"{P}hr_hx\" axis=\"1 0 0\" range=\"-0.785398 0.785398\"/>\n  <geom material=\"spot__BlackAbs\" mesh=\"spot__rear_right_hip\" class=\"spot__visual\"/>\n  <body name=\"{P}hr_uleg\" pos=\"0 -0.1108 0\">\n    <inertial pos=\"0.00514237 0.00243237 -0.121009\" mass=\"2.34\" diaginertia=\"0.0275596 0.0273549 0.00284815\"/>\n    <joint name=\"{P}hr_hy\" axis=\"0 1 0\" range=\"-0.898845 2.29511\"/>\n    <geom mesh=\"spot__rear_right_upper_leg_0\" material=\"spot__wrap\" class=\"spot__visual\"/>\n    <geom mesh=\"spot__rear_right_upper_leg_1\" material=\"spot__BlackAbs\" class=\"spot__visual\"/>\n    <geom mesh=\"spot__right_upper_leg_collision\" class=\"spot__collision\"/>\n    <body name=\"{P}hr_lleg\" pos=\"0.025 0 -0.32\">\n      <inertial pos=\"0.00225794 4.6076e-05 -0.180082\" quat=\"1 0 0 1\" mass=\"0.35\" diaginertia=\"0.00405032 0.00399902 0.00014934\"/>\n      <joint name=\"{P}hr_kn\" axis=\"0 1 0\" range=\"-2.7929 -0.248282\"/>\n      <geom material=\"spot__BlackAbs\" mesh=\"spot__rear_left_lower_leg\" class=\"spot__visual\"/>\n      <geom mesh=\"spot__right_lower_leg_collision\" class=\"spot__collision\"/>\n      <geom name=\"{P}HR\" class=\"spot__foot\"/>\n    </body>\n  </body>\n</body>",
+     "actuatorXml": "<position class=\"spot__spot\" name=\"{P}hr_hx\" joint=\"{P}hr_hx\"/>\n<position class=\"spot__spot\" name=\"{P}hr_hy\" joint=\"{P}hr_hy\"/>\n<position class=\"spot__spot\" name=\"{P}hr_kn\" joint=\"{P}hr_kn\"/>",
+     "excludeWithMount": [
+      "hr_uleg"
+     ],
+     "stance": {
+      "drop": 0.463458,
+      "foot": [
+       -0.031492,
+       -0.1108
+      ],
+      "crouch": {
+       "hip_pitch": 1,
+       "knee": -2
+      },
+      "crouchGain": -0.505614,
+      "crouchFootGain": 0.061119,
+      "swing": {
+       "hip_pitch": -1
+      },
+      "swingGain": 0.428067
+     }
+    }
+   },
+   "xml": "<body name=\"{P}fl_hip\" childclass=\"spot__spot\">\n  <inertial pos=\"-0.00537435 0.0128418 9.87523e-05\" quat=\"1 1 -1 1\" mass=\"1.68\" diaginertia=\"0.00226544 0.00211474 0.00181296\"/>\n  <joint name=\"{P}fl_hx\" axis=\"1 0 0\" range=\"-0.785398 0.785398\"/>\n  <geom material=\"spot__BlackAbs\" mesh=\"spot__front_left_hip\" class=\"spot__visual\"/>\n  <body name=\"{P}fl_uleg\" pos=\"0 0.1108 0\">\n    <inertial pos=\"0.00514237 -0.00243237 -0.121009\" mass=\"2.34\" diaginertia=\"0.0275596 0.0273549 0.00284815\"/>\n    <joint name=\"{P}fl_hy\" axis=\"0 1 0\" range=\"-0.898845 2.29511\"/>\n    <geom mesh=\"spot__front_left_upper_leg_0\" material=\"spot__wrap\" class=\"spot__visual\"/>\n    <geom mesh=\"spot__front_left_upper_leg_1\" material=\"spot__BlackAbs\" class=\"spot__visual\"/>\n    <geom mesh=\"spot__left_upper_leg_collision\" class=\"spot__collision\"/>\n    <body name=\"{P}fl_lleg\" pos=\"0.025 0 -0.32\">\n      <inertial pos=\"0.00225794 4.6076e-05 -0.180082\" quat=\"1 0 0 1\" mass=\"0.35\" diaginertia=\"0.00405032 0.00399902 0.00014934\"/>\n      <joint name=\"{P}fl_kn\" axis=\"0 1 0\" range=\"-2.7929 -0.254402\"/>\n      <geom material=\"spot__BlackAbs\" mesh=\"spot__front_left_lower_leg\" class=\"spot__visual\"/>\n      <geom mesh=\"spot__left_lower_leg_collision\" class=\"spot__collision\"/>\n      <geom name=\"{P}FL\" class=\"spot__foot\"/>\n    </body>\n  </body>\n</body>",
+   "actuatorXml": "<position class=\"spot__spot\" name=\"{P}fl_hx\" joint=\"{P}fl_hx\"/>\n<position class=\"spot__spot\" name=\"{P}fl_hy\" joint=\"{P}fl_hy\"/>\n<position class=\"spot__spot\" name=\"{P}fl_kn\" joint=\"{P}fl_kn\"/>",
+   "meshes": [
+    "spot__front_left_hip",
+    "spot__front_left_upper_leg_0",
+    "spot__front_left_upper_leg_1",
+    "spot__left_upper_leg_collision",
+    "spot__front_left_lower_leg",
+    "spot__left_lower_leg_collision",
+    "spot__front_right_hip",
+    "spot__front_right_upper_leg_0",
+    "spot__front_right_upper_leg_1",
+    "spot__right_upper_leg_collision",
+    "spot__front_right_lower_leg",
+    "spot__right_lower_leg_collision",
+    "spot__rear_left_hip",
+    "spot__rear_left_upper_leg_0",
+    "spot__rear_left_upper_leg_1",
+    "spot__rear_left_lower_leg",
+    "spot__rear_right_hip",
+    "spot__rear_right_upper_leg_0",
+    "spot__rear_right_upper_leg_1"
+   ],
+   "stance": {
+    "drop": 0.463458,
+    "crouchGain": -0.505614
+   },
+   "files": [
+    "assets/front_left_hip.obj",
+    "assets/front_left_lower_leg.obj",
+    "assets/front_left_upper_leg_0.obj",
+    "assets/front_left_upper_leg_1.obj",
+    "assets/front_right_hip.obj",
+    "assets/front_right_lower_leg.obj",
+    "assets/front_right_upper_leg_0.obj",
+    "assets/front_right_upper_leg_1.obj",
+    "assets/left_lower_leg_collision.obj",
+    "assets/left_upper_leg_collision.obj",
+    "assets/rear_left_hip.obj",
+    "assets/rear_left_lower_leg.obj",
+    "assets/rear_left_upper_leg_0.obj",
+    "assets/rear_left_upper_leg_1.obj",
+    "assets/rear_right_hip.obj",
+    "assets/rear_right_upper_leg_0.obj",
+    "assets/rear_right_upper_leg_1.obj",
+    "assets/right_lower_leg_collision.obj",
+    "assets/right_upper_leg_collision.obj"
+   ]
+  },
+  {
+   "id": "h1_leg",
+   "vendor": "Unitree",
+   "kind": "leg",
+   "label": "Unitree H1 leg",
+   "source": "h1",
+   "sourceFile": "menagerie/unitree_h1/h1.xml",
+   "mountType": "hip",
+   "mass": 10.795,
+   "dof": 5,
+   "joints": [
+    {
+     "name": "left_hip_yaw",
+     "role": "hip_yaw",
+     "range": [
+      -0.43,
+      0.43
+     ],
+     "home": 0,
+     "torque": 200
+    },
+    {
+     "name": "left_hip_roll",
+     "role": "hip_abd",
+     "range": [
+      -0.43,
+      0.43
+     ],
+     "home": 0,
+     "torque": 200
+    },
+    {
+     "name": "left_hip_pitch",
+     "role": "hip_pitch",
+     "range": [
+      -1.57,
+      1.57
+     ],
+     "home": -0.4,
+     "torque": 200
+    },
+    {
+     "name": "left_knee",
+     "role": "knee",
+     "range": [
+      -0.26,
+      2.05
+     ],
+     "home": 0.8,
+     "torque": 300
+    },
+    {
+     "name": "left_ankle",
+     "role": "ankle_pitch",
+     "range": [
+      -0.87,
+      0.52
+     ],
+     "home": -0.4,
+     "torque": 40
+    }
+   ],
+   "mirror": [
+    "L",
+    "R"
+   ],
+   "variants": {
+    "L": {
+     "root": "left_hip_yaw_link",
+     "origin": {
+      "pos": [
+       0,
+       0.0875,
+       -0.1742
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ]
+     },
+     "joints": [
+      {
+       "name": "left_hip_yaw",
+       "role": "hip_yaw",
+       "range": [
+        -0.43,
+        0.43
+       ],
+       "home": 0,
+       "torque": 200
+      },
+      {
+       "name": "left_hip_roll",
+       "role": "hip_abd",
+       "range": [
+        -0.43,
+        0.43
+       ],
+       "home": 0,
+       "torque": 200
+      },
+      {
+       "name": "left_hip_pitch",
+       "role": "hip_pitch",
+       "range": [
+        -1.57,
+        1.57
+       ],
+       "home": -0.4,
+       "torque": 200
+      },
+      {
+       "name": "left_knee",
+       "role": "knee",
+       "range": [
+        -0.26,
+        2.05
+       ],
+       "home": 0.8,
+       "torque": 300
+      },
+      {
+       "name": "left_ankle",
+       "role": "ankle_pitch",
+       "range": [
+        -0.87,
+        0.52
+       ],
+       "home": -0.4,
+       "torque": 40
+      }
+     ],
+     "bodies": [
+      "left_hip_yaw_link",
+      "left_hip_roll_link",
+      "left_hip_pitch_link",
+      "left_knee_link",
+      "left_ankle_link"
+     ],
+     "xml": "<body name=\"{P}left_hip_yaw_link\" childclass=\"h1__h1\">\n  <inertial pos=\"-0.04923 0.0001 0.0072\" quat=\"0.69699 0.219193 0.233287 0.641667\" mass=\"2.244\" diaginertia=\"0.00304494 0.00296885 0.00189201\"/>\n  <joint name=\"{P}left_hip_yaw\" axis=\"0 0 1\" range=\"-0.43 0.43\"/>\n  <geom class=\"h1__visual\" mesh=\"h1__left_hip_yaw_link\"/>\n  <geom size=\"0.06 0.035\" pos=\"-0.067 0 0\" quat=\"0.707123 0 0.70709 0\" type=\"cylinder\" class=\"h1__collision\"/>\n  <body name=\"{P}left_hip_roll_link\" pos=\"0.039468 0 0\">\n    <inertial pos=\"-0.0058 -0.00319 -9e-05\" quat=\"0.0438242 0.70721 -0.0729075 0.701867\" mass=\"2.232\" diaginertia=\"0.00243264 0.00225325 0.00205492\"/>\n    <joint name=\"{P}left_hip_roll\" axis=\"1 0 0\" range=\"-0.43 0.43\"/>\n    <geom class=\"h1__visual\" mesh=\"h1__left_hip_roll_link\"/>\n    <geom class=\"h1__collision\" type=\"cylinder\" size=\"0.05 0.03\" quat=\"1 1 0 0\" pos=\"0 -0.02 0\"/>\n    <body name=\"{P}left_hip_pitch_link\" pos=\"0 0.11536 0\">\n      <inertial pos=\"0.00746 -0.02346 -0.08193\" quat=\"0.979828 0.0513522 -0.0169854 -0.192382\" mass=\"4.152\" diaginertia=\"0.0829503 0.0821457 0.00510909\"/>\n      <joint name=\"{P}left_hip_pitch\" axis=\"0 1 0\" range=\"-1.57 1.57\"/>\n      <geom class=\"h1__visual\" mesh=\"h1__left_hip_pitch_link\"/>\n      <geom class=\"h1__collision\" type=\"capsule\" size=\"0.03\" fromto=\"0.02 0 -0.4 -0.02 0 0.02\"/>\n      <geom class=\"h1__collision\" type=\"capsule\" size=\"0.03\" fromto=\"0.02 0 -0.4 0.02 0 0.02\"/>\n      <geom class=\"h1__collision\" type=\"cylinder\" size=\"0.05 0.02\" quat=\"1 1 0 0\" pos=\"0 -0.07 0\"/>\n      <body name=\"{P}left_knee_link\" pos=\"0 0 -0.4\">\n        <inertial pos=\"-0.00136 -0.00512 -0.1384\" quat=\"0.626132 -0.034227 -0.0416277 0.777852\" mass=\"1.721\" diaginertia=\"0.0125237 0.0123104 0.0019428\"/>\n        <joint name=\"{P}left_knee\" axis=\"0 1 0\" range=\"-0.26 2.05\"/>\n        <geom class=\"h1__visual\" mesh=\"h1__left_knee_link\"/>\n        <geom class=\"h1__collision\" type=\"capsule\" size=\"0.025\" fromto=\"0.02 0 -0.4 0.02 0 0\"/>\n        <geom class=\"h1__collision\" type=\"sphere\" size=\"0.05\" pos=\"0 0 -0.115\"/>\n        <body name=\"{P}left_ankle_link\" pos=\"0 0 -0.4\">\n          <inertial pos=\"0.06722 0.00015 -0.04497\" quat=\"0.489101 0.503197 0.565782 0.432972\" mass=\"0.446\" diaginertia=\"0.00220848 0.00218961 0.000214202\"/>\n          <joint name=\"{P}left_ankle\" axis=\"0 1 0\" range=\"-0.87 0.52\"/>\n          <geom class=\"h1__visual\" mesh=\"h1__left_ankle_link\"/>\n          <geom class=\"h1__foot1\"/>\n          <geom class=\"h1__foot2\"/>\n          <geom class=\"h1__foot3\"/>\n        </body>\n      </body>\n    </body>\n  </body>\n</body>",
+     "actuatorXml": "<motor class=\"h1__h1\" name=\"{P}left_hip_yaw\" joint=\"{P}left_hip_yaw\" ctrlrange=\"-200 200\"/>\n<motor class=\"h1__h1\" name=\"{P}left_hip_roll\" joint=\"{P}left_hip_roll\" ctrlrange=\"-200 200\"/>\n<motor class=\"h1__h1\" name=\"{P}left_hip_pitch\" joint=\"{P}left_hip_pitch\" ctrlrange=\"-200 200\"/>\n<motor class=\"h1__h1\" name=\"{P}left_knee\" joint=\"{P}left_knee\" ctrlrange=\"-300 300\"/>\n<motor class=\"h1__h1\" name=\"{P}left_ankle\" joint=\"{P}left_ankle\" ctrlrange=\"-40 40\"/>",
+     "stance": {
+      "drop": 0.806849,
+      "foot": [
+       0.106135,
+       0.11536
+      ],
+      "crouch": {
+       "hip_pitch": -1,
+       "knee": 2,
+       "ankle_pitch": -1
+      },
+      "crouchGain": -0.329822,
+      "crouchFootGain": 0,
+      "swing": {
+       "hip_pitch": -1,
+       "ankle_pitch": 1
+      },
+      "swingGain": 0.736542
+     }
+    },
+    "R": {
+     "root": "right_hip_yaw_link",
+     "origin": {
+      "pos": [
+       0,
+       -0.0875,
+       -0.1742
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ]
+     },
+     "joints": [
+      {
+       "name": "right_hip_yaw",
+       "role": "hip_yaw",
+       "range": [
+        -0.43,
+        0.43
+       ],
+       "home": 0,
+       "torque": 200
+      },
+      {
+       "name": "right_hip_roll",
+       "role": "hip_abd",
+       "range": [
+        -0.43,
+        0.43
+       ],
+       "home": 0,
+       "torque": 200
+      },
+      {
+       "name": "right_hip_pitch",
+       "role": "hip_pitch",
+       "range": [
+        -1.57,
+        1.57
+       ],
+       "home": -0.4,
+       "torque": 200
+      },
+      {
+       "name": "right_knee",
+       "role": "knee",
+       "range": [
+        -0.26,
+        2.05
+       ],
+       "home": 0.8,
+       "torque": 300
+      },
+      {
+       "name": "right_ankle",
+       "role": "ankle_pitch",
+       "range": [
+        -0.87,
+        0.52
+       ],
+       "home": -0.4,
+       "torque": 40
+      }
+     ],
+     "bodies": [
+      "right_hip_yaw_link",
+      "right_hip_roll_link",
+      "right_hip_pitch_link",
+      "right_knee_link",
+      "right_ankle_link"
+     ],
+     "xml": "<body name=\"{P}right_hip_yaw_link\" childclass=\"h1__h1\">\n  <inertial pos=\"-0.04923 -0.0001 0.0072\" quat=\"0.641667 0.233287 0.219193 0.69699\" mass=\"2.244\" diaginertia=\"0.00304494 0.00296885 0.00189201\"/>\n  <joint name=\"{P}right_hip_yaw\" axis=\"0 0 1\" range=\"-0.43 0.43\"/>\n  <geom class=\"h1__visual\" mesh=\"h1__right_hip_yaw_link\"/>\n  <geom size=\"0.06 0.035\" pos=\"-0.067 0 0\" quat=\"0.707123 0 0.70709 0\" type=\"cylinder\" class=\"h1__collision\"/>\n  <body name=\"{P}right_hip_roll_link\" pos=\"0.039468 0 0\">\n    <inertial pos=\"-0.0058 0.00319 -9e-05\" quat=\"-0.0438242 0.70721 0.0729075 0.701867\" mass=\"2.232\" diaginertia=\"0.00243264 0.00225325 0.00205492\"/>\n    <joint name=\"{P}right_hip_roll\" axis=\"1 0 0\" range=\"-0.43 0.43\"/>\n    <geom class=\"h1__visual\" mesh=\"h1__right_hip_roll_link\"/>\n    <geom class=\"h1__collision\" type=\"cylinder\" size=\"0.05 0.03\" quat=\"1 1 0 0\" pos=\"0 0.02 0\"/>\n    <body name=\"{P}right_hip_pitch_link\" pos=\"0 -0.11536 0\">\n      <inertial pos=\"0.00746 0.02346 -0.08193\" quat=\"0.979828 -0.0513522 -0.0169854 0.192382\" mass=\"4.152\" diaginertia=\"0.0829503 0.0821457 0.00510909\"/>\n      <joint name=\"{P}right_hip_pitch\" axis=\"0 1 0\" range=\"-1.57 1.57\"/>\n      <geom class=\"h1__visual\" mesh=\"h1__right_hip_pitch_link\"/>\n      <geom class=\"h1__collision\" type=\"capsule\" size=\"0.03\" fromto=\"0.02 0 -0.4 -0.02 0 0.02\"/>\n      <geom class=\"h1__collision\" type=\"capsule\" size=\"0.03\" fromto=\"0.02 0 -0.4 0.02 0 0.02\"/>\n      <geom class=\"h1__collision\" type=\"cylinder\" size=\"0.05 0.02\" quat=\"1 1 0 0\" pos=\"0 0.07 0\"/>\n      <body name=\"{P}right_knee_link\" pos=\"0 0 -0.4\">\n        <inertial pos=\"-0.00136 0.00512 -0.1384\" quat=\"0.777852 -0.0416277 -0.034227 0.626132\" mass=\"1.721\" diaginertia=\"0.0125237 0.0123104 0.0019428\"/>\n        <joint name=\"{P}right_knee\" axis=\"0 1 0\" range=\"-0.26 2.05\"/>\n        <geom class=\"h1__visual\" mesh=\"h1__right_knee_link\"/>\n        <geom class=\"h1__collision\" type=\"capsule\" size=\"0.025\" fromto=\"0.02 0 -0.4 0.02 0 0\"/>\n        <geom class=\"h1__collision\" type=\"sphere\" size=\"0.05\" pos=\"0 0 -0.115\"/>\n        <body name=\"{P}right_ankle_link\" pos=\"0 0 -0.4\">\n          <inertial pos=\"0.06722 -0.00015 -0.04497\" quat=\"0.432972 0.565782 0.503197 0.489101\" mass=\"0.446\" diaginertia=\"0.00220848 0.00218961 0.000214202\"/>\n          <joint name=\"{P}right_ankle\" axis=\"0 1 0\" range=\"-0.87 0.52\"/>\n          <geom class=\"h1__visual\" mesh=\"h1__right_ankle_link\"/>\n          <geom class=\"h1__foot1\"/>\n          <geom class=\"h1__foot2\"/>\n          <geom class=\"h1__foot3\"/>\n        </body>\n      </body>\n    </body>\n  </body>\n</body>",
+     "actuatorXml": "<motor class=\"h1__h1\" name=\"{P}right_hip_yaw\" joint=\"{P}right_hip_yaw\" ctrlrange=\"-200 200\"/>\n<motor class=\"h1__h1\" name=\"{P}right_hip_roll\" joint=\"{P}right_hip_roll\" ctrlrange=\"-200 200\"/>\n<motor class=\"h1__h1\" name=\"{P}right_hip_pitch\" joint=\"{P}right_hip_pitch\" ctrlrange=\"-200 200\"/>\n<motor class=\"h1__h1\" name=\"{P}right_knee\" joint=\"{P}right_knee\" ctrlrange=\"-300 300\"/>\n<motor class=\"h1__h1\" name=\"{P}right_ankle\" joint=\"{P}right_ankle\" ctrlrange=\"-40 40\"/>",
+     "stance": {
+      "drop": 0.806849,
+      "foot": [
+       0.106135,
+       -0.11536
+      ],
+      "crouch": {
+       "hip_pitch": -1,
+       "knee": 2,
+       "ankle_pitch": -1
+      },
+      "crouchGain": -0.329822,
+      "crouchFootGain": 0,
+      "swing": {
+       "hip_pitch": -1,
+       "ankle_pitch": 1
+      },
+      "swingGain": 0.736542
+     }
+    }
+   },
+   "xml": "<body name=\"{P}left_hip_yaw_link\" childclass=\"h1__h1\">\n  <inertial pos=\"-0.04923 0.0001 0.0072\" quat=\"0.69699 0.219193 0.233287 0.641667\" mass=\"2.244\" diaginertia=\"0.00304494 0.00296885 0.00189201\"/>\n  <joint name=\"{P}left_hip_yaw\" axis=\"0 0 1\" range=\"-0.43 0.43\"/>\n  <geom class=\"h1__visual\" mesh=\"h1__left_hip_yaw_link\"/>\n  <geom size=\"0.06 0.035\" pos=\"-0.067 0 0\" quat=\"0.707123 0 0.70709 0\" type=\"cylinder\" class=\"h1__collision\"/>\n  <body name=\"{P}left_hip_roll_link\" pos=\"0.039468 0 0\">\n    <inertial pos=\"-0.0058 -0.00319 -9e-05\" quat=\"0.0438242 0.70721 -0.0729075 0.701867\" mass=\"2.232\" diaginertia=\"0.00243264 0.00225325 0.00205492\"/>\n    <joint name=\"{P}left_hip_roll\" axis=\"1 0 0\" range=\"-0.43 0.43\"/>\n    <geom class=\"h1__visual\" mesh=\"h1__left_hip_roll_link\"/>\n    <geom class=\"h1__collision\" type=\"cylinder\" size=\"0.05 0.03\" quat=\"1 1 0 0\" pos=\"0 -0.02 0\"/>\n    <body name=\"{P}left_hip_pitch_link\" pos=\"0 0.11536 0\">\n      <inertial pos=\"0.00746 -0.02346 -0.08193\" quat=\"0.979828 0.0513522 -0.0169854 -0.192382\" mass=\"4.152\" diaginertia=\"0.0829503 0.0821457 0.00510909\"/>\n      <joint name=\"{P}left_hip_pitch\" axis=\"0 1 0\" range=\"-1.57 1.57\"/>\n      <geom class=\"h1__visual\" mesh=\"h1__left_hip_pitch_link\"/>\n      <geom class=\"h1__collision\" type=\"capsule\" size=\"0.03\" fromto=\"0.02 0 -0.4 -0.02 0 0.02\"/>\n      <geom class=\"h1__collision\" type=\"capsule\" size=\"0.03\" fromto=\"0.02 0 -0.4 0.02 0 0.02\"/>\n      <geom class=\"h1__collision\" type=\"cylinder\" size=\"0.05 0.02\" quat=\"1 1 0 0\" pos=\"0 -0.07 0\"/>\n      <body name=\"{P}left_knee_link\" pos=\"0 0 -0.4\">\n        <inertial pos=\"-0.00136 -0.00512 -0.1384\" quat=\"0.626132 -0.034227 -0.0416277 0.777852\" mass=\"1.721\" diaginertia=\"0.0125237 0.0123104 0.0019428\"/>\n        <joint name=\"{P}left_knee\" axis=\"0 1 0\" range=\"-0.26 2.05\"/>\n        <geom class=\"h1__visual\" mesh=\"h1__left_knee_link\"/>\n        <geom class=\"h1__collision\" type=\"capsule\" size=\"0.025\" fromto=\"0.02 0 -0.4 0.02 0 0\"/>\n        <geom class=\"h1__collision\" type=\"sphere\" size=\"0.05\" pos=\"0 0 -0.115\"/>\n        <body name=\"{P}left_ankle_link\" pos=\"0 0 -0.4\">\n          <inertial pos=\"0.06722 0.00015 -0.04497\" quat=\"0.489101 0.503197 0.565782 0.432972\" mass=\"0.446\" diaginertia=\"0.00220848 0.00218961 0.000214202\"/>\n          <joint name=\"{P}left_ankle\" axis=\"0 1 0\" range=\"-0.87 0.52\"/>\n          <geom class=\"h1__visual\" mesh=\"h1__left_ankle_link\"/>\n          <geom class=\"h1__foot1\"/>\n          <geom class=\"h1__foot2\"/>\n          <geom class=\"h1__foot3\"/>\n        </body>\n      </body>\n    </body>\n  </body>\n</body>",
+   "actuatorXml": "<motor class=\"h1__h1\" name=\"{P}left_hip_yaw\" joint=\"{P}left_hip_yaw\" ctrlrange=\"-200 200\"/>\n<motor class=\"h1__h1\" name=\"{P}left_hip_roll\" joint=\"{P}left_hip_roll\" ctrlrange=\"-200 200\"/>\n<motor class=\"h1__h1\" name=\"{P}left_hip_pitch\" joint=\"{P}left_hip_pitch\" ctrlrange=\"-200 200\"/>\n<motor class=\"h1__h1\" name=\"{P}left_knee\" joint=\"{P}left_knee\" ctrlrange=\"-300 300\"/>\n<motor class=\"h1__h1\" name=\"{P}left_ankle\" joint=\"{P}left_ankle\" ctrlrange=\"-40 40\"/>",
+   "meshes": [
+    "h1__left_hip_yaw_link",
+    "h1__left_hip_roll_link",
+    "h1__left_hip_pitch_link",
+    "h1__left_knee_link",
+    "h1__left_ankle_link",
+    "h1__right_hip_yaw_link",
+    "h1__right_hip_roll_link",
+    "h1__right_hip_pitch_link",
+    "h1__right_knee_link",
+    "h1__right_ankle_link"
+   ],
+   "stance": {
+    "drop": 0.806849,
+    "crouchGain": -0.329822
+   },
+   "files": [
+    "assets/left_ankle_link.stl",
+    "assets/left_hip_pitch_link.stl",
+    "assets/left_hip_roll_link.stl",
+    "assets/left_hip_yaw_link.stl",
+    "assets/left_knee_link.stl",
+    "assets/right_ankle_link.stl",
+    "assets/right_hip_pitch_link.stl",
+    "assets/right_hip_roll_link.stl",
+    "assets/right_hip_yaw_link.stl",
+    "assets/right_knee_link.stl"
+   ]
+  },
+  {
+   "id": "g1_leg",
+   "vendor": "Unitree",
+   "kind": "leg",
+   "label": "Unitree G1 leg",
+   "source": "g1",
+   "sourceFile": "menagerie/unitree_g1/g1.xml",
+   "mountType": "hip",
+   "mass": 7.186,
+   "dof": 6,
+   "joints": [
+    {
+     "name": "left_hip_pitch_joint",
+     "role": "hip_pitch",
+     "range": [
+      -2.5307,
+      2.8798
+     ],
+     "home": -0.1,
+     "torque": 88
+    },
+    {
+     "name": "left_hip_roll_joint",
+     "role": "hip_abd",
+     "range": [
+      -0.5236,
+      2.9671
+     ],
+     "home": 0,
+     "torque": 139
+    },
+    {
+     "name": "left_hip_yaw_joint",
+     "role": "hip_yaw",
+     "range": [
+      -2.7576,
+      2.7576
+     ],
+     "home": 0,
+     "torque": 88
+    },
+    {
+     "name": "left_knee_joint",
+     "role": "knee",
+     "range": [
+      -0.087267,
+      2.8798
+     ],
+     "home": 0.3,
+     "torque": 139
+    },
+    {
+     "name": "left_ankle_pitch_joint",
+     "role": "ankle_pitch",
+     "range": [
+      -0.87267,
+      0.5236
+     ],
+     "home": -0.2,
+     "torque": 50
+    },
+    {
+     "name": "left_ankle_roll_joint",
+     "role": "ankle_roll",
+     "range": [
+      -0.2618,
+      0.2618
+     ],
+     "home": 0,
+     "torque": 50
+    }
+   ],
+   "mirror": [
+    "L",
+    "R"
+   ],
+   "variants": {
+    "L": {
+     "root": "left_hip_pitch_link",
+     "origin": {
+      "pos": [
+       0,
+       0.064452,
+       -0.1027
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ]
+     },
+     "joints": [
+      {
+       "name": "left_hip_pitch_joint",
+       "role": "hip_pitch",
+       "range": [
+        -2.5307,
+        2.8798
+       ],
+       "home": -0.1,
+       "torque": 88
+      },
+      {
+       "name": "left_hip_roll_joint",
+       "role": "hip_abd",
+       "range": [
+        -0.5236,
+        2.9671
+       ],
+       "home": 0,
+       "torque": 139
+      },
+      {
+       "name": "left_hip_yaw_joint",
+       "role": "hip_yaw",
+       "range": [
+        -2.7576,
+        2.7576
+       ],
+       "home": 0,
+       "torque": 88
+      },
+      {
+       "name": "left_knee_joint",
+       "role": "knee",
+       "range": [
+        -0.087267,
+        2.8798
+       ],
+       "home": 0.3,
+       "torque": 139
+      },
+      {
+       "name": "left_ankle_pitch_joint",
+       "role": "ankle_pitch",
+       "range": [
+        -0.87267,
+        0.5236
+       ],
+       "home": -0.2,
+       "torque": 50
+      },
+      {
+       "name": "left_ankle_roll_joint",
+       "role": "ankle_roll",
+       "range": [
+        -0.2618,
+        0.2618
+       ],
+       "home": 0,
+       "torque": 50
+      }
+     ],
+     "bodies": [
+      "left_hip_pitch_link",
+      "left_hip_roll_link",
+      "left_hip_yaw_link",
+      "left_knee_link",
+      "left_ankle_pitch_link",
+      "left_ankle_roll_link"
+     ],
+     "xml": "<body name=\"{P}left_hip_pitch_link\" childclass=\"g1__g1\">\n  <inertial pos=\"0.002741 0.047791 -0.02606\" quat=\"0.954862 0.293964 0.0302556 0.030122\" mass=\"1.35\" diaginertia=\"0.00181517 0.00153422 0.00116212\"/>\n  <joint name=\"{P}left_hip_pitch_joint\" axis=\"0 1 0\" range=\"-2.5307 2.8798\" actuatorfrcrange=\"-88 88\"/>\n  <geom class=\"g1__visual\" material=\"g1__black\" mesh=\"g1__left_hip_pitch_link\"/>\n  <geom class=\"g1__collision\" material=\"g1__black\" mesh=\"g1__left_hip_pitch_link\"/>\n  <body name=\"{P}left_hip_roll_link\" pos=\"0 0.052 -0.030465\" quat=\"0.996179 0 -0.0873386 0\">\n    <inertial pos=\"0.029812 -0.001045 -0.087934\" quat=\"0.977808 -1.97119e-05 0.205576 -0.0403793\" mass=\"1.52\" diaginertia=\"0.00254986 0.00241169 0.00148755\"/>\n    <joint name=\"{P}left_hip_roll_joint\" axis=\"1 0 0\" range=\"-0.5236 2.9671\" actuatorfrcrange=\"-139 139\"/>\n    <geom class=\"g1__visual\" mesh=\"g1__left_hip_roll_link\"/>\n    <geom class=\"g1__collision\" mesh=\"g1__left_hip_roll_link\"/>\n    <body name=\"{P}left_hip_yaw_link\" pos=\"0.025001 0 -0.12412\">\n      <inertial pos=\"-0.057709 -0.010981 -0.15078\" quat=\"0.600598 0.15832 0.223482 0.751181\" mass=\"1.702\" diaginertia=\"0.00776166 0.00717575 0.00160139\"/>\n      <joint name=\"{P}left_hip_yaw_joint\" axis=\"0 0 1\" range=\"-2.7576 2.7576\" actuatorfrcrange=\"-88 88\"/>\n      <geom class=\"g1__visual\" mesh=\"g1__left_hip_yaw_link\"/>\n      <geom class=\"g1__collision\" mesh=\"g1__left_hip_yaw_link\"/>\n      <body name=\"{P}left_knee_link\" pos=\"-0.078273 0.0021489 -0.17734\" quat=\"0.996179 0 0.0873386 0\">\n        <inertial pos=\"0.005457 0.003964 -0.12074\" quat=\"0.923418 -0.0327699 0.0158246 0.382067\" mass=\"1.932\" diaginertia=\"0.0113804 0.0112778 0.00146458\"/>\n        <joint name=\"{P}left_knee_joint\" axis=\"0 1 0\" range=\"-0.087267 2.8798\" actuatorfrcrange=\"-139 139\"/>\n        <geom class=\"g1__visual\" mesh=\"g1__left_knee_link\"/>\n        <geom class=\"g1__collision\" mesh=\"g1__left_knee_link\"/>\n        <body name=\"{P}left_ankle_pitch_link\" pos=\"0 -9.4445e-05 -0.30001\">\n          <inertial pos=\"-0.007269 0 0.011137\" quat=\"0.603053 0.369225 0.369225 0.603053\" mass=\"0.074\" diaginertia=\"1.89e-05 1.40805e-05 6.9195e-06\"/>\n          <joint name=\"{P}left_ankle_pitch_joint\" axis=\"0 1 0\" range=\"-0.87267 0.5236\" actuatorfrcrange=\"-50 50\"/>\n          <geom class=\"g1__visual\" mesh=\"g1__left_ankle_pitch_link\"/>\n          <geom class=\"g1__collision\" mesh=\"g1__left_ankle_pitch_link\"/>\n          <body name=\"{P}left_ankle_roll_link\" pos=\"0 0 -0.017558\">\n            <inertial pos=\"0.026505 0 -0.016425\" quat=\"-0.000481092 0.728482 -0.000618967 0.685065\" mass=\"0.608\" diaginertia=\"0.00167218 0.0016161 0.000217621\"/>\n            <joint name=\"{P}left_ankle_roll_joint\" axis=\"1 0 0\" range=\"-0.2618 0.2618\" actuatorfrcrange=\"-50 50\"/>\n            <geom class=\"g1__visual\" material=\"g1__black\" mesh=\"g1__left_ankle_roll_link\"/>\n            <geom class=\"g1__foot\" pos=\"-0.05 0.025 -0.03\"/>\n            <geom class=\"g1__foot\" pos=\"-0.05 -0.025 -0.03\"/>\n            <geom class=\"g1__foot\" pos=\"0.12 0.03 -0.03\"/>\n            <geom class=\"g1__foot\" pos=\"0.12 -0.03 -0.03\"/>\n            <site name=\"{P}left_foot\"/>\n          </body>\n        </body>\n      </body>\n    </body>\n  </body>\n</body>",
+     "actuatorXml": "<position class=\"g1__g1\" name=\"{P}left_hip_pitch_joint\" joint=\"{P}left_hip_pitch_joint\"/>\n<position class=\"g1__g1\" name=\"{P}left_hip_roll_joint\" joint=\"{P}left_hip_roll_joint\"/>\n<position class=\"g1__g1\" name=\"{P}left_hip_yaw_joint\" joint=\"{P}left_hip_yaw_joint\"/>\n<position class=\"g1__g1\" name=\"{P}left_knee_joint\" joint=\"{P}left_knee_joint\"/>\n<position class=\"g1__g1\" name=\"{P}left_ankle_pitch_joint\" joint=\"{P}left_ankle_pitch_joint\"/>\n<position class=\"g1__g1\" name=\"{P}left_ankle_roll_joint\" joint=\"{P}left_ankle_roll_joint\"/>",
+     "stance": {
+      "drop": 0.681502,
+      "foot": [
+       0.008998,
+       0.054054
+      ],
+      "crouch": {
+       "hip_pitch": -1,
+       "knee": 2,
+       "ankle_pitch": -1
+      },
+      "crouchGain": -0.108885,
+      "crouchFootGain": 0.041518,
+      "swing": {
+       "hip_pitch": -1,
+       "ankle_pitch": 1
+      },
+      "swingGain": 0.629332
+     }
+    },
+    "R": {
+     "root": "right_hip_pitch_link",
+     "origin": {
+      "pos": [
+       0,
+       -0.064452,
+       -0.1027
+      ],
+      "quat": [
+       1,
+       0,
+       0,
+       0
+      ]
+     },
+     "joints": [
+      {
+       "name": "right_hip_pitch_joint",
+       "role": "hip_pitch",
+       "range": [
+        -2.5307,
+        2.8798
+       ],
+       "home": -0.1,
+       "torque": 88
+      },
+      {
+       "name": "right_hip_roll_joint",
+       "role": "hip_abd",
+       "range": [
+        -2.9671,
+        0.5236
+       ],
+       "home": 0,
+       "torque": 139
+      },
+      {
+       "name": "right_hip_yaw_joint",
+       "role": "hip_yaw",
+       "range": [
+        -2.7576,
+        2.7576
+       ],
+       "home": 0,
+       "torque": 88
+      },
+      {
+       "name": "right_knee_joint",
+       "role": "knee",
+       "range": [
+        -0.087267,
+        2.8798
+       ],
+       "home": 0.3,
+       "torque": 139
+      },
+      {
+       "name": "right_ankle_pitch_joint",
+       "role": "ankle_pitch",
+       "range": [
+        -0.87267,
+        0.5236
+       ],
+       "home": -0.2,
+       "torque": 50
+      },
+      {
+       "name": "right_ankle_roll_joint",
+       "role": "ankle_roll",
+       "range": [
+        -0.2618,
+        0.2618
+       ],
+       "home": 0,
+       "torque": 50
+      }
+     ],
+     "bodies": [
+      "right_hip_pitch_link",
+      "right_hip_roll_link",
+      "right_hip_yaw_link",
+      "right_knee_link",
+      "right_ankle_pitch_link",
+      "right_ankle_roll_link"
+     ],
+     "xml": "<body name=\"{P}right_hip_pitch_link\" childclass=\"g1__g1\">\n  <inertial pos=\"0.002741 -0.047791 -0.02606\" quat=\"0.954862 -0.293964 0.0302556 -0.030122\" mass=\"1.35\" diaginertia=\"0.00181517 0.00153422 0.00116212\"/>\n  <joint name=\"{P}right_hip_pitch_joint\" axis=\"0 1 0\" range=\"-2.5307 2.8798\" actuatorfrcrange=\"-88 88\"/>\n  <geom class=\"g1__visual\" material=\"g1__black\" mesh=\"g1__right_hip_pitch_link\"/>\n  <geom class=\"g1__collision\" material=\"g1__black\" mesh=\"g1__right_hip_pitch_link\"/>\n  <body name=\"{P}right_hip_roll_link\" pos=\"0 -0.052 -0.030465\" quat=\"0.996179 0 -0.0873386 0\">\n    <inertial pos=\"0.029812 0.001045 -0.087934\" quat=\"0.977808 1.97119e-05 0.205576 0.0403793\" mass=\"1.52\" diaginertia=\"0.00254986 0.00241169 0.00148755\"/>\n    <joint name=\"{P}right_hip_roll_joint\" axis=\"1 0 0\" range=\"-2.9671 0.5236\" actuatorfrcrange=\"-139 139\"/>\n    <geom class=\"g1__visual\" mesh=\"g1__right_hip_roll_link\"/>\n    <geom class=\"g1__collision\" mesh=\"g1__right_hip_roll_link\"/>\n    <body name=\"{P}right_hip_yaw_link\" pos=\"0.025001 0 -0.12412\">\n      <inertial pos=\"-0.057709 0.010981 -0.15078\" quat=\"0.751181 0.223482 0.15832 0.600598\" mass=\"1.702\" diaginertia=\"0.00776166 0.00717575 0.00160139\"/>\n      <joint name=\"{P}right_hip_yaw_joint\" axis=\"0 0 1\" range=\"-2.7576 2.7576\" actuatorfrcrange=\"-88 88\"/>\n      <geom class=\"g1__visual\" mesh=\"g1__right_hip_yaw_link\"/>\n      <geom class=\"g1__collision\" mesh=\"g1__right_hip_yaw_link\"/>\n      <body name=\"{P}right_knee_link\" pos=\"-0.078273 -0.0021489 -0.17734\" quat=\"0.996179 0 0.0873386 0\">\n        <inertial pos=\"0.005457 -0.003964 -0.12074\" quat=\"0.923439 0.0345276 0.0116333 -0.382012\" mass=\"1.932\" diaginertia=\"0.011374 0.0112843 0.00146452\"/>\n        <joint name=\"{P}right_knee_joint\" axis=\"0 1 0\" range=\"-0.087267 2.8798\" actuatorfrcrange=\"-139 139\"/>\n        <geom class=\"g1__visual\" mesh=\"g1__right_knee_link\"/>\n        <geom class=\"g1__collision\" mesh=\"g1__right_knee_link\"/>\n        <body name=\"{P}right_ankle_pitch_link\" pos=\"0 9.4445e-05 -0.30001\">\n          <inertial pos=\"-0.007269 0 0.011137\" quat=\"0.603053 0.369225 0.369225 0.603053\" mass=\"0.074\" diaginertia=\"1.89e-05 1.40805e-05 6.9195e-06\"/>\n          <joint name=\"{P}right_ankle_pitch_joint\" axis=\"0 1 0\" range=\"-0.87267 0.5236\" actuatorfrcrange=\"-50 50\"/>\n          <geom class=\"g1__visual\" mesh=\"g1__right_ankle_pitch_link\"/>\n          <geom class=\"g1__collision\" mesh=\"g1__right_ankle_pitch_link\"/>\n          <body name=\"{P}right_ankle_roll_link\" pos=\"0 0 -0.017558\">\n            <inertial pos=\"0.026505 0 -0.016425\" quat=\"0.000481092 0.728482 0.000618967 0.685065\" mass=\"0.608\" diaginertia=\"0.00167218 0.0016161 0.000217621\"/>\n            <joint name=\"{P}right_ankle_roll_joint\" axis=\"1 0 0\" range=\"-0.2618 0.2618\" actuatorfrcrange=\"-50 50\"/>\n            <geom class=\"g1__visual\" material=\"g1__black\" mesh=\"g1__right_ankle_roll_link\"/>\n            <geom class=\"g1__foot\" pos=\"-0.05 0.025 -0.03\"/>\n            <geom class=\"g1__foot\" pos=\"-0.05 -0.025 -0.03\"/>\n            <geom class=\"g1__foot\" pos=\"0.12 0.03 -0.03\"/>\n            <geom class=\"g1__foot\" pos=\"0.12 -0.03 -0.03\"/>\n            <site name=\"{P}right_foot\"/>\n          </body>\n        </body>\n      </body>\n    </body>\n  </body>\n</body>",
+     "actuatorXml": "<position class=\"g1__g1\" name=\"{P}right_hip_pitch_joint\" joint=\"{P}right_hip_pitch_joint\"/>\n<position class=\"g1__g1\" name=\"{P}right_hip_roll_joint\" joint=\"{P}right_hip_roll_joint\"/>\n<position class=\"g1__g1\" name=\"{P}right_hip_yaw_joint\" joint=\"{P}right_hip_yaw_joint\"/>\n<position class=\"g1__g1\" name=\"{P}right_knee_joint\" joint=\"{P}right_knee_joint\"/>\n<position class=\"g1__g1\" name=\"{P}right_ankle_pitch_joint\" joint=\"{P}right_ankle_pitch_joint\"/>\n<position class=\"g1__g1\" name=\"{P}right_ankle_roll_joint\" joint=\"{P}right_ankle_roll_joint\"/>",
+     "stance": {
+      "drop": 0.681502,
+      "foot": [
+       0.008998,
+       -0.054054
+      ],
+      "crouch": {
+       "hip_pitch": -1,
+       "knee": 2,
+       "ankle_pitch": -1
+      },
+      "crouchGain": -0.108885,
+      "crouchFootGain": 0.041518,
+      "swing": {
+       "hip_pitch": -1,
+       "ankle_pitch": 1
+      },
+      "swingGain": 0.629332
+     }
+    }
+   },
+   "xml": "<body name=\"{P}left_hip_pitch_link\" childclass=\"g1__g1\">\n  <inertial pos=\"0.002741 0.047791 -0.02606\" quat=\"0.954862 0.293964 0.0302556 0.030122\" mass=\"1.35\" diaginertia=\"0.00181517 0.00153422 0.00116212\"/>\n  <joint name=\"{P}left_hip_pitch_joint\" axis=\"0 1 0\" range=\"-2.5307 2.8798\" actuatorfrcrange=\"-88 88\"/>\n  <geom class=\"g1__visual\" material=\"g1__black\" mesh=\"g1__left_hip_pitch_link\"/>\n  <geom class=\"g1__collision\" material=\"g1__black\" mesh=\"g1__left_hip_pitch_link\"/>\n  <body name=\"{P}left_hip_roll_link\" pos=\"0 0.052 -0.030465\" quat=\"0.996179 0 -0.0873386 0\">\n    <inertial pos=\"0.029812 -0.001045 -0.087934\" quat=\"0.977808 -1.97119e-05 0.205576 -0.0403793\" mass=\"1.52\" diaginertia=\"0.00254986 0.00241169 0.00148755\"/>\n    <joint name=\"{P}left_hip_roll_joint\" axis=\"1 0 0\" range=\"-0.5236 2.9671\" actuatorfrcrange=\"-139 139\"/>\n    <geom class=\"g1__visual\" mesh=\"g1__left_hip_roll_link\"/>\n    <geom class=\"g1__collision\" mesh=\"g1__left_hip_roll_link\"/>\n    <body name=\"{P}left_hip_yaw_link\" pos=\"0.025001 0 -0.12412\">\n      <inertial pos=\"-0.057709 -0.010981 -0.15078\" quat=\"0.600598 0.15832 0.223482 0.751181\" mass=\"1.702\" diaginertia=\"0.00776166 0.00717575 0.00160139\"/>\n      <joint name=\"{P}left_hip_yaw_joint\" axis=\"0 0 1\" range=\"-2.7576 2.7576\" actuatorfrcrange=\"-88 88\"/>\n      <geom class=\"g1__visual\" mesh=\"g1__left_hip_yaw_link\"/>\n      <geom class=\"g1__collision\" mesh=\"g1__left_hip_yaw_link\"/>\n      <body name=\"{P}left_knee_link\" pos=\"-0.078273 0.0021489 -0.17734\" quat=\"0.996179 0 0.0873386 0\">\n        <inertial pos=\"0.005457 0.003964 -0.12074\" quat=\"0.923418 -0.0327699 0.0158246 0.382067\" mass=\"1.932\" diaginertia=\"0.0113804 0.0112778 0.00146458\"/>\n        <joint name=\"{P}left_knee_joint\" axis=\"0 1 0\" range=\"-0.087267 2.8798\" actuatorfrcrange=\"-139 139\"/>\n        <geom class=\"g1__visual\" mesh=\"g1__left_knee_link\"/>\n        <geom class=\"g1__collision\" mesh=\"g1__left_knee_link\"/>\n        <body name=\"{P}left_ankle_pitch_link\" pos=\"0 -9.4445e-05 -0.30001\">\n          <inertial pos=\"-0.007269 0 0.011137\" quat=\"0.603053 0.369225 0.369225 0.603053\" mass=\"0.074\" diaginertia=\"1.89e-05 1.40805e-05 6.9195e-06\"/>\n          <joint name=\"{P}left_ankle_pitch_joint\" axis=\"0 1 0\" range=\"-0.87267 0.5236\" actuatorfrcrange=\"-50 50\"/>\n          <geom class=\"g1__visual\" mesh=\"g1__left_ankle_pitch_link\"/>\n          <geom class=\"g1__collision\" mesh=\"g1__left_ankle_pitch_link\"/>\n          <body name=\"{P}left_ankle_roll_link\" pos=\"0 0 -0.017558\">\n            <inertial pos=\"0.026505 0 -0.016425\" quat=\"-0.000481092 0.728482 -0.000618967 0.685065\" mass=\"0.608\" diaginertia=\"0.00167218 0.0016161 0.000217621\"/>\n            <joint name=\"{P}left_ankle_roll_joint\" axis=\"1 0 0\" range=\"-0.2618 0.2618\" actuatorfrcrange=\"-50 50\"/>\n            <geom class=\"g1__visual\" material=\"g1__black\" mesh=\"g1__left_ankle_roll_link\"/>\n            <geom class=\"g1__foot\" pos=\"-0.05 0.025 -0.03\"/>\n            <geom class=\"g1__foot\" pos=\"-0.05 -0.025 -0.03\"/>\n            <geom class=\"g1__foot\" pos=\"0.12 0.03 -0.03\"/>\n            <geom class=\"g1__foot\" pos=\"0.12 -0.03 -0.03\"/>\n            <site name=\"{P}left_foot\"/>\n          </body>\n        </body>\n      </body>\n    </body>\n  </body>\n</body>",
+   "actuatorXml": "<position class=\"g1__g1\" name=\"{P}left_hip_pitch_joint\" joint=\"{P}left_hip_pitch_joint\"/>\n<position class=\"g1__g1\" name=\"{P}left_hip_roll_joint\" joint=\"{P}left_hip_roll_joint\"/>\n<position class=\"g1__g1\" name=\"{P}left_hip_yaw_joint\" joint=\"{P}left_hip_yaw_joint\"/>\n<position class=\"g1__g1\" name=\"{P}left_knee_joint\" joint=\"{P}left_knee_joint\"/>\n<position class=\"g1__g1\" name=\"{P}left_ankle_pitch_joint\" joint=\"{P}left_ankle_pitch_joint\"/>\n<position class=\"g1__g1\" name=\"{P}left_ankle_roll_joint\" joint=\"{P}left_ankle_roll_joint\"/>",
+   "meshes": [
+    "g1__left_hip_pitch_link",
+    "g1__left_hip_roll_link",
+    "g1__left_hip_yaw_link",
+    "g1__left_knee_link",
+    "g1__left_ankle_pitch_link",
+    "g1__left_ankle_roll_link",
+    "g1__right_hip_pitch_link",
+    "g1__right_hip_roll_link",
+    "g1__right_hip_yaw_link",
+    "g1__right_knee_link",
+    "g1__right_ankle_pitch_link",
+    "g1__right_ankle_roll_link"
+   ],
+   "homeNote": "legs: slightly bent stance (hip -0.1, knee 0.3, ankle -0.2) instead of the straight-leg \"stand\" key; arms from the original key",
+   "stance": {
+    "drop": 0.681502,
+    "crouchGain": -0.108885
+   },
+   "files": [
+    "assets/left_ankle_pitch_link.STL",
+    "assets/left_ankle_roll_link.STL",
+    "assets/left_hip_pitch_link.STL",
+    "assets/left_hip_roll_link.STL",
+    "assets/left_hip_yaw_link.STL",
+    "assets/left_knee_link.STL",
+    "assets/right_ankle_pitch_link.STL",
+    "assets/right_ankle_roll_link.STL",
+    "assets/right_hip_pitch_link.STL",
+    "assets/right_hip_roll_link.STL",
+    "assets/right_hip_yaw_link.STL",
+    "assets/right_knee_link.STL"
+   ]
+  },
+  {
+   "id": "ur5e_arm",
+   "vendor": "Universal Robots",
+   "kind": "arm",
+   "label": "Universal Robots UR5e arm",
+   "source": "ur5e",
+   "sourceFile": "menagerie/universal_robots_ur5e/ur5e.xml",
+   "mountType": "top_plate",
+   "mass": 20.9949,
+   "dof": 6,
+   "joints": [
+    {
+     "name": "shoulder_pan_joint",
+     "role": "arm",
+     "range": [
+      -6.28319,
+      6.28319
+     ],
+     "home": -1.5708,
+     "torque": 150
+    },
+    {
+     "name": "shoulder_lift_joint",
+     "role": "arm",
+     "range": [
+      -6.28319,
+      6.28319
+     ],
+     "home": -1.5708,
+     "torque": 150
+    },
+    {
+     "name": "elbow_joint",
+     "role": "arm",
+     "range": [
+      -3.1415,
+      3.1415
+     ],
+     "home": 1.5708,
+     "torque": 150
+    },
+    {
+     "name": "wrist_1_joint",
+     "role": "arm",
+     "range": [
+      -6.28319,
+      6.28319
+     ],
+     "home": -1.5708,
+     "torque": 28
+    },
+    {
+     "name": "wrist_2_joint",
+     "role": "arm",
+     "range": [
+      -6.28319,
+      6.28319
+     ],
+     "home": -1.5708,
+     "torque": 28
+    },
+    {
+     "name": "wrist_3_joint",
+     "role": "arm",
+     "range": [
+      -6.28319,
+      6.28319
+     ],
+     "home": 0,
+     "torque": 28
+    }
+   ],
+   "mirror": [
+    "C"
+   ],
+   "variants": {
+    "C": {
+     "root": "base",
+     "origin": {
+      "pos": [
+       0,
+       0,
+       0
+      ],
+      "quat": [
+       0,
+       0,
+       0,
+       -1
+      ]
+     },
+     "joints": [
+      {
+       "name": "shoulder_pan_joint",
+       "role": "arm",
+       "range": [
+        -6.28319,
+        6.28319
+       ],
+       "home": -1.5708,
+       "torque": 150
+      },
+      {
+       "name": "shoulder_lift_joint",
+       "role": "arm",
+       "range": [
+        -6.28319,
+        6.28319
+       ],
+       "home": -1.5708,
+       "torque": 150
+      },
+      {
+       "name": "elbow_joint",
+       "role": "arm",
+       "range": [
+        -3.1415,
+        3.1415
+       ],
+       "home": 1.5708,
+       "torque": 150
+      },
+      {
+       "name": "wrist_1_joint",
+       "role": "arm",
+       "range": [
+        -6.28319,
+        6.28319
+       ],
+       "home": -1.5708,
+       "torque": 28
+      },
+      {
+       "name": "wrist_2_joint",
+       "role": "arm",
+       "range": [
+        -6.28319,
+        6.28319
+       ],
+       "home": -1.5708,
+       "torque": 28
+      },
+      {
+       "name": "wrist_3_joint",
+       "role": "arm",
+       "range": [
+        -6.28319,
+        6.28319
+       ],
+       "home": 0,
+       "torque": 28
+      }
+     ],
+     "bodies": [
+      "base",
+      "shoulder_link",
+      "upper_arm_link",
+      "forearm_link",
+      "wrist_1_link",
+      "wrist_2_link",
+      "wrist_3_link"
+     ],
+     "xml": "<body name=\"{P}base\" childclass=\"ur5e__ur5e\">\n  <inertial mass=\"4.0\" pos=\"0 0 0\" diaginertia=\"0.00443333156 0.00443333156 0.0072\"/>\n  <geom mesh=\"ur5e__base_0\" material=\"ur5e__black\" class=\"ur5e__visual\"/>\n  <geom mesh=\"ur5e__base_1\" material=\"ur5e__jointgray\" class=\"ur5e__visual\"/>\n  <body name=\"{P}shoulder_link\" pos=\"0 0 0.163\">\n    <inertial mass=\"3.7\" pos=\"0 0 0\" diaginertia=\"0.0102675 0.0102675 0.00666\"/>\n    <joint name=\"{P}shoulder_pan_joint\" class=\"ur5e__size3\" axis=\"0 0 1\"/>\n    <geom mesh=\"ur5e__shoulder_0\" material=\"ur5e__urblue\" class=\"ur5e__visual\"/>\n    <geom mesh=\"ur5e__shoulder_1\" material=\"ur5e__black\" class=\"ur5e__visual\"/>\n    <geom mesh=\"ur5e__shoulder_2\" material=\"ur5e__jointgray\" class=\"ur5e__visual\"/>\n    <geom class=\"ur5e__collision\" size=\"0.06 0.06\" pos=\"0 0 -0.04\"/>\n    <body name=\"{P}upper_arm_link\" pos=\"0 0.138 0\" quat=\"1 0 1 0\">\n      <inertial mass=\"8.393\" pos=\"0 0 0.2125\" diaginertia=\"0.133886 0.133886 0.0151074\"/>\n      <joint name=\"{P}shoulder_lift_joint\" class=\"ur5e__size3\"/>\n      <geom mesh=\"ur5e__upperarm_0\" material=\"ur5e__linkgray\" class=\"ur5e__visual\"/>\n      <geom mesh=\"ur5e__upperarm_1\" material=\"ur5e__black\" class=\"ur5e__visual\"/>\n      <geom mesh=\"ur5e__upperarm_2\" material=\"ur5e__jointgray\" class=\"ur5e__visual\"/>\n      <geom mesh=\"ur5e__upperarm_3\" material=\"ur5e__urblue\" class=\"ur5e__visual\"/>\n      <geom class=\"ur5e__collision\" pos=\"0 -0.04 0\" quat=\"1 1 0 0\" size=\"0.06 0.06\"/>\n      <geom class=\"ur5e__collision\" size=\"0.05 0.2\" pos=\"0 0 0.2\"/>\n      <body name=\"{P}forearm_link\" pos=\"0 -0.131 0.425\">\n        <inertial mass=\"2.275\" pos=\"0 0 0.196\" diaginertia=\"0.0311796 0.0311796 0.004095\"/>\n        <joint name=\"{P}elbow_joint\" class=\"ur5e__size3_limited\"/>\n        <geom mesh=\"ur5e__forearm_0\" material=\"ur5e__urblue\" class=\"ur5e__visual\"/>\n        <geom mesh=\"ur5e__forearm_1\" material=\"ur5e__linkgray\" class=\"ur5e__visual\"/>\n        <geom mesh=\"ur5e__forearm_2\" material=\"ur5e__black\" class=\"ur5e__visual\"/>\n        <geom mesh=\"ur5e__forearm_3\" material=\"ur5e__jointgray\" class=\"ur5e__visual\"/>\n        <geom class=\"ur5e__collision\" pos=\"0 0.08 0\" quat=\"1 1 0 0\" size=\"0.055 0.06\"/>\n        <geom class=\"ur5e__collision\" size=\"0.038 0.19\" pos=\"0 0 0.2\"/>\n        <body name=\"{P}wrist_1_link\" pos=\"0 0 0.392\" quat=\"1 0 1 0\">\n          <inertial mass=\"1.219\" pos=\"0 0.127 0\" diaginertia=\"0.0025599 0.0025599 0.0021942\"/>\n          <joint name=\"{P}wrist_1_joint\" class=\"ur5e__size1\"/>\n          <geom mesh=\"ur5e__wrist1_0\" material=\"ur5e__black\" class=\"ur5e__visual\"/>\n          <geom mesh=\"ur5e__wrist1_1\" material=\"ur5e__urblue\" class=\"ur5e__visual\"/>\n          <geom mesh=\"ur5e__wrist1_2\" material=\"ur5e__jointgray\" class=\"ur5e__visual\"/>\n          <geom class=\"ur5e__collision\" pos=\"0 0.05 0\" quat=\"1 1 0 0\" size=\"0.04 0.07\"/>\n          <body name=\"{P}wrist_2_link\" pos=\"0 0.127 0\">\n            <inertial mass=\"1.219\" pos=\"0 0 0.1\" diaginertia=\"0.0025599 0.0025599 0.0021942\"/>\n            <joint name=\"{P}wrist_2_joint\" axis=\"0 0 1\" class=\"ur5e__size1\"/>\n            <geom mesh=\"ur5e__wrist2_0\" material=\"ur5e__black\" class=\"ur5e__visual\"/>\n            <geom mesh=\"ur5e__wrist2_1\" material=\"ur5e__urblue\" class=\"ur5e__visual\"/>\n            <geom mesh=\"ur5e__wrist2_2\" material=\"ur5e__jointgray\" class=\"ur5e__visual\"/>\n            <geom class=\"ur5e__collision\" size=\"0.04 0.06\" pos=\"0 0 0.04\"/>\n            <geom class=\"ur5e__collision\" pos=\"0 0.02 0.1\" quat=\"1 1 0 0\" size=\"0.04 0.04\"/>\n            <body name=\"{P}wrist_3_link\" pos=\"0 0 0.1\">\n              <inertial mass=\"0.1889\" pos=\"0 0.0771683 0\" quat=\"1 0 0 1\" diaginertia=\"0.000132134 9.90863e-05 9.90863e-05\"/>\n              <joint name=\"{P}wrist_3_joint\" class=\"ur5e__size1\"/>\n              <geom material=\"ur5e__linkgray\" mesh=\"ur5e__wrist3\" class=\"ur5e__visual\"/>\n              <geom class=\"ur5e__eef_collision\" pos=\"0 0.08 0\" quat=\"1 1 0 0\" size=\"0.04 0.02\"/>\n              <site name=\"{P}attachment_site\" pos=\"0 0.1 0\" quat=\"-1 1 0 0\"/>\n            </body>\n          </body>\n        </body>\n      </body>\n    </body>\n  </body>\n</body>",
+     "actuatorXml": "<general class=\"ur5e__size3\" name=\"{P}shoulder_pan\" joint=\"{P}shoulder_pan_joint\"/>\n<general class=\"ur5e__size3\" name=\"{P}shoulder_lift\" joint=\"{P}shoulder_lift_joint\"/>\n<general class=\"ur5e__size3_limited\" name=\"{P}elbow\" joint=\"{P}elbow_joint\"/>\n<general class=\"ur5e__size1\" name=\"{P}wrist_1\" joint=\"{P}wrist_1_joint\"/>\n<general class=\"ur5e__size1\" name=\"{P}wrist_2\" joint=\"{P}wrist_2_joint\"/>\n<general class=\"ur5e__size1\" name=\"{P}wrist_3\" joint=\"{P}wrist_3_joint\"/>",
+     "reach": 0.967616
+    }
+   },
+   "xml": "<body name=\"{P}base\" childclass=\"ur5e__ur5e\">\n  <inertial mass=\"4.0\" pos=\"0 0 0\" diaginertia=\"0.00443333156 0.00443333156 0.0072\"/>\n  <geom mesh=\"ur5e__base_0\" material=\"ur5e__black\" class=\"ur5e__visual\"/>\n  <geom mesh=\"ur5e__base_1\" material=\"ur5e__jointgray\" class=\"ur5e__visual\"/>\n  <body name=\"{P}shoulder_link\" pos=\"0 0 0.163\">\n    <inertial mass=\"3.7\" pos=\"0 0 0\" diaginertia=\"0.0102675 0.0102675 0.00666\"/>\n    <joint name=\"{P}shoulder_pan_joint\" class=\"ur5e__size3\" axis=\"0 0 1\"/>\n    <geom mesh=\"ur5e__shoulder_0\" material=\"ur5e__urblue\" class=\"ur5e__visual\"/>\n    <geom mesh=\"ur5e__shoulder_1\" material=\"ur5e__black\" class=\"ur5e__visual\"/>\n    <geom mesh=\"ur5e__shoulder_2\" material=\"ur5e__jointgray\" class=\"ur5e__visual\"/>\n    <geom class=\"ur5e__collision\" size=\"0.06 0.06\" pos=\"0 0 -0.04\"/>\n    <body name=\"{P}upper_arm_link\" pos=\"0 0.138 0\" quat=\"1 0 1 0\">\n      <inertial mass=\"8.393\" pos=\"0 0 0.2125\" diaginertia=\"0.133886 0.133886 0.0151074\"/>\n      <joint name=\"{P}shoulder_lift_joint\" class=\"ur5e__size3\"/>\n      <geom mesh=\"ur5e__upperarm_0\" material=\"ur5e__linkgray\" class=\"ur5e__visual\"/>\n      <geom mesh=\"ur5e__upperarm_1\" material=\"ur5e__black\" class=\"ur5e__visual\"/>\n      <geom mesh=\"ur5e__upperarm_2\" material=\"ur5e__jointgray\" class=\"ur5e__visual\"/>\n      <geom mesh=\"ur5e__upperarm_3\" material=\"ur5e__urblue\" class=\"ur5e__visual\"/>\n      <geom class=\"ur5e__collision\" pos=\"0 -0.04 0\" quat=\"1 1 0 0\" size=\"0.06 0.06\"/>\n      <geom class=\"ur5e__collision\" size=\"0.05 0.2\" pos=\"0 0 0.2\"/>\n      <body name=\"{P}forearm_link\" pos=\"0 -0.131 0.425\">\n        <inertial mass=\"2.275\" pos=\"0 0 0.196\" diaginertia=\"0.0311796 0.0311796 0.004095\"/>\n        <joint name=\"{P}elbow_joint\" class=\"ur5e__size3_limited\"/>\n        <geom mesh=\"ur5e__forearm_0\" material=\"ur5e__urblue\" class=\"ur5e__visual\"/>\n        <geom mesh=\"ur5e__forearm_1\" material=\"ur5e__linkgray\" class=\"ur5e__visual\"/>\n        <geom mesh=\"ur5e__forearm_2\" material=\"ur5e__black\" class=\"ur5e__visual\"/>\n        <geom mesh=\"ur5e__forearm_3\" material=\"ur5e__jointgray\" class=\"ur5e__visual\"/>\n        <geom class=\"ur5e__collision\" pos=\"0 0.08 0\" quat=\"1 1 0 0\" size=\"0.055 0.06\"/>\n        <geom class=\"ur5e__collision\" size=\"0.038 0.19\" pos=\"0 0 0.2\"/>\n        <body name=\"{P}wrist_1_link\" pos=\"0 0 0.392\" quat=\"1 0 1 0\">\n          <inertial mass=\"1.219\" pos=\"0 0.127 0\" diaginertia=\"0.0025599 0.0025599 0.0021942\"/>\n          <joint name=\"{P}wrist_1_joint\" class=\"ur5e__size1\"/>\n          <geom mesh=\"ur5e__wrist1_0\" material=\"ur5e__black\" class=\"ur5e__visual\"/>\n          <geom mesh=\"ur5e__wrist1_1\" material=\"ur5e__urblue\" class=\"ur5e__visual\"/>\n          <geom mesh=\"ur5e__wrist1_2\" material=\"ur5e__jointgray\" class=\"ur5e__visual\"/>\n          <geom class=\"ur5e__collision\" pos=\"0 0.05 0\" quat=\"1 1 0 0\" size=\"0.04 0.07\"/>\n          <body name=\"{P}wrist_2_link\" pos=\"0 0.127 0\">\n            <inertial mass=\"1.219\" pos=\"0 0 0.1\" diaginertia=\"0.0025599 0.0025599 0.0021942\"/>\n            <joint name=\"{P}wrist_2_joint\" axis=\"0 0 1\" class=\"ur5e__size1\"/>\n            <geom mesh=\"ur5e__wrist2_0\" material=\"ur5e__black\" class=\"ur5e__visual\"/>\n            <geom mesh=\"ur5e__wrist2_1\" material=\"ur5e__urblue\" class=\"ur5e__visual\"/>\n            <geom mesh=\"ur5e__wrist2_2\" material=\"ur5e__jointgray\" class=\"ur5e__visual\"/>\n            <geom class=\"ur5e__collision\" size=\"0.04 0.06\" pos=\"0 0 0.04\"/>\n            <geom class=\"ur5e__collision\" pos=\"0 0.02 0.1\" quat=\"1 1 0 0\" size=\"0.04 0.04\"/>\n            <body name=\"{P}wrist_3_link\" pos=\"0 0 0.1\">\n              <inertial mass=\"0.1889\" pos=\"0 0.0771683 0\" quat=\"1 0 0 1\" diaginertia=\"0.000132134 9.90863e-05 9.90863e-05\"/>\n              <joint name=\"{P}wrist_3_joint\" class=\"ur5e__size1\"/>\n              <geom material=\"ur5e__linkgray\" mesh=\"ur5e__wrist3\" class=\"ur5e__visual\"/>\n              <geom class=\"ur5e__eef_collision\" pos=\"0 0.08 0\" quat=\"1 1 0 0\" size=\"0.04 0.02\"/>\n              <site name=\"{P}attachment_site\" pos=\"0 0.1 0\" quat=\"-1 1 0 0\"/>\n            </body>\n          </body>\n        </body>\n      </body>\n    </body>\n  </body>\n</body>",
+   "actuatorXml": "<general class=\"ur5e__size3\" name=\"{P}shoulder_pan\" joint=\"{P}shoulder_pan_joint\"/>\n<general class=\"ur5e__size3\" name=\"{P}shoulder_lift\" joint=\"{P}shoulder_lift_joint\"/>\n<general class=\"ur5e__size3_limited\" name=\"{P}elbow\" joint=\"{P}elbow_joint\"/>\n<general class=\"ur5e__size1\" name=\"{P}wrist_1\" joint=\"{P}wrist_1_joint\"/>\n<general class=\"ur5e__size1\" name=\"{P}wrist_2\" joint=\"{P}wrist_2_joint\"/>\n<general class=\"ur5e__size1\" name=\"{P}wrist_3\" joint=\"{P}wrist_3_joint\"/>",
+   "meshes": [
+    "ur5e__base_0",
+    "ur5e__base_1",
+    "ur5e__shoulder_0",
+    "ur5e__shoulder_1",
+    "ur5e__shoulder_2",
+    "ur5e__upperarm_0",
+    "ur5e__upperarm_1",
+    "ur5e__upperarm_2",
+    "ur5e__upperarm_3",
+    "ur5e__forearm_0",
+    "ur5e__forearm_1",
+    "ur5e__forearm_2",
+    "ur5e__forearm_3",
+    "ur5e__wrist1_0",
+    "ur5e__wrist1_1",
+    "ur5e__wrist1_2",
+    "ur5e__wrist2_0",
+    "ur5e__wrist2_1",
+    "ur5e__wrist2_2",
+    "ur5e__wrist3"
+   ],
+   "reach": 0.967616,
+   "baseQuat": [
+    0,
+    0,
+    0,
+    -1
+   ],
+   "files": [
+    "assets/base_0.obj",
+    "assets/base_1.obj",
+    "assets/forearm_0.obj",
+    "assets/forearm_1.obj",
+    "assets/forearm_2.obj",
+    "assets/forearm_3.obj",
+    "assets/shoulder_0.obj",
+    "assets/shoulder_1.obj",
+    "assets/shoulder_2.obj",
+    "assets/upperarm_0.obj",
+    "assets/upperarm_1.obj",
+    "assets/upperarm_2.obj",
+    "assets/upperarm_3.obj",
+    "assets/wrist1_0.obj",
+    "assets/wrist1_1.obj",
+    "assets/wrist1_2.obj",
+    "assets/wrist2_0.obj",
+    "assets/wrist2_1.obj",
+    "assets/wrist2_2.obj",
+    "assets/wrist3.obj"
+   ]
+  },
+  {
+   "id": "h1_arm",
+   "vendor": "Unitree",
+   "kind": "arm",
+   "label": "Unitree H1 arm",
+   "source": "h1",
+   "sourceFile": "menagerie/unitree_h1/h1.xml",
+   "mountType": "shoulder",
+   "mass": 3.334,
+   "dof": 4,
+   "joints": [
+    {
+     "name": "left_shoulder_pitch",
+     "role": "arm",
+     "range": [
+      -2.87,
+      2.87
+     ],
+     "home": 0,
+     "torque": 40
+    },
+    {
+     "name": "left_shoulder_roll",
+     "role": "arm",
+     "range": [
+      -0.34,
+      3.11
+     ],
+     "home": 0,
+     "torque": 40
+    },
+    {
+     "name": "left_shoulder_yaw",
+     "role": "arm",
+     "range": [
+      -1.3,
+      4.45
+     ],
+     "home": 0,
+     "torque": 18
+    },
+    {
+     "name": "left_elbow",
+     "role": "arm",
+     "range": [
+      -1.25,
+      2.61
+     ],
+     "home": 0,
+     "torque": 18
+    }
+   ],
+   "mirror": [
+    "L",
+    "R"
+   ],
+   "variants": {
+    "L": {
+     "root": "left_shoulder_pitch_link",
+     "origin": {
+      "pos": [
+       0.0055,
+       0.15535,
+       0.42999
+      ],
+      "quat": [
+       0.976296,
+       0.216438,
+       0,
+       0
+      ]
+     },
+     "joints": [
+      {
+       "name": "left_shoulder_pitch",
+       "role": "arm",
+       "range": [
+        -2.87,
+        2.87
+       ],
+       "home": 0,
+       "torque": 40
+      },
+      {
+       "name": "left_shoulder_roll",
+       "role": "arm",
+       "range": [
+        -0.34,
+        3.11
+       ],
+       "home": 0,
+       "torque": 40
+      },
+      {
+       "name": "left_shoulder_yaw",
+       "role": "arm",
+       "range": [
+        -1.3,
+        4.45
+       ],
+       "home": 0,
+       "torque": 18
+      },
+      {
+       "name": "left_elbow",
+       "role": "arm",
+       "range": [
+        -1.25,
+        2.61
+       ],
+       "home": 0,
+       "torque": 18
+      }
+     ],
+     "bodies": [
+      "left_shoulder_pitch_link",
+      "left_shoulder_roll_link",
+      "left_shoulder_yaw_link",
+      "left_elbow_link"
+     ],
+     "xml": "<body name=\"{P}left_shoulder_pitch_link\" childclass=\"h1__h1\">\n  <inertial pos=\"0.005045 0.053657 -0.015715\" quat=\"0.814858 0.579236 -0.0201072 -0.00936488\" mass=\"1.033\" diaginertia=\"0.00129936 0.000987113 0.000858198\"/>\n  <joint name=\"{P}left_shoulder_pitch\" axis=\"0 1 0\" range=\"-2.87 2.87\"/>\n  <geom class=\"h1__visual\" mesh=\"h1__left_shoulder_pitch_link\"/>\n  <body name=\"{P}left_shoulder_roll_link\" pos=\"-0.0055 0.0565 -0.0165\" quat=\"0.976296 -0.216438 0 0\">\n    <inertial pos=\"0.000679 0.00115 -0.094076\" quat=\"0.732491 0.00917179 0.0766656 0.676384\" mass=\"0.793\" diaginertia=\"0.00170388 0.00158256 0.00100336\"/>\n    <joint name=\"{P}left_shoulder_roll\" axis=\"1 0 0\" range=\"-0.34 3.11\"/>\n    <geom class=\"h1__visual\" mesh=\"h1__left_shoulder_roll_link\"/>\n    <geom name=\"{P}left_shoulder\" class=\"h1__collision\" type=\"capsule\" size=\"0.04\" fromto=\"0 0.01 0.008 0 -0.07 -0.02\"/>\n    <body name=\"{P}left_shoulder_yaw_link\" pos=\"0 0 -0.1343\">\n      <inertial pos=\"0.01365 0.002767 -0.16266\" quat=\"0.703042 -0.0331229 -0.0473362 0.708798\" mass=\"0.839\" diaginertia=\"0.00408038 0.00370367 0.000622687\"/>\n      <joint name=\"{P}left_shoulder_yaw\" axis=\"0 0 1\" range=\"-1.3 4.45\"/>\n      <geom class=\"h1__visual\" mesh=\"h1__left_shoulder_yaw_link\"/>\n      <geom class=\"h1__collision\" type=\"capsule\" size=\"0.03\" fromto=\"0 0 0.15 0 0 -0.2\"/>\n      <body name=\"{P}left_elbow_link\" pos=\"0.0185 0 -0.198\">\n        <inertial pos=\"0.15908 -0.000144 -0.015776\" quat=\"0.0765232 0.720327 0.0853116 0.684102\" mass=\"0.669\" diaginertia=\"0.00601829 0.00600579 0.000408305\"/>\n        <joint name=\"{P}left_elbow\" axis=\"0 1 0\" range=\"-1.25 2.61\"/>\n        <geom class=\"h1__visual\" mesh=\"h1__left_elbow_link\"/>\n        <geom class=\"h1__collision\" type=\"capsule\" size=\"0.025\" fromto=\"0 0 0 0.28 0 -0.015\"/>\n        <geom class=\"h1__collision\" type=\"sphere\" size=\"0.033\" pos=\"0.28 0 -0.015\"/>\n      </body>\n    </body>\n  </body>\n</body>",
+     "actuatorXml": "<motor class=\"h1__h1\" name=\"{P}left_shoulder_pitch\" joint=\"{P}left_shoulder_pitch\" ctrlrange=\"-40 40\"/>\n<motor class=\"h1__h1\" name=\"{P}left_shoulder_roll\" joint=\"{P}left_shoulder_roll\" ctrlrange=\"-40 40\"/>\n<motor class=\"h1__h1\" name=\"{P}left_shoulder_yaw\" joint=\"{P}left_shoulder_yaw\" ctrlrange=\"-18 18\"/>\n<motor class=\"h1__h1\" name=\"{P}left_elbow\" joint=\"{P}left_elbow\" ctrlrange=\"-18 18\"/>",
+     "excludeWithMount": [
+      "left_shoulder_roll_link"
+     ],
+     "reach": 0.672294
+    },
+    "R": {
+     "root": "right_shoulder_pitch_link",
+     "origin": {
+      "pos": [
+       0.0055,
+       -0.15535,
+       0.42999
+      ],
+      "quat": [
+       0.976296,
+       -0.216438,
+       0,
+       0
+      ]
+     },
+     "joints": [
+      {
+       "name": "right_shoulder_pitch",
+       "role": "arm",
+       "range": [
+        -2.87,
+        2.87
+       ],
+       "home": 0,
+       "torque": 40
+      },
+      {
+       "name": "right_shoulder_roll",
+       "role": "arm",
+       "range": [
+        -3.11,
+        0.34
+       ],
+       "home": 0,
+       "torque": 40
+      },
+      {
+       "name": "right_shoulder_yaw",
+       "role": "arm",
+       "range": [
+        -4.45,
+        1.3
+       ],
+       "home": 0,
+       "torque": 18
+      },
+      {
+       "name": "right_elbow",
+       "role": "arm",
+       "range": [
+        -1.25,
+        2.61
+       ],
+       "home": 0,
+       "torque": 18
+      }
+     ],
+     "bodies": [
+      "right_shoulder_pitch_link",
+      "right_shoulder_roll_link",
+      "right_shoulder_yaw_link",
+      "right_elbow_link"
+     ],
+     "xml": "<body name=\"{P}right_shoulder_pitch_link\" childclass=\"h1__h1\">\n  <inertial pos=\"0.005045 -0.053657 -0.015715\" quat=\"0.579236 0.814858 0.00936488 0.0201072\" mass=\"1.033\" diaginertia=\"0.00129936 0.000987113 0.000858198\"/>\n  <joint name=\"{P}right_shoulder_pitch\" axis=\"0 1 0\" range=\"-2.87 2.87\"/>\n  <geom class=\"h1__visual\" mesh=\"h1__right_shoulder_pitch_link\"/>\n  <body name=\"{P}right_shoulder_roll_link\" pos=\"-0.0055 -0.0565 -0.0165\" quat=\"0.976296 0.216438 0 0\">\n    <inertial pos=\"0.000679 -0.00115 -0.094076\" quat=\"0.676384 0.0766656 0.00917179 0.732491\" mass=\"0.793\" diaginertia=\"0.00170388 0.00158256 0.00100336\"/>\n    <joint name=\"{P}right_shoulder_roll\" axis=\"1 0 0\" range=\"-3.11 0.34\"/>\n    <geom class=\"h1__visual\" mesh=\"h1__right_shoulder_roll_link\"/>\n    <geom name=\"{P}right_shoulder\" class=\"h1__collision\" type=\"capsule\" size=\"0.04\" fromto=\"0 -0.01 0.008 0 0.07 -0.02\"/>\n    <body name=\"{P}right_shoulder_yaw_link\" pos=\"0 0 -0.1343\">\n      <inertial pos=\"0.01365 -0.002767 -0.16266\" quat=\"0.708798 -0.0473362 -0.0331229 0.703042\" mass=\"0.839\" diaginertia=\"0.00408038 0.00370367 0.000622687\"/>\n      <joint name=\"{P}right_shoulder_yaw\" axis=\"0 0 1\" range=\"-4.45 1.3\"/>\n      <geom class=\"h1__visual\" mesh=\"h1__right_shoulder_yaw_link\"/>\n      <geom class=\"h1__collision\" type=\"capsule\" size=\"0.03\" fromto=\"0 0 0.15 0 0 -0.2\"/>\n      <body name=\"{P}right_elbow_link\" pos=\"0.0185 0 -0.198\">\n        <inertial pos=\"0.15908 0.000144 -0.015776\" quat=\"-0.0765232 0.720327 -0.0853116 0.684102\" mass=\"0.669\" diaginertia=\"0.00601829 0.00600579 0.000408305\"/>\n        <joint name=\"{P}right_elbow\" axis=\"0 1 0\" range=\"-1.25 2.61\"/>\n        <geom class=\"h1__visual\" mesh=\"h1__right_elbow_link\"/>\n        <geom class=\"h1__collision\" type=\"capsule\" size=\"0.025\" fromto=\"0 0 0 0.28 0 -0.015\"/>\n        <geom class=\"h1__collision\" type=\"sphere\" size=\"0.033\" pos=\"0.28 0 -0.015\"/>\n      </body>\n    </body>\n  </body>\n</body>",
+     "actuatorXml": "<motor class=\"h1__h1\" name=\"{P}right_shoulder_pitch\" joint=\"{P}right_shoulder_pitch\" ctrlrange=\"-40 40\"/>\n<motor class=\"h1__h1\" name=\"{P}right_shoulder_roll\" joint=\"{P}right_shoulder_roll\" ctrlrange=\"-40 40\"/>\n<motor class=\"h1__h1\" name=\"{P}right_shoulder_yaw\" joint=\"{P}right_shoulder_yaw\" ctrlrange=\"-18 18\"/>\n<motor class=\"h1__h1\" name=\"{P}right_elbow\" joint=\"{P}right_elbow\" ctrlrange=\"-18 18\"/>",
+     "excludeWithMount": [
+      "right_shoulder_roll_link"
+     ],
+     "reach": 0.672058
+    }
+   },
+   "xml": "<body name=\"{P}left_shoulder_pitch_link\" childclass=\"h1__h1\">\n  <inertial pos=\"0.005045 0.053657 -0.015715\" quat=\"0.814858 0.579236 -0.0201072 -0.00936488\" mass=\"1.033\" diaginertia=\"0.00129936 0.000987113 0.000858198\"/>\n  <joint name=\"{P}left_shoulder_pitch\" axis=\"0 1 0\" range=\"-2.87 2.87\"/>\n  <geom class=\"h1__visual\" mesh=\"h1__left_shoulder_pitch_link\"/>\n  <body name=\"{P}left_shoulder_roll_link\" pos=\"-0.0055 0.0565 -0.0165\" quat=\"0.976296 -0.216438 0 0\">\n    <inertial pos=\"0.000679 0.00115 -0.094076\" quat=\"0.732491 0.00917179 0.0766656 0.676384\" mass=\"0.793\" diaginertia=\"0.00170388 0.00158256 0.00100336\"/>\n    <joint name=\"{P}left_shoulder_roll\" axis=\"1 0 0\" range=\"-0.34 3.11\"/>\n    <geom class=\"h1__visual\" mesh=\"h1__left_shoulder_roll_link\"/>\n    <geom name=\"{P}left_shoulder\" class=\"h1__collision\" type=\"capsule\" size=\"0.04\" fromto=\"0 0.01 0.008 0 -0.07 -0.02\"/>\n    <body name=\"{P}left_shoulder_yaw_link\" pos=\"0 0 -0.1343\">\n      <inertial pos=\"0.01365 0.002767 -0.16266\" quat=\"0.703042 -0.0331229 -0.0473362 0.708798\" mass=\"0.839\" diaginertia=\"0.00408038 0.00370367 0.000622687\"/>\n      <joint name=\"{P}left_shoulder_yaw\" axis=\"0 0 1\" range=\"-1.3 4.45\"/>\n      <geom class=\"h1__visual\" mesh=\"h1__left_shoulder_yaw_link\"/>\n      <geom class=\"h1__collision\" type=\"capsule\" size=\"0.03\" fromto=\"0 0 0.15 0 0 -0.2\"/>\n      <body name=\"{P}left_elbow_link\" pos=\"0.0185 0 -0.198\">\n        <inertial pos=\"0.15908 -0.000144 -0.015776\" quat=\"0.0765232 0.720327 0.0853116 0.684102\" mass=\"0.669\" diaginertia=\"0.00601829 0.00600579 0.000408305\"/>\n        <joint name=\"{P}left_elbow\" axis=\"0 1 0\" range=\"-1.25 2.61\"/>\n        <geom class=\"h1__visual\" mesh=\"h1__left_elbow_link\"/>\n        <geom class=\"h1__collision\" type=\"capsule\" size=\"0.025\" fromto=\"0 0 0 0.28 0 -0.015\"/>\n        <geom class=\"h1__collision\" type=\"sphere\" size=\"0.033\" pos=\"0.28 0 -0.015\"/>\n      </body>\n    </body>\n  </body>\n</body>",
+   "actuatorXml": "<motor class=\"h1__h1\" name=\"{P}left_shoulder_pitch\" joint=\"{P}left_shoulder_pitch\" ctrlrange=\"-40 40\"/>\n<motor class=\"h1__h1\" name=\"{P}left_shoulder_roll\" joint=\"{P}left_shoulder_roll\" ctrlrange=\"-40 40\"/>\n<motor class=\"h1__h1\" name=\"{P}left_shoulder_yaw\" joint=\"{P}left_shoulder_yaw\" ctrlrange=\"-18 18\"/>\n<motor class=\"h1__h1\" name=\"{P}left_elbow\" joint=\"{P}left_elbow\" ctrlrange=\"-18 18\"/>",
+   "meshes": [
+    "h1__left_shoulder_pitch_link",
+    "h1__left_shoulder_roll_link",
+    "h1__left_shoulder_yaw_link",
+    "h1__left_elbow_link",
+    "h1__right_shoulder_pitch_link",
+    "h1__right_shoulder_roll_link",
+    "h1__right_shoulder_yaw_link",
+    "h1__right_elbow_link"
+   ],
+   "reach": 0.672294,
+   "files": [
+    "assets/left_elbow_link.stl",
+    "assets/left_shoulder_pitch_link.stl",
+    "assets/left_shoulder_roll_link.stl",
+    "assets/left_shoulder_yaw_link.stl",
+    "assets/right_elbow_link.stl",
+    "assets/right_shoulder_pitch_link.stl",
+    "assets/right_shoulder_roll_link.stl",
+    "assets/right_shoulder_yaw_link.stl"
+   ]
+  },
+  {
+   "id": "g1_arm",
+   "vendor": "Unitree",
+   "kind": "arm",
+   "label": "Unitree G1 arm",
+   "source": "g1",
+   "sourceFile": "menagerie/unitree_g1/g1.xml",
+   "mountType": "shoulder",
+   "mass": 3.519071,
+   "dof": 7,
+   "joints": [
+    {
+     "name": "left_shoulder_pitch_joint",
+     "role": "arm",
+     "range": [
+      -3.0892,
+      2.6704
+     ],
+     "home": 0.2,
+     "torque": 25
+    },
+    {
+     "name": "left_shoulder_roll_joint",
+     "role": "arm",
+     "range": [
+      -1.5882,
+      2.2515
+     ],
+     "home": 0.2,
+     "torque": 25
+    },
+    {
+     "name": "left_shoulder_yaw_joint",
+     "role": "arm",
+     "range": [
+      -2.618,
+      2.618
+     ],
+     "home": 0,
+     "torque": 25
+    },
+    {
+     "name": "left_elbow_joint",
+     "role": "arm",
+     "range": [
+      -1.0472,
+      2.0944
+     ],
+     "home": 1.28,
+     "torque": 25
+    },
+    {
+     "name": "left_wrist_roll_joint",
+     "role": "arm",
+     "range": [
+      -1.97222,
+      1.97222
+     ],
+     "home": 0,
+     "torque": 25
+    },
+    {
+     "name": "left_wrist_pitch_joint",
+     "role": "arm",
+     "range": [
+      -1.61443,
+      1.61443
+     ],
+     "home": 0,
+     "torque": 5
+    },
+    {
+     "name": "left_wrist_yaw_joint",
+     "role": "arm",
+     "range": [
+      -1.61443,
+      1.61443
+     ],
+     "home": 0,
+     "torque": 5
+    }
+   ],
+   "mirror": [
+    "L",
+    "R"
+   ],
+   "variants": {
+    "L": {
+     "root": "left_shoulder_pitch_link",
+     "origin": {
+      "pos": [
+       0.003956,
+       0.10022,
+       0.24778
+      ],
+      "quat": [
+       0.990264,
+       0.139201,
+       0.000014,
+       -0.000099
+      ]
+     },
+     "joints": [
+      {
+       "name": "left_shoulder_pitch_joint",
+       "role": "arm",
+       "range": [
+        -3.0892,
+        2.6704
+       ],
+       "home": 0.2,
+       "torque": 25
+      },
+      {
+       "name": "left_shoulder_roll_joint",
+       "role": "arm",
+       "range": [
+        -1.5882,
+        2.2515
+       ],
+       "home": 0.2,
+       "torque": 25
+      },
+      {
+       "name": "left_shoulder_yaw_joint",
+       "role": "arm",
+       "range": [
+        -2.618,
+        2.618
+       ],
+       "home": 0,
+       "torque": 25
+      },
+      {
+       "name": "left_elbow_joint",
+       "role": "arm",
+       "range": [
+        -1.0472,
+        2.0944
+       ],
+       "home": 1.28,
+       "torque": 25
+      },
+      {
+       "name": "left_wrist_roll_joint",
+       "role": "arm",
+       "range": [
+        -1.97222,
+        1.97222
+       ],
+       "home": 0,
+       "torque": 25
+      },
+      {
+       "name": "left_wrist_pitch_joint",
+       "role": "arm",
+       "range": [
+        -1.61443,
+        1.61443
+       ],
+       "home": 0,
+       "torque": 5
+      },
+      {
+       "name": "left_wrist_yaw_joint",
+       "role": "arm",
+       "range": [
+        -1.61443,
+        1.61443
+       ],
+       "home": 0,
+       "torque": 5
+      }
+     ],
+     "bodies": [
+      "left_shoulder_pitch_link",
+      "left_shoulder_roll_link",
+      "left_shoulder_yaw_link",
+      "left_elbow_link",
+      "left_wrist_roll_link",
+      "left_wrist_pitch_link",
+      "left_wrist_yaw_link"
+     ],
+     "xml": "<body name=\"{P}left_shoulder_pitch_link\" childclass=\"g1__g1\">\n  <inertial pos=\"0 0.035892 -0.011628\" quat=\"0.654152 0.0130458 -0.326267 0.68225\" mass=\"0.718\" diaginertia=\"0.000465864 0.000432842 0.000406394\"/>\n  <joint name=\"{P}left_shoulder_pitch_joint\" axis=\"0 1 0\" range=\"-3.0892 2.6704\" actuatorfrcrange=\"-25 25\"/>\n  <geom class=\"g1__visual\" mesh=\"g1__left_shoulder_pitch_link\"/>\n  <geom size=\"0.03 0.025\" pos=\"0 0.04 -0.01\" quat=\"0.707107 0 0.707107 0\" type=\"cylinder\" rgba=\"0.7 0.7 0.7 1\" class=\"g1__collision\"/>\n  <body name=\"{P}left_shoulder_roll_link\" pos=\"0 0.038 -0.013831\" quat=\"0.990268 -0.139172 0 0\">\n    <inertial pos=\"-0.000227 0.00727 -0.063243\" quat=\"0.701256 -0.0196223 -0.00710317 0.712604\" mass=\"0.643\" diaginertia=\"0.000691311 0.000618011 0.000388977\"/>\n    <joint name=\"{P}left_shoulder_roll_joint\" axis=\"1 0 0\" range=\"-1.5882 2.2515\" actuatorfrcrange=\"-25 25\"/>\n    <geom class=\"g1__visual\" mesh=\"g1__left_shoulder_roll_link\"/>\n    <geom size=\"0.03 0.015\" pos=\"-0.004 0.006 -0.053\" type=\"cylinder\" rgba=\"0.7 0.7 0.7 1\" class=\"g1__collision\"/>\n    <body name=\"{P}left_shoulder_yaw_link\" pos=\"0 0.00624 -0.1032\">\n      <inertial pos=\"0.010773 -0.002949 -0.072009\" quat=\"0.716879 -0.0964829 -0.0679942 0.687134\" mass=\"0.734\" diaginertia=\"0.00106187 0.00103217 0.000400661\"/>\n      <joint name=\"{P}left_shoulder_yaw_joint\" axis=\"0 0 1\" range=\"-2.618 2.618\" actuatorfrcrange=\"-25 25\"/>\n      <geom class=\"g1__visual\" mesh=\"g1__left_shoulder_yaw_link\"/>\n      <geom class=\"g1__collision\" mesh=\"g1__left_shoulder_yaw_link\"/>\n      <body name=\"{P}left_elbow_link\" pos=\"0.015783 0 -0.080518\">\n        <inertial pos=\"0.064956 0.004454 -0.010062\" quat=\"0.541765 0.636132 0.388821 0.388129\" mass=\"0.6\" diaginertia=\"0.000443035 0.000421612 0.000259353\"/>\n        <joint name=\"{P}left_elbow_joint\" axis=\"0 1 0\" range=\"-1.0472 2.0944\" actuatorfrcrange=\"-25 25\"/>\n        <geom class=\"g1__visual\" mesh=\"g1__left_elbow_link\"/>\n        <geom class=\"g1__collision\" mesh=\"g1__left_elbow_link\"/>\n        <body name=\"{P}left_wrist_roll_link\" pos=\"0.1 0.00188791 -0.01\">\n          <inertial pos=\"0.0171394 0.000537591 4.8864e-07\" quat=\"0.575338 0.411667 -0.574906 0.411094\" mass=\"0.085445\" diaginertia=\"5.48211e-05 4.96646e-05 3.57798e-05\"/>\n          <joint name=\"{P}left_wrist_roll_joint\" axis=\"1 0 0\" range=\"-1.97222 1.97222\" actuatorfrcrange=\"-25 25\"/>\n          <geom class=\"g1__visual\" mesh=\"g1__left_wrist_roll_link\"/>\n          <geom class=\"g1__collision\" mesh=\"g1__left_wrist_roll_link\"/>\n          <body name=\"{P}left_wrist_pitch_link\" pos=\"0.038 0 0\">\n            <inertial pos=\"0.0229999 -0.00111685 -0.00111658\" quat=\"0.249998 0.661363 0.293036 0.643608\" mass=\"0.48405\" diaginertia=\"0.000430353 0.000429873 0.000164648\"/>\n            <joint name=\"{P}left_wrist_pitch_joint\" axis=\"0 1 0\" range=\"-1.61443 1.61443\" actuatorfrcrange=\"-5 5\"/>\n            <geom class=\"g1__visual\" mesh=\"g1__left_wrist_pitch_link\"/>\n            <geom class=\"g1__collision\" mesh=\"g1__left_wrist_pitch_link\"/>\n            <body name=\"{P}left_wrist_yaw_link\" pos=\"0.046 0 0\">\n              <inertial pos=\"0.0708244 0.000191745 0.00161742\" quat=\"0.510571 0.526295 0.468078 0.493188\" mass=\"0.254576\" diaginertia=\"0.000646113 0.000559993 0.000147566\"/>\n              <joint name=\"{P}left_wrist_yaw_joint\" axis=\"0 0 1\" range=\"-1.61443 1.61443\" actuatorfrcrange=\"-5 5\"/>\n              <geom class=\"g1__visual\" mesh=\"g1__left_wrist_yaw_link\"/>\n              <geom class=\"g1__collision\" mesh=\"g1__left_wrist_yaw_link\"/>\n              <geom pos=\"0.0415 0.003 0\" quat=\"1 0 0 0\" class=\"g1__visual\" mesh=\"g1__left_rubber_hand\"/>\n            </body>\n          </body>\n        </body>\n      </body>\n    </body>\n  </body>\n</body>",
+     "actuatorXml": "<position class=\"g1__g1\" name=\"{P}left_shoulder_pitch_joint\" joint=\"{P}left_shoulder_pitch_joint\"/>\n<position class=\"g1__g1\" name=\"{P}left_shoulder_roll_joint\" joint=\"{P}left_shoulder_roll_joint\"/>\n<position class=\"g1__g1\" name=\"{P}left_shoulder_yaw_joint\" joint=\"{P}left_shoulder_yaw_joint\"/>\n<position class=\"g1__g1\" name=\"{P}left_elbow_joint\" joint=\"{P}left_elbow_joint\"/>\n<position class=\"g1__g1\" name=\"{P}left_wrist_roll_joint\" joint=\"{P}left_wrist_roll_joint\"/>\n<position class=\"g1__g1\" name=\"{P}left_wrist_pitch_joint\" joint=\"{P}left_wrist_pitch_joint\"/>\n<position class=\"g1__g1\" name=\"{P}left_wrist_yaw_joint\" joint=\"{P}left_wrist_yaw_joint\"/>",
+     "reach": 0.513222
+    },
+    "R": {
+     "root": "right_shoulder_pitch_link",
+     "origin": {
+      "pos": [
+       0.003956,
+       -0.10021,
+       0.24778
+      ],
+      "quat": [
+       0.990264,
+       -0.139201,
+       0.000014,
+       0.000099
+      ]
+     },
+     "joints": [
+      {
+       "name": "right_shoulder_pitch_joint",
+       "role": "arm",
+       "range": [
+        -3.0892,
+        2.6704
+       ],
+       "home": 0.2,
+       "torque": 25
+      },
+      {
+       "name": "right_shoulder_roll_joint",
+       "role": "arm",
+       "range": [
+        -2.2515,
+        1.5882
+       ],
+       "home": -0.2,
+       "torque": 25
+      },
+      {
+       "name": "right_shoulder_yaw_joint",
+       "role": "arm",
+       "range": [
+        -2.618,
+        2.618
+       ],
+       "home": 0,
+       "torque": 25
+      },
+      {
+       "name": "right_elbow_joint",
+       "role": "arm",
+       "range": [
+        -1.0472,
+        2.0944
+       ],
+       "home": 1.28,
+       "torque": 25
+      },
+      {
+       "name": "right_wrist_roll_joint",
+       "role": "arm",
+       "range": [
+        -1.97222,
+        1.97222
+       ],
+       "home": 0,
+       "torque": 25
+      },
+      {
+       "name": "right_wrist_pitch_joint",
+       "role": "arm",
+       "range": [
+        -1.61443,
+        1.61443
+       ],
+       "home": 0,
+       "torque": 5
+      },
+      {
+       "name": "right_wrist_yaw_joint",
+       "role": "arm",
+       "range": [
+        -1.61443,
+        1.61443
+       ],
+       "home": 0,
+       "torque": 5
+      }
+     ],
+     "bodies": [
+      "right_shoulder_pitch_link",
+      "right_shoulder_roll_link",
+      "right_shoulder_yaw_link",
+      "right_elbow_link",
+      "right_wrist_roll_link",
+      "right_wrist_pitch_link",
+      "right_wrist_yaw_link"
+     ],
+     "xml": "<body name=\"{P}right_shoulder_pitch_link\" childclass=\"g1__g1\">\n  <inertial pos=\"0 -0.035892 -0.011628\" quat=\"0.68225 -0.326267 0.0130458 0.654152\" mass=\"0.718\" diaginertia=\"0.000465864 0.000432842 0.000406394\"/>\n  <joint name=\"{P}right_shoulder_pitch_joint\" axis=\"0 1 0\" range=\"-3.0892 2.6704\" actuatorfrcrange=\"-25 25\"/>\n  <geom class=\"g1__visual\" mesh=\"g1__right_shoulder_pitch_link\"/>\n  <geom size=\"0.03 0.025\" pos=\"0 -0.04 -0.01\" quat=\"0.707107 0 0.707107 0\" type=\"cylinder\" rgba=\"0.7 0.7 0.7 1\" class=\"g1__collision\"/>\n  <body name=\"{P}right_shoulder_roll_link\" pos=\"0 -0.038 -0.013831\" quat=\"0.990268 0.139172 0 0\">\n    <inertial pos=\"-0.000227 -0.00727 -0.063243\" quat=\"0.712604 -0.00710317 -0.0196223 0.701256\" mass=\"0.643\" diaginertia=\"0.000691311 0.000618011 0.000388977\"/>\n    <joint name=\"{P}right_shoulder_roll_joint\" axis=\"1 0 0\" range=\"-2.2515 1.5882\" actuatorfrcrange=\"-25 25\"/>\n    <geom class=\"g1__visual\" mesh=\"g1__right_shoulder_roll_link\"/>\n    <geom size=\"0.03 0.015\" pos=\"-0.004 -0.006 -0.053\" type=\"cylinder\" rgba=\"0.7 0.7 0.7 1\" class=\"g1__collision\"/>\n    <body name=\"{P}right_shoulder_yaw_link\" pos=\"0 -0.00624 -0.1032\">\n      <inertial pos=\"0.010773 0.002949 -0.072009\" quat=\"0.687134 -0.0679942 -0.0964829 0.716879\" mass=\"0.734\" diaginertia=\"0.00106187 0.00103217 0.000400661\"/>\n      <joint name=\"{P}right_shoulder_yaw_joint\" axis=\"0 0 1\" range=\"-2.618 2.618\" actuatorfrcrange=\"-25 25\"/>\n      <geom class=\"g1__visual\" mesh=\"g1__right_shoulder_yaw_link\"/>\n      <geom class=\"g1__collision\" mesh=\"g1__right_shoulder_yaw_link\"/>\n      <body name=\"{P}right_elbow_link\" pos=\"0.015783 0 -0.080518\">\n        <inertial pos=\"0.064956 -0.004454 -0.010062\" quat=\"0.388129 0.388821 0.636132 0.541765\" mass=\"0.6\" diaginertia=\"0.000443035 0.000421612 0.000259353\"/>\n        <joint name=\"{P}right_elbow_joint\" axis=\"0 1 0\" range=\"-1.0472 2.0944\" actuatorfrcrange=\"-25 25\"/>\n        <geom class=\"g1__visual\" mesh=\"g1__right_elbow_link\"/>\n        <geom class=\"g1__collision\" mesh=\"g1__right_elbow_link\"/>\n        <body name=\"{P}right_wrist_roll_link\" pos=\"0.1 -0.00188791 -0.01\">\n          <inertial pos=\"0.0171394 -0.000537591 4.8864e-07\" quat=\"0.411667 0.575338 -0.411094 0.574906\" mass=\"0.085445\" diaginertia=\"5.48211e-05 4.96646e-05 3.57798e-05\"/>\n          <joint name=\"{P}right_wrist_roll_joint\" axis=\"1 0 0\" range=\"-1.97222 1.97222\" actuatorfrcrange=\"-25 25\"/>\n          <geom class=\"g1__visual\" mesh=\"g1__right_wrist_roll_link\"/>\n          <geom class=\"g1__collision\" mesh=\"g1__right_wrist_roll_link\"/>\n          <body name=\"{P}right_wrist_pitch_link\" pos=\"0.038 0 0\">\n            <inertial pos=\"0.0229999 0.00111685 -0.00111658\" quat=\"0.643608 0.293036 0.661363 0.249998\" mass=\"0.48405\" diaginertia=\"0.000430353 0.000429873 0.000164648\"/>\n            <joint name=\"{P}right_wrist_pitch_joint\" axis=\"0 1 0\" range=\"-1.61443 1.61443\" actuatorfrcrange=\"-5 5\"/>\n            <geom class=\"g1__visual\" mesh=\"g1__right_wrist_pitch_link\"/>\n            <geom class=\"g1__collision\" mesh=\"g1__right_wrist_pitch_link\"/>\n            <body name=\"{P}right_wrist_yaw_link\" pos=\"0.046 0 0\">\n              <inertial pos=\"0.0708244 -0.000191745 0.00161742\" quat=\"0.493188 0.468078 0.526295 0.510571\" mass=\"0.254576\" diaginertia=\"0.000646113 0.000559993 0.000147566\"/>\n              <joint name=\"{P}right_wrist_yaw_joint\" axis=\"0 0 1\" range=\"-1.61443 1.61443\" actuatorfrcrange=\"-5 5\"/>\n              <geom class=\"g1__visual\" mesh=\"g1__right_wrist_yaw_link\"/>\n              <geom class=\"g1__collision\" mesh=\"g1__right_wrist_yaw_link\"/>\n              <geom pos=\"0.0415 -0.003 0\" quat=\"1 0 0 0\" class=\"g1__visual\" mesh=\"g1__right_rubber_hand\"/>\n            </body>\n          </body>\n        </body>\n      </body>\n    </body>\n  </body>\n</body>",
+     "actuatorXml": "<position class=\"g1__g1\" name=\"{P}right_shoulder_pitch_joint\" joint=\"{P}right_shoulder_pitch_joint\"/>\n<position class=\"g1__g1\" name=\"{P}right_shoulder_roll_joint\" joint=\"{P}right_shoulder_roll_joint\"/>\n<position class=\"g1__g1\" name=\"{P}right_shoulder_yaw_joint\" joint=\"{P}right_shoulder_yaw_joint\"/>\n<position class=\"g1__g1\" name=\"{P}right_elbow_joint\" joint=\"{P}right_elbow_joint\"/>\n<position class=\"g1__g1\" name=\"{P}right_wrist_roll_joint\" joint=\"{P}right_wrist_roll_joint\"/>\n<position class=\"g1__g1\" name=\"{P}right_wrist_pitch_joint\" joint=\"{P}right_wrist_pitch_joint\"/>\n<position class=\"g1__g1\" name=\"{P}right_wrist_yaw_joint\" joint=\"{P}right_wrist_yaw_joint\"/>",
+     "reach": 0.509493
+    }
+   },
+   "xml": "<body name=\"{P}left_shoulder_pitch_link\" childclass=\"g1__g1\">\n  <inertial pos=\"0 0.035892 -0.011628\" quat=\"0.654152 0.0130458 -0.326267 0.68225\" mass=\"0.718\" diaginertia=\"0.000465864 0.000432842 0.000406394\"/>\n  <joint name=\"{P}left_shoulder_pitch_joint\" axis=\"0 1 0\" range=\"-3.0892 2.6704\" actuatorfrcrange=\"-25 25\"/>\n  <geom class=\"g1__visual\" mesh=\"g1__left_shoulder_pitch_link\"/>\n  <geom size=\"0.03 0.025\" pos=\"0 0.04 -0.01\" quat=\"0.707107 0 0.707107 0\" type=\"cylinder\" rgba=\"0.7 0.7 0.7 1\" class=\"g1__collision\"/>\n  <body name=\"{P}left_shoulder_roll_link\" pos=\"0 0.038 -0.013831\" quat=\"0.990268 -0.139172 0 0\">\n    <inertial pos=\"-0.000227 0.00727 -0.063243\" quat=\"0.701256 -0.0196223 -0.00710317 0.712604\" mass=\"0.643\" diaginertia=\"0.000691311 0.000618011 0.000388977\"/>\n    <joint name=\"{P}left_shoulder_roll_joint\" axis=\"1 0 0\" range=\"-1.5882 2.2515\" actuatorfrcrange=\"-25 25\"/>\n    <geom class=\"g1__visual\" mesh=\"g1__left_shoulder_roll_link\"/>\n    <geom size=\"0.03 0.015\" pos=\"-0.004 0.006 -0.053\" type=\"cylinder\" rgba=\"0.7 0.7 0.7 1\" class=\"g1__collision\"/>\n    <body name=\"{P}left_shoulder_yaw_link\" pos=\"0 0.00624 -0.1032\">\n      <inertial pos=\"0.010773 -0.002949 -0.072009\" quat=\"0.716879 -0.0964829 -0.0679942 0.687134\" mass=\"0.734\" diaginertia=\"0.00106187 0.00103217 0.000400661\"/>\n      <joint name=\"{P}left_shoulder_yaw_joint\" axis=\"0 0 1\" range=\"-2.618 2.618\" actuatorfrcrange=\"-25 25\"/>\n      <geom class=\"g1__visual\" mesh=\"g1__left_shoulder_yaw_link\"/>\n      <geom class=\"g1__collision\" mesh=\"g1__left_shoulder_yaw_link\"/>\n      <body name=\"{P}left_elbow_link\" pos=\"0.015783 0 -0.080518\">\n        <inertial pos=\"0.064956 0.004454 -0.010062\" quat=\"0.541765 0.636132 0.388821 0.388129\" mass=\"0.6\" diaginertia=\"0.000443035 0.000421612 0.000259353\"/>\n        <joint name=\"{P}left_elbow_joint\" axis=\"0 1 0\" range=\"-1.0472 2.0944\" actuatorfrcrange=\"-25 25\"/>\n        <geom class=\"g1__visual\" mesh=\"g1__left_elbow_link\"/>\n        <geom class=\"g1__collision\" mesh=\"g1__left_elbow_link\"/>\n        <body name=\"{P}left_wrist_roll_link\" pos=\"0.1 0.00188791 -0.01\">\n          <inertial pos=\"0.0171394 0.000537591 4.8864e-07\" quat=\"0.575338 0.411667 -0.574906 0.411094\" mass=\"0.085445\" diaginertia=\"5.48211e-05 4.96646e-05 3.57798e-05\"/>\n          <joint name=\"{P}left_wrist_roll_joint\" axis=\"1 0 0\" range=\"-1.97222 1.97222\" actuatorfrcrange=\"-25 25\"/>\n          <geom class=\"g1__visual\" mesh=\"g1__left_wrist_roll_link\"/>\n          <geom class=\"g1__collision\" mesh=\"g1__left_wrist_roll_link\"/>\n          <body name=\"{P}left_wrist_pitch_link\" pos=\"0.038 0 0\">\n            <inertial pos=\"0.0229999 -0.00111685 -0.00111658\" quat=\"0.249998 0.661363 0.293036 0.643608\" mass=\"0.48405\" diaginertia=\"0.000430353 0.000429873 0.000164648\"/>\n            <joint name=\"{P}left_wrist_pitch_joint\" axis=\"0 1 0\" range=\"-1.61443 1.61443\" actuatorfrcrange=\"-5 5\"/>\n            <geom class=\"g1__visual\" mesh=\"g1__left_wrist_pitch_link\"/>\n            <geom class=\"g1__collision\" mesh=\"g1__left_wrist_pitch_link\"/>\n            <body name=\"{P}left_wrist_yaw_link\" pos=\"0.046 0 0\">\n              <inertial pos=\"0.0708244 0.000191745 0.00161742\" quat=\"0.510571 0.526295 0.468078 0.493188\" mass=\"0.254576\" diaginertia=\"0.000646113 0.000559993 0.000147566\"/>\n              <joint name=\"{P}left_wrist_yaw_joint\" axis=\"0 0 1\" range=\"-1.61443 1.61443\" actuatorfrcrange=\"-5 5\"/>\n              <geom class=\"g1__visual\" mesh=\"g1__left_wrist_yaw_link\"/>\n              <geom class=\"g1__collision\" mesh=\"g1__left_wrist_yaw_link\"/>\n              <geom pos=\"0.0415 0.003 0\" quat=\"1 0 0 0\" class=\"g1__visual\" mesh=\"g1__left_rubber_hand\"/>\n            </body>\n          </body>\n        </body>\n      </body>\n    </body>\n  </body>\n</body>",
+   "actuatorXml": "<position class=\"g1__g1\" name=\"{P}left_shoulder_pitch_joint\" joint=\"{P}left_shoulder_pitch_joint\"/>\n<position class=\"g1__g1\" name=\"{P}left_shoulder_roll_joint\" joint=\"{P}left_shoulder_roll_joint\"/>\n<position class=\"g1__g1\" name=\"{P}left_shoulder_yaw_joint\" joint=\"{P}left_shoulder_yaw_joint\"/>\n<position class=\"g1__g1\" name=\"{P}left_elbow_joint\" joint=\"{P}left_elbow_joint\"/>\n<position class=\"g1__g1\" name=\"{P}left_wrist_roll_joint\" joint=\"{P}left_wrist_roll_joint\"/>\n<position class=\"g1__g1\" name=\"{P}left_wrist_pitch_joint\" joint=\"{P}left_wrist_pitch_joint\"/>\n<position class=\"g1__g1\" name=\"{P}left_wrist_yaw_joint\" joint=\"{P}left_wrist_yaw_joint\"/>",
+   "meshes": [
+    "g1__left_shoulder_pitch_link",
+    "g1__left_shoulder_roll_link",
+    "g1__left_shoulder_yaw_link",
+    "g1__left_elbow_link",
+    "g1__left_wrist_roll_link",
+    "g1__left_wrist_pitch_link",
+    "g1__left_wrist_yaw_link",
+    "g1__left_rubber_hand",
+    "g1__right_shoulder_pitch_link",
+    "g1__right_shoulder_roll_link",
+    "g1__right_shoulder_yaw_link",
+    "g1__right_elbow_link",
+    "g1__right_wrist_roll_link",
+    "g1__right_wrist_pitch_link",
+    "g1__right_wrist_yaw_link",
+    "g1__right_rubber_hand"
+   ],
+   "homeNote": "legs: slightly bent stance (hip -0.1, knee 0.3, ankle -0.2) instead of the straight-leg \"stand\" key; arms from the original key",
+   "reach": 0.513222,
+   "files": [
+    "assets/left_elbow_link.STL",
+    "assets/left_rubber_hand.STL",
+    "assets/left_shoulder_pitch_link.STL",
+    "assets/left_shoulder_roll_link.STL",
+    "assets/left_shoulder_yaw_link.STL",
+    "assets/left_wrist_pitch_link.STL",
+    "assets/left_wrist_roll_link.STL",
+    "assets/left_wrist_yaw_link.STL",
+    "assets/right_elbow_link.STL",
+    "assets/right_rubber_hand.STL",
+    "assets/right_shoulder_pitch_link.STL",
+    "assets/right_shoulder_roll_link.STL",
+    "assets/right_shoulder_yaw_link.STL",
+    "assets/right_wrist_pitch_link.STL",
+    "assets/right_wrist_roll_link.STL",
+    "assets/right_wrist_yaw_link.STL"
+   ]
+  }
+ ]
+}

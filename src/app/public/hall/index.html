@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head><script src="../gate.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Skild AI — Robotics Lab</title>
+<meta name="description" content="Walk through every Skild AI release: watch the official video, then try the idea yourself at the stand next to it.">
+<meta name="theme-color" content="#121212">
+<link rel="icon" href="../assets/favicon.png">
+<link rel="stylesheet" href="./hall.css">
+<script>try{var t=localStorage.getItem("skild-hall:theme")||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<div id="css3d"></div>
+<canvas id="gl"></canvas>
+<div id="css3dTop"></div>
+<div class="crosshair" id="crosshair"></div>
+
+<header class="topbar">
+  <a class="brand" href="./" aria-label="Skild AI Release Hall"><img src="../assets/brand/skild-wordmark-mono.svg" alt="Skild AI" class="wordmark"><span class="brand-sep"></span><span class="brand-title">Robotics Lab · Releases</span></a>
+  <span class="online" id="online">1 in the lab</span>
+  <div class="passport" id="passport" title="Watched / tried"></div>
+  <button class="chip ghost" id="themeBtn">Dark</button>
+  <button class="chip ghost" id="muteBtn">Sound on</button>
+  <button class="chip ghost" id="datasetBtn">Dataset</button>
+  <button class="chip" id="timelineBtn">Timeline <kbd>T</kbd></button>
+</header>
+
+<div class="prompt" id="prompt" hidden><kbd>E</kbd><span id="promptText"></span></div>
+<div class="toast" id="toast"></div>
+<div class="where" id="where"></div>
+<div class="minimap" id="minimap"><div class="mm-line"></div><i id="miniDot"></i></div>
+
+<section class="intro" id="intro">
+  <div class="intro-card">
+    <img src="../assets/brand/skild-wordmark-mono.svg" alt="Skild AI" class="intro-logo">
+    <p class="eyebrow">Skild AI Robotics Lab · newest release first · walk back to where it began</p>
+    <h1>Watch it. <span>Then try it.</span></h1>
+    <p class="lead">Every Skild AI release has its own lab bay, with a live robot, the official video and a stand where you run the experiment. Read the plaque, watch the official video, then step up to the stand next to it and try the idea yourself.</p>
+    <div class="keys"><span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> walk</span><span><kbd>Mouse</kbd> look</span><span><kbd>E</kbd> watch / try</span><span><kbd>Space</kbd> guide me</span><span><kbd>Shift</kbd> run</span><span><kbd>N</kbd>/<kbd>B</kbd> next / back</span><span><kbd>T</kbd> timeline</span><span><kbd>G</kbd> dataset</span><span><kbd>M</kbd> sound</span><span><kbd>L</kbd> dark / light</span><span><kbd>Esc</kbd> free cursor</span></div>
+    <label class="name-field"><span>Your name in the lab</span><input id="nameInput" maxlength="24" placeholder="e.g. Sergii" autocomplete="off"></label>
+    <button class="btn primary" id="enter">Enter the lab</button>
+    <button class="btn ghost" id="enterLatest">Start where it began (2024) →</button>
+  </div>
+</section>
+
+<section class="modal" id="cinema" hidden>
+  <div class="cinema">
+    <div class="cinema-media">
+      <div class="player" id="player"></div>
+      <div class="playlist" id="playlist"></div>
+    </div>
+    <aside class="cinema-info">
+      <p class="eyebrow" id="cinemaCode"></p>
+      <h2 id="cinemaTitle"></h2>
+      <p class="sub" id="cinemaSub"></p>
+      <p class="summary" id="cinemaSummary"></p>
+      <ul class="points" id="cinemaPoints"></ul>
+      <div class="cinema-actions">
+        <button class="btn primary" id="toTry">Try it →</button>
+        <a class="btn ghost" id="cinemaBlog" target="_blank" rel="noopener">Read the post ↗</a>
+      </div>
+      <p class="fineprint">Official video from Skild AI, streamed from its original source.</p>
+    </aside>
+    <button class="close" data-close aria-label="Close">×</button>
+  </div>
+</section>
+
+<section class="modal" id="try" hidden>
+  <div class="try">
+    <header class="try-head">
+      <div><p class="eyebrow" id="tryCode"></p><h2 id="tryTitle"></h2><p class="sub" id="tryBlurb"></p></div>
+      <div class="try-status" id="tryStatus"></div>
+      <button class="close" data-close aria-label="Close">×</button>
+    </header>
+    <div class="try-root" id="tryRoot"></div>
+    <div class="pip" id="pip" hidden></div>
+  </div>
+</section>
+
+<section class="modal" id="timeline" hidden>
+  <div class="timeline">
+    <header><p class="eyebrow">Timeline</p><h2>Every release</h2><button class="close" data-close aria-label="Close">×</button></header>
+    <ol id="timelineList"></ol>
+  </div>
+</section>
+
+<section class="modal" id="dataset" hidden>
+  <div class="timeline dataset">
+    <header><p class="eyebrow">Your dataset</p><h2>Data you collected</h2><button class="close" data-close aria-label="Close">×</button></header>
+    <p class="sub">Skild's brain gets better with diverse data from many bodies and tasks. Every interaction at a TRY stand is saved here as a frame, and every visit as an episode. It stays in this browser. Nothing is uploaded.</p>
+    <div class="ds-summary" id="dsSummary"></div>
+    <table class="ds-table"><thead><tr><th>Release</th><th>Stand</th><th>Episodes</th><th>Frames</th><th>Completed</th></tr></thead><tbody id="dsRows"></tbody></table>
+    <div class="cinema-actions"><button class="btn primary" id="dsExport">Export JSON</button><button class="btn ghost" id="dsClear">Clear</button></div>
+  </div>
+</section>
+
+<section class="modal" id="paperModal" hidden>
+  <div class="cinema paper-modal">
+    <div class="cinema-media"><div class="player" id="paperMedia"></div></div>
+    <aside class="cinema-info">
+      <p class="eyebrow" id="paperMeta"></p><h2 id="paperTitle" style="font-size:30px"></h2><p class="sub" id="paperAuthors"></p>
+      <p class="summary" id="paperIdea"></p><p class="sub" id="paperRobot"></p><p class="summary" id="paperSkild" style="color:var(--sk-orange-2)"></p>
+      <div class="cinema-actions" id="paperLinks"></div>
+      <div class="cinema-actions"><button class="btn primary" id="paperTry" hidden></button></div>
+      <p class="fineprint">From the Pathak Lab at CMU (pathak22.github.io). Media is streamed from the lab's official pages.</p>
+    </aside>
+    <button class="close" data-close aria-label="Close">×</button>
+  </div>
+</section>
+
+<section class="modal" id="investorsModal" hidden>
+  <div class="timeline investors-modal">
+    <header><p class="eyebrow">Backed by</p><h2>Skild AI investors</h2><button class="close" data-close aria-label="Close">×</button></header>
+    <p class="sub">As named in the Series A and Series C announcements. Links open each investor's official site in a new tab.</p>
+    <div class="inv-links" id="invList"></div>
+  </div>
+</section>
+
+<section class="research-card" id="research" hidden>
+  <p class="eyebrow">Help the lab · research card</p>
+  <h3 class="rc-title"></h3>
+  <p class="rc-q">Did this experiment make the release clear?</p>
+  <div class="rc-stars"></div>
+  <p class="rc-q">What should Skild's robots learn next?</p>
+  <div class="rc-chips"></div>
+  <textarea class="rc-note" rows="2" maxlength="500" placeholder="A task you'd want a robot to do for you, or what felt wrong (optional)"></textarea>
+  <label class="rc-opt"><input type="checkbox" class="rc-share"> Contribute this episode (your inputs and results, no personal data) to the lab's research pool</label>
+  <div class="rc-actions"><button class="btn primary rc-send">Send to the lab</button><button class="btn ghost rc-skip">Skip</button></div>
+</section>
+
+<script type="module" src="./hall.js"></script>
+</body>
+</html>

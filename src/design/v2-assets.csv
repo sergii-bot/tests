@@ -1,0 +1,6 @@
+id,parent_asset,role,type,file,source
+rig-props,robot-kit,gripper payload and sockets,procedural3d,app/public/world.js,authored geometry
+learned-motion,robot-kit,recorded trail replay and follower policies,procedural3d,app/public/world.js,authoritative training state
+handover-beacon,world-kit,physical humanoid receiving target,procedural3d,app/public/world.js,authored geometry
+training-console,calibration,manual gripper pad and feedback,ui,app/public/client.js,authored HTML/CSS
+story-journal,calibration,three-act archive and robot logs,ui,app/public/campaign.js,authored Russian and English copy

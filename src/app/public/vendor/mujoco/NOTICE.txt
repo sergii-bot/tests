@@ -1,0 +1,1 @@
+mujoco-js 0.0.7 — official MuJoCo WebAssembly build (google-deepmind/mujoco), Apache-2.0.

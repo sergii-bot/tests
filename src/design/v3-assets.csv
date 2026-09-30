@@ -1,0 +1,10 @@
+id,role,type,file,source
+module-rigs,physical dog and humanoid assembly,procedural3d,app/public/exhibits-world.js,authored rigid geometry
+parts-racks,graspable warehouse inventory,procedural3d,app/public/exhibits-world.js,authored rigid geometry
+cooking-episode,dual-arm fried egg sequence,procedural3d,app/public/exhibits-world.js,user requested scene
+coffee-demo,pour-over observation station,procedural3d,app/public/exhibits-world.js,S1 task category adaptation
+plant-demo,repotting observation station,procedural3d,app/public/exhibits-world.js,S1 task category adaptation
+exhibit-interface,recipe and current cooking step,ui,app/public/exhibits-ui.js,authored localized UI
+frying-sizzle,localized kitchen ambience,audio,app/public/assets/sizzle.mp3,generated
+research-teleoperation,mood and workspace reference,image,research/skild-teleoperation.jpg,https://www.skild.ai/blogs/skild-brain/video/how2prompt.jpg
+research-body,morphology research reference,image,research/skild-body-adaptation.jpg,https://img.youtube.com/vi/JQAfxp-FB0I/0.jpg

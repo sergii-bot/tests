@@ -1,0 +1,12 @@
+id,role,type,description,size/ratio,style line ref,source
+reference-hills,entry-background,image,foggy hillside user reference,1440x603,plan.md Style formula,reference_media[3]
+reference-lab,lab-research-display,image,hazy robot lab user reference,1440x603,plan.md Style formula,reference_media[0]
+reference-kitchen,kitchen-display,image,kitchen demonstration reference,1440x810,plan.md Style formula,reference_media[1]
+reference-hero,simulation-display,image,humanoid hillside reference,1440x603,plan.md Style formula,reference_media[2]
+robot-kit,robot-bodies,procedural3d,rigid articulated humanoid quadruped arm wheeled robot,hero 2.2m,plan.md Style formula,procedural
+world-kit,three-zone-world,procedural3d,lab walls hills platforms warehouse racks and props,140x100m,plan.md Style formula,procedural
+calibration,world-and-ui,procedural,hairline grid tracking lines grain and particles,viewport,plan.md Style formula,procedural
+ambience,environment-audio,audio,low laboratory hum with sparse ambient pad,30s,plan.md Style formula,generate
+servo,interaction-audio,audio,soft isolated electric servo whirr,2s,plan.md Style formula,generate
+cover,launch-branding,image,foggy robot science cover,3:2,plan.md Style formula,generate
+icon,game-icon,image,blue sensor emblem,1:1,plan.md Style formula,generate

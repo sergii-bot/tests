@@ -73,6 +73,25 @@ renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
 renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 const cine = createCinema(THREE, renderer); // the director's film look (LOOK_BIBLE.md); C toggles it
+
+// ---------- loading screen: the lab appears only once light, surfaces and robots are ready (no flat first frames) ----------
+const boot = (() => {
+  const steps = {light: 'Light', hero: 'Your robot', robots: 'Robots in the bays'}, done = new Set();
+  let tex = [0, 0], finished = false;
+  THREE.DefaultLoadingManager.onProgress = (u, a, b) => { tex = [a, b]; paint(); };
+  const bar = $('loadBar'), txt = $('loadText');
+  function paint() {
+    if (finished) return;
+    const parts = Object.keys(steps).length + 1, texF = tex[1] ? tex[0] / tex[1] : 0;
+    const p = (done.size + texF) / parts; bar.style.transform = `scaleX(${Math.max(.04, p).toFixed(3)})`;
+    const next = Object.keys(steps).find(k => !done.has(k));
+    txt.textContent = next ? `Loading · ${steps[next]}` : tex[1] && tex[0] < tex[1] ? `Loading · Surfaces ${tex[0]}/${tex[1]}` : 'Ready';
+    if (done.size === Object.keys(steps).length && (!tex[1] || tex[0] >= tex[1])) finish();
+  }
+  function finish() { if (finished) return; finished = true; bar.style.transform = 'scaleX(1)'; setTimeout(() => $('loading').classList.add('gone'), 450); setTimeout(() => $('loading').remove(), 1400); }
+  setTimeout(finish, 30000); // slow network: never trap the visitor
+  return {done(k) { done.add(k); paint(); }};
+})();
 // Two CSS3D layers: 'under' (screens, plaques, posters) sits BELOW the WebGL canvas and shows through
 // transparent 'holes', so robots and glass correctly occlude it (true depth/parallax).
 // 'top' holds text-only elements (floor dates, stand signs, wall titles).
@@ -93,7 +112,7 @@ addEventListener('resize', resize); resize();
 // ---------- heroes: walk the lab as a robot, a drone or an engineer; V switches third / first person ----------
 const heroes = createHeroes(THREE, scene, MJ);
 let heroId = (() => { try { return localStorage.getItem('skild-hall:hero'); } catch { return null; } })() || 'g1';
-heroes.pick(heroId);
+heroes.pick(heroId).finally(() => boot.done('hero'));
 
 // ---------- materials & architecture ----------
 const M = {
@@ -135,7 +154,7 @@ sun.position.set(6, 14, 4); sun.castShadow = true; sun.shadow.mapSize.set(2048, 
 Object.assign(sun.shadow.camera, {left: -16, right: 16, top: 16, bottom: -16, near: 1, far: 40});
 scene.add(sun, sun.target);
 sun.shadow.mapSize.set(4096, 4096); sun.shadow.bias = -.0004; sun.shadow.normalBias = .02; sun.shadow.radius = 4;
-installLookdev(THREE, renderer, scene, M, {hallLen, hallW: HALL_W}).catch(e => console.warn('lookdev', e));
+installLookdev(THREE, renderer, scene, M, {hallLen, hallW: HALL_W}).catch(e => console.warn('lookdev', e)).finally(() => boot.done('light'));
 const upgradeExhibits = () => { for (const p of pav) upgradeRobot(THREE, p.bot.group); };
 setTimeout(upgradeExhibits, 2500); setTimeout(upgradeExhibits, 9000);
 
@@ -250,6 +269,7 @@ const billboards = sceneTop.children.filter(o => o.userData?.billboard);
 // swap in the real robots lazily, nearest bays first (keeps the first frame fast)
 async function loadRealRobots() {
   const order = [...pav].sort((a, b) => Math.abs(a.L.z - player.z) - Math.abs(b.L.z - player.z));
+  let bays = 0; const enough = () => { if (++bays === 3) boot.done('robots'); }; // the nearest three bays are what you see first
   for (const p of order) {
     const spec = REAL[p.r.id]; if (!spec) continue;
     try {
@@ -264,8 +284,10 @@ async function loadRealRobots() {
       dressBay(p);
       p.plaque.insertAdjacentHTML('beforeend', `<div class="model-tag">Stand-in body: third-party robot in Skild livery. Skild builds the brain, not this hardware · ${spec.map(s => MJ.LABEL[s[0]]).filter((v, i, a) => a.indexOf(v) === i).join(' · ')} · MuJoCo Menagerie</div>`);
       syncHoles();
-    } catch (e) { console.warn('real robot', p.r.id, e); }
+      enough();
+    } catch (e) { console.warn('real robot', p.r.id, e); enough(); }
   }
+  boot.done('robots');
 }
 setTimeout(loadRealRobots, 600);
 

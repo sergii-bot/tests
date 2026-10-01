@@ -371,3 +371,11 @@ a.inv-link:hover { border-color: var(--sk-orange); transform: translateY(-2px); 
 :root[data-film="1"] .crosshair { background: #f2b640; box-shadow: 0 0 0 3px rgba(242, 182, 64, .18); }
 
 .topbar .chip { white-space: nowrap; }
+
+/* loading screen: covers the lab until light, surfaces and robots are in */
+.loading { position: fixed; inset: 0; z-index: 50; display: grid; place-content: center; justify-items: center; gap: 22px; background: #0b0c0c; color: #e9eceb; transition: opacity .9s ease; }
+.loading img { height: 26px; filter: invert(1); opacity: .92; }
+.loading .load-track { width: min(320px, 70vw); height: 2px; background: rgba(255,255,255,.12); overflow: hidden; }
+.loading .load-track i { display: block; height: 100%; background: #e9eceb; transform: scaleX(.04); transform-origin: left; transition: transform .5s ease; }
+.loading p { margin: 0; font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; opacity: .6; }
+.loading.gone { opacity: 0; pointer-events: none; }

@@ -14,14 +14,14 @@ const PRESETS = {
   'Skild humanoid XL': {torso: 'h1_torso', leg: 'h1_leg', layout: 'biped', arm: 'h1_arm'},
   'Skild humanoid': {torso: 'g1_torso', leg: 'g1_leg', layout: 'biped', arm: 'g1_arm'},
   'Quadruped + arm': {torso: 'go2_base', leg: 'go2_leg', layout: 'quad', arm: 'ur5e_arm'},
-  'Go2 hexapod': {torso: 'go2_base', leg: 'go2_leg', layout: 'hex', arm: 'none'},
+  'Skild quadruped hexapod': {torso: 'go2_base', leg: 'go2_leg', layout: 'hex', arm: 'none'},
 };
 const HUMAN = t => t === 'h1_torso' || t === 'g1_torso';
 function check(c) {
   const bipedLeg = c.leg === 'h1_leg' || c.leg === 'g1_leg';
-  if (c.layout === 'biped' && !bipedLeg) return 'Biped layout needs H1 or G1 legs.';
-  if (c.layout !== 'biped' && bipedLeg) return 'H1/G1 legs are humanoid legs: use the 2-leg layout.';
-  if (c.layout === 'biped' && !HUMAN(c.torso)) return 'Two legs need a humanoid torso (H1 or G1).';
+  if (c.layout === 'biped' && !bipedLeg) return 'Biped layout needs humanoid legs (Skild humanoid or humanoid XL).';
+  if (c.layout !== 'biped' && bipedLeg) return 'Humanoid legs need the 2-leg layout.';
+  if (c.layout === 'biped' && !HUMAN(c.torso)) return 'Two legs need a humanoid torso (Skild humanoid or humanoid XL).';
   if ((c.arm === 'h1_arm' || c.arm === 'g1_arm') && !HUMAN(c.torso)) return 'Shoulder arms mount on a humanoid torso. Use the Skild arm on a top plate instead.';
   return null;
 }
@@ -53,7 +53,7 @@ export default function mount(root, api) {
   // side panel (HTML)
   const panel = document.createElement('div'); panel.className = 'hwr-panel'; wrap.append(panel);
   const sel = (label, opts, key) => `<label><span>${label}</span><select data-k="${key}">${opts.map(([v, t]) => `<option value="${v}">${t}</option>`).join('')}</select></label>`;
-  panel.innerHTML = `<p class="hk">Real parts · MuJoCo Menagerie</p>${sel('Torso', TORSOS, 'torso')}${sel('Legs', LEGS, 'leg')}${sel('Layout', LAYOUTS, 'layout')}${sel('Arms', ARMS, 'arm')}<div class="hwr-msg"></div><div class="hwr-spec"></div><p class="hwr-note">Controller: stand-in (PD + gait generator), not the Skild Brain. Mass, joints and actuator limits come from the official models.</p>`;
+  panel.innerHTML = `<p class="hk">Stand-in parts · MuJoCo Menagerie</p>${sel('Torso', TORSOS, 'torso')}${sel('Legs', LEGS, 'leg')}${sel('Layout', LAYOUTS, 'layout')}${sel('Arms', ARMS, 'arm')}<div class="hwr-msg"></div><div class="hwr-spec"></div><p class="hwr-note">Controller: stand-in (PD + gait generator), not the Skild Brain. Mass, joints and actuator limits come from the official models.</p>`;
   const cfg = {...PRESETS['Skild quadruped']};
   const syncSelects = () => panel.querySelectorAll('select').forEach(s => { s.value = cfg[s.dataset.k]; });
   panel.querySelectorAll('select').forEach(s => s.onchange = () => { cfg[s.dataset.k] = s.value; assemble(); });
@@ -70,7 +70,7 @@ export default function mount(root, api) {
       bot = nb; scene.add(bot.group); fell = false; stoodT = 0; pushes = 0; vx = 0; speed.value = 0;
       startH = bot.data.qpos[2]; t0 = performance.now();
       const s = bot.spec || {};
-      specBox.innerHTML = `<div><b>${(s.mass ?? 0).toFixed(1)} kg</b><span>mass (from model)</span></div><div><b>${s.dof ?? '–'}</b><span>actuated DOF</span></div><div><b>${Array.isArray(s.legs) ? s.legs.length : (s.legs ?? '–')}</b><span>legs</span></div><div><b>${Array.isArray(s.arms) ? s.arms.length : (s.arms ?? 0)}</b><span>arms</span></div><div class="src">${(s.sources || []).map(x => typeof x === 'string' ? x : x.label || x.id).join(' · ')}</div>`;
+      specBox.innerHTML = `<div><b>${(s.mass ?? 0).toFixed(1)} kg</b><span>mass (Menagerie model)</span></div><div><b>${s.dof ?? '–'}</b><span>actuated DOF</span></div><div><b>${Array.isArray(s.legs) ? s.legs.length : (s.legs ?? '–')}</b><span>legs</span></div><div><b>${Array.isArray(s.arms) ? s.arms.length : (s.arms ?? 0)}</b><span>arms</span></div><div class="src">${(s.sources || []).map(x => typeof x === 'string' ? x : x.label || x.id).join(' · ')}</div>`;
       say(`Composed ${TORSOS.find(x => x[0] === cfg.torso)[1]} + ${LAYOUTS.find(x => x[0] === cfg.layout)[1]} (${LEGS.find(x => x[0] === cfg.leg)[1]})${cfg.arm !== 'none' ? ' + ' + ARMS.find(x => x[0] === cfg.arm)[1] : ''}`);
       api.record('real_build', {config: toConfig(cfg), mass: s.mass, dof: s.dof});
       try { localStorage.setItem('skild-hall:realRobot', JSON.stringify(toConfig(cfg))); } catch {}
@@ -99,10 +99,10 @@ export default function mount(root, api) {
       sun.position.set(cx + 2, 4, cz + 2.5); sun.target.position.set(cx, 0, cz); sun.target.updateMatrixWorld();
       // overlay (2D)
       k.ctx.clearRect(0, 0, w, h);
-      k.text('Goal: compose a robot from real parts and keep it standing in real physics for 5 s. Then push it.', 16, 24, {size: 14, weight: 600});
+      k.text('Goal: compose a robot from open-source robot parts and keep it standing in real physics for 5 s. Then push it.', 16, 24, {size: 14, weight: 600});
       k.label(`MuJoCo · ${Math.round((performance.now() - t0) / 1000)} s · height ${mz.toFixed(2)} m · tilt ${tilt.toFixed(0)}° · ${pushes} pushes`, 16, 44);
       log.slice(-3).forEach((l, i) => k.text(l, 16, h - 54 + i * 16, {size: 12, color: i === Math.min(2, log.length - 1) ? B.black : B.cool2}));
-    } else { k.ctx.clearRect(0, 0, w, h); k.text('Loading real parts…', 16, 24, {size: 14, weight: 600}); }
+    } else { k.ctx.clearRect(0, 0, w, h); k.text('Loading robot parts…', 16, 24, {size: 14, weight: 600}); }
     const c = Math.cos(orbit.pitch); cam.position.set(cx + Math.sin(orbit.yaw) * orbit.dist * c, cy + Math.sin(orbit.pitch) * orbit.dist, cz + Math.cos(orbit.yaw) * orbit.dist * c); cam.lookAt(cx, cy, cz);
     renderer.render(scene, cam);
     void last;

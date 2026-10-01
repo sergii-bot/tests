@@ -222,7 +222,7 @@ export default function mount(root, api) {
     for (let i = 0; i < bot.model.nbody; i++) bodyId[bot.bodyName(i)] = i;
     for (const m of bot.meshes) { m.material.metalness = .35; m.material.roughness = .42; }
     say('Stand-in humanoid loaded · MuJoCo model, kinematic gait');
-  }).catch(e => { console.warn('one-policy: G1 load failed', e); say('Could not load the G1 model'); });
+  }).catch(e => { console.warn('one-policy: G1 load failed', e); say('Could not load the humanoid model'); });
 
   const tY = x => { const g = gAt(x); return g == null ? null : g - BASE; };   // three-y of the terrain at x
   function smoothTerrain(x) {                              // for rails: running max, then average

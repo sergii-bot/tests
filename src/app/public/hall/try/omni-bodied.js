@@ -14,8 +14,8 @@ import * as MJ from '../mj.js';
 import {SETS, groundPlane, mat, wheel, cardboardBox, boot, chainsaw, disposeTree} from '../props/loco-props.js';
 
 const PRESETS = {
-  quad: {name: 'Go2 quadruped', rows: 2, len: .8, w: .3, reach: 1},
-  wheel: {name: 'Go2 + wheels', rows: 2, len: .8, w: .3, reach: 1, wheels: true},
+  quad: {name: 'Skild quadruped', rows: 2, len: .8, w: .3, reach: 1},
+  wheel: {name: 'Skild quadruped + wheels', rows: 2, len: .8, w: .3, reach: 1, wheels: true},
 };
 // adaptation times: the post gives 7-8 s (lost limb) and 2-3 s (locked knees); "within seconds" for stilts
 const ADAPT = {cut: 7.5, lock: 2.5, wheels: 2, stilts: 3, body: 2.5, other: 1.4};
@@ -302,7 +302,7 @@ export default function mount(root, api) {
     const grey = {ffffff: '#8d9297', d6d9e4: '#a2a8b0', f3f9f9: '#b3b9bd'};        // the video quadruped is grey with a boxy head
     for (const m of b.meshes) { const hex = m.material.color.getHexString(); if (grey[hex]) m.material.color.set(grey[hex]); m.material.metalness = .2; m.material.roughness = .5; const nm = b.bodyName(m.userData.body); if (/_calf$/.test(nm)) (calfMeshes[nm.slice(0, 2)] ||= []).push(m); }
     buildRig(); refreshRig(); say('Stand-in quadruped loaded · MuJoCo model, kinematic gait on its joints');
-  }).catch(e => { loadErr = String(e.message || e); console.warn('omni-bodied: Go2 load failed', e); say('Could not load the Go2 model'); });
+  }).catch(e => { loadErr = String(e.message || e); console.warn('omni-bodied: Go2 load failed', e); say('Could not load the quadruped model'); });
 
   // things attached to a MuJoCo body (thigh, calf, base): wheels, stilts, knee lock, cut face, payload
   function holder(bodyName) { const h = new THREE.Group(); h.matrixAutoUpdate = false; h.userData.b = bodyIdx[bodyName]; inner.add(h); holders.push(h); return h; }
@@ -525,8 +525,8 @@ export default function mount(root, api) {
   // ---- real physics (optional): composed Go2 in MuJoCo with the stand-in controller ----
   async function setPhysics(on) {
     const tok = ++physTok; physOn = on; physBtn.textContent = 'Real physics (MuJoCo)' + (on ? ' · ON' : ' · OFF'); physBtn.classList.toggle('on', on);
-    if (!on) { if (phys) { scene3.remove(phys.group); phys.dispose(); phys = null; } physMsg = ''; api.status('Kinematic Go2'); say('Back to the kinematic Go2 (stand-in physics off)'); return; }
-    physMsg = 'Loading MuJoCo · composing the Go2…'; physFell = false; physT = 0; api.status('Real physics · loading');
+    if (!on) { if (phys) { scene3.remove(phys.group); phys.dispose(); phys = null; } physMsg = ''; api.status('Kinematic quadruped'); say('Back to the kinematic quadruped (stand-in physics off)'); return; }
+    physMsg = 'Loading MuJoCo · composing the quadruped…'; physFell = false; physT = 0; api.status('Real physics · loading');
     try {
       const {spawnComposed} = await import('../parts/loader.js');
       const nb = await spawnComposed({torso: 'go2_base', legs: {part: 'go2_leg', layout: 'quad'}}, {THREE});
@@ -563,7 +563,7 @@ export default function mount(root, api) {
     chipRects = chips(k, list, x0, 62, k.w - 20);
     let sy = Math.max(62, ...chipRects.map(r => r.y + 26)) + 14;
     if (!bot && !loadErr) { pill(x0 - 8, sy - 14, 250, 24); k.text('Loading Skild quadruped · MuJoCo Menagerie…', x0, sy + 2, {size: 12, mono: true, color: B.cool2}); sy += 34; }
-    if (loadErr) { pill(x0 - 8, sy - 14, 320, 24); k.text('Could not load the Go2 model', x0, sy + 2, {size: 12, mono: true, color: B.black}); sy += 34; }
+    if (loadErr) { pill(x0 - 8, sy - 14, 320, 24); k.text('Could not load the quadruped model', x0, sy + 2, {size: 12, mono: true, color: B.black}); sy += 34; }
     if (physOn || physMsg) {
       const lab = physMsg || `Real physics · MuJoCo · stand-in controller, not the Skild Brain`, w2 = tw(lab, 12, 600, true) + 24;
       pill(x0 - 8, sy - 16, w2, 34, B.white, .92); k.text(lab, x0 + 4, sy + 1, {size: 12, mono: true, weight: 600, color: physMsg ? B.cool2 : B.orange});
@@ -644,7 +644,7 @@ export default function mount(root, api) {
   }
 
   const scenBtns = SIDS.map(id => { const b = k.button(SCEN[id].name, () => pickScenario(id)); b.dataset.id = id; return b; });
-  const bodyBtn = k.button('Body: Go2 quadruped', () => {
+  const bodyBtn = k.button('Body: Skild quadruped', () => {
     const ids = Object.keys(PRESETS); pid = ids[(ids.indexOf(pid) + 1) % ids.length]; build(); wheelJam = false; trial = 0; refreshRig();
     bodyBtn.textContent = 'Body: ' + P().name; resetPose(); changed(`New body: ${P().name.toLowerCase()} · never seen in training`, 'body');
   });

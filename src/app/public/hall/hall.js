@@ -13,8 +13,8 @@ import {buildResearchWing, RX, RW} from './research-wing.js';
 import {startLearners} from './learners.js';
 import * as MJ from './mj.js';
 import {createCinema} from './cinema.js';
-import {createHeroes, HEROES} from './heroes.js';
-import {installLookdev, upgradeRobot} from './lookdev.js';
+import {createHeroes, HEROES, heroBody} from './heroes.js';
+import {installLookdev} from './lookdev.js';
 import {dressCorridor} from './corridor.js';
 import {dressJapanLab} from './japan.js';
 
@@ -77,7 +77,7 @@ const cine = createCinema(THREE, renderer); // the director's film look (LOOK_BI
 // ---------- loading screen: the lab appears only once light, surfaces and robots are ready (no flat first frames) ----------
 const boot = (() => {
   const steps = {light: 'Light', hero: 'Your robot', robots: 'Robots in the bays'}, done = new Set();
-  let tex = [0, 0], finished = false;
+  let tex = [0, 0], finished = false, ready; const readyP = new Promise(res => ready = res);
   THREE.DefaultLoadingManager.onProgress = (u, a, b) => { tex = [a, b]; paint(); };
   const bar = $('loadBar'), txt = $('loadText');
   function paint() {
@@ -88,9 +88,12 @@ const boot = (() => {
     txt.textContent = next ? `Loading · ${steps[next]}` : tex[1] && tex[0] < tex[1] ? `Loading · Surfaces ${tex[0]}/${tex[1]}` : 'Ready';
     if (done.size === Object.keys(steps).length && (!tex[1] || tex[0] >= tex[1])) finish();
   }
-  function finish() { if (finished) return; finished = true; bar.style.transform = 'scaleX(1)'; setTimeout(() => $('loading').classList.add('gone'), 450); setTimeout(() => $('loading').remove(), 1400); }
+  function finish() { if (finished) return; finished = true; try { prewarmRooms(); } catch (e) { console.warn('prewarm', e); } try { syncHoles(); } catch {} ready(); bar.style.transform = 'scaleX(1)'; setTimeout(() => $('loading').classList.add('gone'), 450); setTimeout(() => $('loading').remove(), 1400); }
   setTimeout(finish, 30000); // slow network: never trap the visitor
-  return {done(k) { done.add(k); paint(); }};
+  // a fatal error while booting: say so and let the visitor in anyway, instead of a progress bar that never ends
+  const fail = e => { if (finished) return; txt.textContent = 'Something failed to load · entering anyway'; console.error('boot', e?.reason || e?.error || e); setTimeout(finish, 1500); };
+  addEventListener('error', fail); addEventListener('unhandledrejection', fail);
+  return {done(k) { done.add(k); paint(); }, then: f => readyP.then(f)};
 })();
 // Two CSS3D layers: 'under' (screens, plaques, posters) sits BELOW the WebGL canvas and shows through
 // transparent 'holes', so robots and glass correctly occlude it (true depth/parallax).
@@ -153,10 +156,8 @@ const sun = new THREE.DirectionalLight('#fff4e6', 1.6);
 sun.position.set(6, 14, 4); sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048);
 Object.assign(sun.shadow.camera, {left: -16, right: 16, top: 16, bottom: -16, near: 1, far: 40});
 scene.add(sun, sun.target);
-sun.shadow.mapSize.set(4096, 4096); sun.shadow.bias = -.0004; sun.shadow.normalBias = .02; sun.shadow.radius = 4;
+sun.shadow.mapSize.set(2048, 2048); sun.shadow.bias = -.0004; sun.shadow.normalBias = .02; sun.shadow.radius = 4;
 installLookdev(THREE, renderer, scene, M, {hallLen, hallW: HALL_W}).catch(e => console.warn('lookdev', e)).finally(() => boot.done('light'));
-const upgradeExhibits = () => { for (const p of pav) upgradeRobot(THREE, p.bot.group); };
-setTimeout(upgradeExhibits, 2500); setTimeout(upgradeExhibits, 9000);
 
 // ---------- CSS3D helpers ----------
 const PX = 0.01; // 100 css px = 1 world unit
@@ -265,7 +266,8 @@ const pav = layout.map(L => {
   return p;
 });
 const corridor = dressCorridor(THREE, renderer, scene, {hallLen, hallMid, wallX: WALL_X, hallW: HALL_W, ceil: 7.3, bays: layout.map(L => ({robot: {x: -L.side * 6.4, z: L.z + 1}, stand: L.stand})), stands: layout.map(L => L.stand)});
-const billboards = sceneTop.children.filter(o => o.userData?.billboard);
+let billboards = []; // filled once the Hardware Lab signs exist (below)
+new ResizeObserver(() => syncHoles()).observe($('css3d')); // e.g. after the password gate unhides the page
 // swap in the real robots lazily, nearest bays first (keeps the first frame fast)
 async function loadRealRobots() {
   const order = [...pav].sort((a, b) => Math.abs(a.L.z - player.z) - Math.abs(b.L.z - player.z));
@@ -282,7 +284,7 @@ async function loadRealRobots() {
       }
       p.bot.group.userData.robot.visible = false; // hide the stylized placeholder
       dressBay(p);
-      p.plaque.insertAdjacentHTML('beforeend', `<div class="model-tag">Stand-in body: third-party robot in Skild livery. Skild builds the brain, not this hardware · ${spec.map(s => MJ.LABEL[s[0]]).filter((v, i, a) => a.indexOf(v) === i).join(' · ')} · MuJoCo Menagerie</div>`);
+      p.plaque.insertAdjacentHTML('beforeend', `<div class="model-tag">Stand-in ${spec.length > 1 ? 'bodies' : 'body'} (third-party ${[...new Set(spec.map(x => ({g1: 'humanoid', h1: 'tall humanoid', go2: 'quadruped', spot: 'quadruped', ur5e: 'arm'})[x[0]] || 'robot'))].join(' + ')}, MuJoCo Menagerie) in Skild livery. Skild builds the brain, not this hardware</div>`);
       syncHoles();
       enough();
     } catch (e) { console.warn('real robot', p.r.id, e); enough(); }
@@ -299,7 +301,15 @@ function dressTorso(b, opt) {
   else { c.fillStyle = '#111'; c.fillRect(0, 0, 256, 256); c.fillStyle = '#fff'; c.font = '600 44px Geist, sans-serif'; c.textAlign = 'center'; c.fillText(opt.shirt, 128, 140); }
   const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace;
   const mat = new THREE.MeshStandardMaterial({map: tex, roughness: .8});
-  for (const m of torso) if (/torso/i.test(b.bodyName(m.userData.body))) m.material = mat;
+  // MuJoCo meshes carry no UVs: give the torso shell its own cylindrical mapping (around MuJoCo's up axis), so the
+  // stripes / the tee text actually wrap the chest; the head and logo meshes in the same body keep their own look
+  for (const m of torso) {
+    if (!/torso/i.test(b.bodyName(m.userData.body)) || /head|logo/i.test(b.meshName(m.userData.g))) continue;
+    const geo = m.geometry.clone(); geo.userData = {}; const pa = geo.attributes.position; geo.computeBoundingBox();
+    const bb = geo.boundingBox, uv = new Float32Array(pa.count * 2);
+    for (let i = 0; i < pa.count; i++) { uv[i * 2] = Math.atan2(pa.getY(i), pa.getX(i)) / (Math.PI * 2) + .5; uv[i * 2 + 1] = (pa.getZ(i) - bb.min.z) / Math.max(1e-4, bb.max.z - bb.min.z); }
+    geo.setAttribute('uv', new THREE.BufferAttribute(uv, 2)); m.geometry = geo; m.material = mat;
+  }
 }
 
 // ---------- scene dressing: each bay's props match what its release video shows ----------
@@ -394,12 +404,13 @@ addGrid(-WALL_X, WALL_X, END_Z, START_Z + 14);
 
 // ---------- Hardware Lab (side room) + door from the hall's future zone ----------
 const hw = buildHardwareLab({scene, css3d, el, M, BRAND});
+billboards = sceneTop.children.filter(o => o.userData?.billboard);
 const japanLab = dressJapanLab(THREE, scene, {HX, HZ: 0, HW: 28, HD: 26}); // Japanese-tech look (director's references)
 // shelves: swap the box placeholders for real robot parts (exact Menagerie meshes, one body each)
 const RACK_PARTS = [
-  [['go2', 'FL_thigh'], ['go2', 'FL_calf'], ['g1', 'left_knee_link'], ['g1', 'left_ankle_roll_link'], ['spot', 'fl_uleg'], ['spot', 'fl_lleg'], ['h1', 'left_knee_link'], ['g1', 'left_hip_pitch_link'], ['h1', 'left_ankle_link'], ['go2', 'RR_calf']],
+  [['go2', 'FL_thigh'], ['go2', 'FL_calf'], ['g1', 'left_knee_link'], ['g1', 'left_ankle_roll_link'], ['go2', 'FR_thigh'], ['h1', 'left_hip_pitch_link'], ['h1', 'left_knee_link'], ['g1', 'left_hip_pitch_link'], ['h1', 'left_ankle_link'], ['go2', 'RR_calf']],
   [['ur5e', 'wrist_1_link'], ['ur5e', 'wrist_2_link'], ['ur5e', 'wrist_3_link'], ['ur5e', 'forearm_link'], ['g1', 'left_elbow_link'], ['g1', 'left_wrist_roll_link'], ['h1', 'left_elbow_link'], ['g1', 'left_shoulder_pitch_link'], ['ur5e', 'upper_arm_link'], ['h1', 'left_shoulder_pitch_link']],
-  [['ur5e', 'base'], ['ur5e', 'shoulder_link'], ['g1', 'pelvis'], ['h1', 'pelvis'], ['spot', 'fl_hip'], ['g1', 'waist_yaw_link'], ['go2', 'FL_hip'], ['g1', 'waist_roll_link'], ['h1', 'left_hip_yaw_link'], ['g1', 'left_hip_roll_link']],
+  [['ur5e', 'base'], ['ur5e', 'shoulder_link'], ['g1', 'pelvis'], ['h1', 'pelvis'], ['g1', 'right_knee_link'], ['g1', 'waist_yaw_link'], ['go2', 'FL_hip'], ['g1', 'waist_roll_link'], ['h1', 'left_hip_yaw_link'], ['g1', 'left_hip_roll_link']],
 ];
 async function fillRacks() {
   const count = [0, 0, 0];
@@ -415,7 +426,7 @@ async function fillRacks() {
     } catch (e) { console.warn('rack part', key, name, e); }
   }
 }
-setTimeout(fillRacks, 6000);
+let racksFilled = false; // the real parts load the first time you walk into the lab (not 6 s after boot, wherever you are)
 hw.refreshArena();
 addGrid(HX - 14, HX + 14, -13, 13);
 const hallDoor = {x: -7, z: START_Z + 12.6};
@@ -496,6 +507,7 @@ let playing = false, modalOpen = false;
 const KEYMAP = {KeyW: 'f', ArrowUp: 'f', KeyS: 'b', ArrowDown: 'b', KeyA: 'l', ArrowLeft: 'l', KeyD: 'r', ArrowRight: 'r', ShiftLeft: 'run', ShiftRight: 'run'};
 addEventListener('keydown', e => {
   if (e.target.closest?.('input, textarea')) return;
+  if (!$('intro').hidden || $('loading')) return; // the intro and loading screens are not the game yet
   if (modalOpen) { if (e.code === 'Escape') closeModals(); return; }
   if (KEYMAP[e.code]) { held.add(KEYMAP[e.code]); e.preventDefault(); }
   if (e.code === 'KeyE' || e.code === 'Enter') interact();
@@ -515,7 +527,11 @@ addEventListener('blur', () => held.clear());
 canvas.addEventListener('click', () => { if (!modalOpen && $('intro').hidden) lock(); });
 function lock() { canvas.requestPointerLock?.()?.catch?.(() => {}); }
 function unlock() { if (document.pointerLockElement) document.exitPointerLock(); }
-document.addEventListener('pointerlockchange', () => { playing = document.pointerLockElement === canvas; document.body.classList.toggle('playing', playing); });
+document.addEventListener('pointerlockchange', () => {
+  if (document.pointerLockElement && modalOpen) { document.exitPointerLock(); playing = false; } // a late lock never captures the cursor over a modal
+  else playing = document.pointerLockElement === canvas;
+  document.body.classList.toggle('playing', playing);
+});
 document.addEventListener('mousemove', e => {
   if (!playing) return;
   look.yaw -= e.movementX * .0022; look.pitch = Math.max(-1.2, Math.min(1.2, look.pitch - e.movementY * .0022));
@@ -528,7 +544,7 @@ addEventListener('pointermove', e => { if (!drag || playing) return; look.yaw -=
 
 let audioOn = false;
 // the intro has the lab's own ambience (starts on the first click / key: browsers allow sound only after a gesture)
-const wake = () => { audioOn = true; audioStart(); };
+const wake = () => { if (document.getElementById('gate')) { addEventListener('pointerdown', wake, {once: true}); return; } audioOn = true; audioStart(); };
 addEventListener('pointerdown', wake, {once: true}); addEventListener('keydown', wake, {once: true});
 let enteredAt = 0; // video sound waits a beat after you enter, then fades in
 $('enter').onclick = () => { $('intro').hidden = true; enteredAt = performance.now(); audioStart(); flyIn(); lock(); };
@@ -595,7 +611,7 @@ addEventListener('message', e => {
   let d = {}; try { d = typeof e.data === 'string' ? JSON.parse(e.data) : e.data || {}; } catch { return; }
   for (const p of pav) if (p.yt && e.source === p.yt.contentWindow) {
     if (d.event === 'onError') { p.yt.remove(); p.yt = null; p.ytFailed = true; }
-    else if (ytPlaying(d)) { p.ytOk = true; p.yt.style.opacity = 1; }
+    else if (ytPlaying(d)) { if (!p.ytOk) p.ytVol = -1; p.ytOk = true; p.yt.style.opacity = 1; } // first PLAYING: (re)send the volume
     else if (!p.ytKick && (d.event === 'onReady' || d.event === 'initialDelivery')) { p.ytKick = true; ytCmd(p.yt, 'mute'); ytCmd(p.yt, 'playVideo'); } // a hidden player won't autoplay by itself
   }
   if (cinemaYT && e.source === cinemaYT.contentWindow) {
@@ -619,7 +635,7 @@ function updateScreens() {
   for (const p of pav) {
     const want = p === near && !modalOpen, v0 = p.r.videos[0];
     if (p.screenVideo) {
-      if (want && !p.playing) { if (!p.screenVideo.src) p.screenVideo.src = p.screenVideo.dataset.src; p.screenVideo.play().catch(() => {}); p.playing = true; }
+      if (want && (!p.playing || p.screenVideo.paused)) { if (!p.screenVideo.src) p.screenVideo.src = p.screenVideo.dataset.src; if (frameCount % 60 === 0 || !p.playing) p.screenVideo.play().catch(() => {}); p.playing = true; }
       else if (!want && p.playing) { p.screenVideo.pause(); p.screenVideo.muted = true; p.playing = false; }
       if (want) { p.screenVideo.muted = vol <= 0; p.screenVideo.volume = vol * .8; } else if (!p.screenVideo.muted) p.screenVideo.muted = true; // never two voices
     } else if (v0.type === 'youtube') {
@@ -633,7 +649,7 @@ function updateScreens() {
         const me = f; setTimeout(() => { if (p.yt === me && !p.ytOk) { me.remove(); p.yt = null; p.ytFailed = true; } }, 8000);
       } else if (!want && p.yt) { p.yt.remove(); p.yt = null; }
       if (!want) p.ytFailed = false; // walk away and back: try the live player again
-      if (want && p.yt) { const v = Math.round(vol * 80); if (v !== p.ytVol) { if (v > 0) { ytCmd(p.yt, 'unMute'); ytCmd(p.yt, 'setVolume', [v]); } else ytCmd(p.yt, 'mute'); p.ytVol = v; } }
+      if (want && p.yt && p.ytOk) { const v = Math.round(vol * 80); if (v !== p.ytVol) { if (v > 0) { ytCmd(p.yt, 'unMute'); ytCmd(p.yt, 'setVolume', [v]); } else ytCmd(p.yt, 'mute'); p.ytVol = v; } }
     }
   }
 }
@@ -652,13 +668,13 @@ function playerFor(v) {
     // poster underneath, player on top only once it really plays; if it never does, a clear way out instead of black
     const poster = `https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`;
     box.style.background = `#000 center / cover no-repeat url("${poster}")`;
-    const f = el('iframe'); f.src = `https://www.youtube-nocookie.com/embed/${v.id}?autoplay=1&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&origin=${encodeURIComponent(location.origin)}&widget_referrer=${encodeURIComponent(location.href.split('?')[0])}`;
+    const f = el('iframe'); f.src = `https://www.youtube-nocookie.com/embed/${v.id}?autoplay=1${isMuted() ? '&mute=1' : ''}&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&origin=${encodeURIComponent(location.origin)}&widget_referrer=${encodeURIComponent(location.href.split('?')[0])}`;
     f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen'; f.allowFullscreen = true; f.title = v.title; f.referrerPolicy = 'strict-origin-when-cross-origin'; f.style.opacity = 0; f.style.transition = 'opacity .5s';
     f.onload = () => f.contentWindow?.postMessage(JSON.stringify({event: 'listening', id: v.id}), '*');
     box.append(f); cinemaYT = f; cinemaOk = false; cinemaVid = v;
     setTimeout(() => { if (cinemaYT === f && !cinemaOk) cinemaFallback(); }, 8000);
   } else {
-    const vid = el('video'); Object.assign(vid, {src: v.src, controls: true, autoplay: true, playsInline: true}); if (v.poster) vid.poster = v.poster; box.append(vid);
+    const vid = el('video'); Object.assign(vid, {src: v.src, controls: true, autoplay: true, playsInline: true, muted: isMuted()}); if (v.poster) vid.poster = v.poster; box.append(vid);
   }
 }
 function openCinema(p) {
@@ -679,7 +695,7 @@ function markWatched(p) {
   const st = stateOf(p.r.id); if (st.watched) return;
   st.watched = true; sfx.unlock(); saveProgress(); paint(p); renderPassport(p.r.id); toast(`TRY stand unlocked · ${p.r.try.title}`);
 }
-$('toTry').onclick = () => { const p = cinemaP; markWatched(p); closeModals(); openTry(p); };
+$('toTry').onclick = () => { const p = cinemaP; markWatched(p); closeModals(true); openTry(p); }; // silent: no pointer re-lock under the stand
 
 // ---------- TRY ----------
 let unmountTry = null, episode = null;
@@ -803,10 +819,10 @@ function enterRoom(to) {
   look.pitch = player.pitch = -0.02; toast(to === 'hw' ? 'Hardware Lab' : to === 'rw' ? `Research Wing · ${rw.lab.name}` : 'Release Hall');
 }
 function jump(d) { sfx.whoosh(); const i = Math.max(0, Math.min(layout.length - 1, (hereIdx < 0 ? -1 : hereIdx) + d)); teleport(i); toast(`${layout[i].r.code} · ${layout[i].r.title}`); }
-function teleport(i) { const L = layout[i]; player.x = -L.side * 2.5; player.z = L.z + 9; player.yaw = look.yaw = L.side > 0 ? -0.55 : 0.55; player.pitch = look.pitch = -0.02; player.vx = player.vz = 0; }
+function teleport(i) { const L = layout[i]; player.x = -L.side * 2.5; player.z = L.z + 4; player.yaw = look.yaw = L.side > 0 ? -1.0 : 1.0; player.pitch = look.pitch = -0.02; player.vx = player.vz = 0; audible = pav[i] || null; glide = null; heroes.snap?.(); }
 
 // ---------- modal plumbing ----------
-function showModal(id) { closeModals(true); modalOpen = true; document.body.classList.add('modal-open'); held.clear(); unlock(); $(id).hidden = false; $('prompt').hidden = true; }
+function showModal(id) { $('research').hidden = true; closeModals(true); modalOpen = true; document.body.classList.add('modal-open'); held.clear(); unlock(); $(id).hidden = false; $('prompt').hidden = true; }
 // ---------- research card: what visitors tell the lab (feedback + opt-in data contribution) ----------
 const NEXT = ['Home chores', 'Cooking', 'Warehouse', 'Factory assembly', 'Healthcare help', 'Outdoor inspection', 'Elder care', 'Construction'];
 let pendingResearch = null;
@@ -874,13 +890,13 @@ function move(dt) {
 const params = new URLSearchParams(location.search);
 const deep = layout.findIndex(L => L.r.id === params.get('release'));
 if (deep < 0) teleport(0); // default: stand in front of the newest release
-if (deep >= 0) { teleport(deep); $('intro').hidden = true; if (params.has('present')) setTimeout(() => openCinema(pav[deep]), 300); }
+if (deep >= 0) { teleport(deep); $('intro').hidden = true; boot.then(() => { enteredAt = performance.now(); if (params.has('present')) openCinema(pav[deep]); }); }
 
 // debug: a turntable to inspect any robot from any side (?debug only)
 let debugCam = null, inspectBot = null;
 if (params.has('debug')) window.__inspect = async (key, angle = 0, dist = 1.6, h = 1.1) => {
   if (!key) { debugCam = null; inspectBot?.dispose(); inspectBot = null; return 'off'; }
-  if (inspectBot?.key !== key) { inspectBot?.dispose(); inspectBot = await MJ.spawn(key, {shared: true}); upgradeRobot(THREE, inspectBot.group); scene.add(inspectBot.group); }
+  if (inspectBot?.key !== key) { inspectBot?.dispose(); inspectBot = await MJ.spawn(key, {shared: true}); scene.add(inspectBot.group); }
   const c = new THREE.Vector3(player.x, 0, player.z - 4); inspectBot.group.position.copy(c);
   debugCam = {pos: new THREE.Vector3(c.x + Math.sin(angle) * dist, h, c.z + Math.cos(angle) * dist), at: new THREE.Vector3(c.x, h * .85, c.z)};
   return key + ' @ ' + angle.toFixed(2);
@@ -894,8 +910,8 @@ let visitorName = (() => { try { return localStorage.getItem('skild-hall:name') 
 $('nameInput').value = visitorName;
 $('nameInput').addEventListener('input', e => { visitorName = e.target.value.trim().slice(0, 24); try { localStorage.setItem('skild-hall:name', visitorName); } catch {} });
 const doing = () => !$('try').hidden ? `Trying · ${$('tryTitle').textContent}` : !$('cinema').hidden ? `Watching · ${$('cinemaTitle').textContent}` : '';
-const presenceLink = startPresence({scene, sceneTop, room: params.get('room') || 'lab',
-  getState: () => ({name: visitorName || 'Visitor', x: +player.x.toFixed(2), z: +player.z.toFixed(2), yaw: +player.yaw.toFixed(3), doing: doing(), level: DS.stats().level}),
+const presenceLink = startPresence({scene, sceneTop, room: params.get('room') || 'lab', makeBody: id => heroBody(THREE, MJ, id),
+  getState: () => ({name: visitorName || 'Visitor', x: +player.x.toFixed(2), z: +player.z.toFixed(2), yaw: +player.yaw.toFixed(3), doing: doing(), level: DS.stats().level, hero: heroId}),
   onCount: n => { $('online').textContent = `${n} in the lab`; $('online').classList.toggle('multi', n > 1); }});
 
 // ---------- dark mode: UI (CSS vars), 3D lab (materials, fog, light) and TRY stand canvases (shared BRAND palette) ----------
@@ -903,9 +919,9 @@ const LIGHT = {...BRAND};
 const DARK = {...BRAND, black: '#F2F0EB', ink: '#E6E4DD', white: '#262a2f', warm1: '#1e2125', warm2: '#363b41', warm3: '#474d54', warm4: '#8E8177', cool1: '#4A535C', cool2: '#9AA3AB', cool3: '#C7CDD2', cool4: '#E3E6E9'};
 const SCENE_THEME = {
   // dark = black product studio (spot pools, floor fading to black); light = bright showroom (glowing ceiling, cool carpet)
-  dark: {floor: '#3a3b3c', wall: '#141617', fog: '#07090a', sky: '#ffffff', ground: '#000000', hemi: .12, sun: .2, glass: '#3a3f42', dim: '#e9c37a', plinth: '#1a1c1d', bench: '#222526', exposure: .9, near: 12, far: 85, line: '#b8883a', rough: .62,
+  dark: {floor: '#3a3b3c', wall: '#141617', fog: '#07090a', sky: '#ffffff', ground: '#000000', hemi: .12, sun: .2, glass: '#3a3f42', dim: '#5c4a2c', plinth: '#1a1c1d', bench: '#222526', exposure: .9, near: 12, far: 85, line: '#e0a33c', rough: .62, env: .12,
     grade: {shadowTint: [1, 1, 1], highTint: [1, .975, .93], liftC: [.004, .004, .004], vig: .7}},
-  light: {floor: '#7a8086', wall: '#b7bdc2', fog: '#c9ced2', sky: '#f2f4f6', ground: '#8a9096', hemi: .8, sun: .75, glass: '#dfe6ea', dim: '#f3c79b', plinth: '#e8edf0', bench: '#d0d8dd', exposure: .9, near: 26, far: 100, line: '#d9a441', rough: .95,
+  light: {floor: '#7a8086', wall: '#b7bdc2', fog: '#c9ced2', sky: '#f2f4f6', ground: '#8a9096', hemi: .8, sun: .75, glass: '#dfe6ea', dim: '#f3c79b', plinth: '#e8edf0', bench: '#d0d8dd', exposure: .9, near: 26, far: 100, env: .85, line: '#d9a441', rough: .95,
     grade: {shadowTint: [.93, .97, 1.04], highTint: [.98, 1, 1.02], liftC: [.02, .024, .03], vig: .3}},
 };
 function applyTheme(t) {
@@ -916,7 +932,7 @@ function applyTheme(t) {
   M.floor.color.set(s.floor); M.wall.color.set(s.wall); M.glass.color.set(s.glass); M.orangeDim.color.set(s.dim);
   scene.fog.color.set(s.fog); hemi.color.set(s.sky); hemi.groundColor.set(s.ground); hemi.intensity = s.hemi; sun.intensity = s.sun;
   scene.fog.near = s.near || 30; scene.fog.far = s.far || 95; M.orange.color.set(s.line || BRAND.orange);
-  M.floor.roughness = s.rough ?? .5; corridor.setTheme(t); cine.set(s.grade || {});
+  M.floor.roughness = s.rough ?? .5; corridor.setTheme(t); scene.environmentIntensity = s.env ?? .9; cine.set(s.grade || {});
   gridMat.color.set(t === 'dark' ? '#9aa3ab' : '#8e8177'); gridMat.opacity = t === 'dark' ? 0 : .13;
   ROBOT_MAT.plinth.color.set(s.plinth); ROBOT_MAT.light.color.set(s.bench); renderer.toneMappingExposure = s.exposure;
   $('themeBtn').textContent = t === 'dark' ? 'Light' : 'Dark';
@@ -941,19 +957,37 @@ function openHeroes() { unlock(); modalOpen = true; document.body.classList.add(
 const roomOf = x => x > HX - 20 ? 'hw' : x < RX + 20 ? 'rw' : 'hall';
 const cssRoom = new Map(), wp = new THREE.Vector3();
 let litRoom = '';
+// each room's own lights are switched on only while you are in it; their shader variants are compiled once,
+// up front under the loading screen (prewarmRooms), so walking through a door never stalls
+function setRoomLights(room) {
+  japanLab.group.traverse(o => { if (o.isLight) o.visible = room === 'hw'; });
+  japanLab.glass.visible = room === 'hw'; // a visible transmissive mesh costs an extra scene pass, even seen through a door
+  corridor.setLit(room === 'hall');
+  for (const s of rwSpots) s.visible = room === 'rw';
+}
+function prewarmRooms() {
+  // a real frame per room (not renderer.compile): the film pass renders into a linear target without tone mapping,
+  // and only an identical render builds the exact shader variants the game will use
+  for (const room of ['hw', 'rw', 'hall']) { setRoomLights(room); try { cine.render(scene, camera, 1 / 60); } catch {} }
+  litRoom = ''; // the next cull pass sets the real room
+}
 function cullCssByRoom() {
   const here = roomOf(player.x);
-  if (here !== litRoom) { litRoom = here; japanLab.group.traverse(o => { if (o.isLight) { o.userData.on ??= o.intensity; o.intensity = here === 'hw' ? o.userData.on : 0; } }); corridor.setLit(here === 'hall'); } // lights only where you are
+  if (here !== litRoom) { litRoom = here; setRoomLights(here); }
+  if (here === 'hw' && !racksFilled) { racksFilled = true; fillRacks(); }
   for (const sc of [sceneTop, sceneUnder]) sc.traverse(o => {
-    if (!o.isCSS3DObject || o.element.classList.contains('w-peer')) return; // visitors move: never cached
-    if (!cssRoom.has(o)) { o.getWorldPosition(wp); cssRoom.set(o, roomOf(wp.x)); }
-    const show = cssRoom.get(o) === here;
+    if (!o.isCSS3DObject) return;
+    const moving = o.element.classList.contains('w-peer') || o.element.classList.contains('w-learner'); // visitors and learners walk between rooms
+    let room = cssRoom.get(o);
+    if (moving || room === undefined) { o.getWorldPosition(wp); room = roomOf(wp.x); if (!moving) cssRoom.set(o, room); }
+    const show = room === here;
     if (o.userData.roomHidden !== !show) { o.userData.roomHidden = !show; o.element.style.visibility = show ? '' : 'hidden'; }
   });
 }
 
 // ---------- loop ----------
 let last = performance.now(), hereIdx = -2, frameCount = 0;
+let rwWasIn = false;
 function frame(now) {
   requestAnimationFrame(frame);
   const dt = Math.min(.05, (now - last) / 1000); last = now; frameCount++;
@@ -970,10 +1004,10 @@ function frame(now) {
   if (!inHW() && !inRW()) corridor.update(player.x, player.z, player.yaw);
   if (player.z - START_Z > -40) core.update(now / 1000, dt);
   if (inHW()) hw.update(now / 1000, dt);
-  if (inRW() && frameCount % 10 === 0) rw.update(player.x, player.z);
+  if (frameCount % 10 === 0 && (inRW() || rwWasIn)) { rw.update(inRW() ? player.x : 1e6, player.z); rwWasIn = inRW(); } // leaving pauses the teasers
   if (frameCount % 20 === 5) updateRwSpots();
   if (inRW()) learners.update(now / 1000, dt, camera);
-  for (const p of pav) { if (Math.abs(p.L.z - player.z) < 40) { p.bot.update(now / 1000, dt); for (const b of p.real) b.update(now / 1000, dt); animateDressing(p, now / 1000); } p.holo.rotation.y += dt * .8; p.holo.rotation.x += dt * .3; p.holo.position.y = 1.75 + Math.sin(now / 700 + p.L.i) * .06; }
+  for (const p of pav) { if (!inHW() && !inRW() && Math.abs(p.L.z - player.z) < 40) { p.bot.update(now / 1000, dt); for (const b of p.real) b.update(now / 1000, dt); animateDressing(p, now / 1000); } p.holo.rotation.y += dt * .8; p.holo.rotation.x += dt * .3; p.holo.position.y = 1.75 + Math.sin(now / 700 + p.L.i) * .06; }
   for (const b of billboards) b.rotation.y = Math.atan2(camera.position.x - b.position.x, camera.position.z - b.position.z);
   if (frameCount % 3 === 0) updateFlippers();
   if (frameCount % 15 === 1) cullCssByRoom();
@@ -983,7 +1017,9 @@ function frame(now) {
     if (inHW()) { $('where').textContent = 'HARDWARE LAB · build · teleoperate · test'; } else if (inRW()) { $('where').textContent = `RESEARCH WING · ${rw.lab.name}`; } else if (idx !== hereIdx) { hereIdx = idx; const r = layout[idx].r; renderPassport(r.id); $('where').textContent = `${r.code} · ${fmtDate(r.date)} · ${r.title}`; }
     $('miniDot').style.left = (100 * Math.max(0, Math.min(1, (START_Z - player.z) / (START_Z - layout.at(-1).z)))) + '%';
   }
-  cine.render(scene, camera, dt); css.render(sceneUnder, camera); cssTop.render(sceneTop, camera);
+  // under an opaque modal (TRY stand, cinema) the hall is only refreshed every 10th frame: the stand gets the GPU
+  const covered = modalOpen && $('heroes').hidden;
+  if (!covered || frameCount % 10 === 0) { cine.render(scene, camera, dt); css.render(sceneUnder, camera); cssTop.render(sceneTop, camera); }
   if (frameCount === 1) { syncHoles(); setTimeout(syncHoles, 800); setTimeout(syncHoles, 3000); document.fonts?.ready.then(syncHoles); }
 }
 requestAnimationFrame(frame);

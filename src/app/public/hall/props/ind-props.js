@@ -57,9 +57,9 @@ export function lights(scene, {hemi = ['#ffffff', '#5a5650', 1.1], sun = ['#ffff
 export function disposeTree(root) {
   const seen = new Set();
   root.traverse(o => {
-    if (o.geometry && !seen.has(o.geometry)) { seen.add(o.geometry); o.geometry.dispose(); }
+    if (o.geometry && !seen.has(o.geometry)) { seen.add(o.geometry); if (!o.geometry.userData?.shared) o.geometry.dispose(); } // shared: owned by mj.js
     const ms = Array.isArray(o.material) ? o.material : o.material ? [o.material] : [];
-    for (const m of ms) { if (seen.has(m)) continue; seen.add(m); for (const key of ['map', 'emissiveMap', 'roughnessMap', 'normalMap', 'alphaMap']) if (m[key] && !seen.has(m[key])) { seen.add(m[key]); m[key].dispose(); } m.dispose(); }
+    for (const m of ms) { if (seen.has(m)) continue; seen.add(m); for (const key of ['map', 'emissiveMap', 'roughnessMap', 'normalMap', 'alphaMap']) if (m[key] && !seen.has(m[key])) { seen.add(m[key]); if (!m[key].userData?.shared) m[key].dispose(); } m.dispose(); }
     if (o.isInstancedMesh) o.dispose?.();
   });
 }

@@ -8,6 +8,8 @@ import os, re, sys
 root, v = sys.argv[1], sys.argv[2][:8]
 quoted = re.compile(r"""((?:\bfrom\s*|\bimport\s*\(\s*|\bsrc=|\bhref=|\bfetch\(\s*)['"])(\.{1,2}/[^'"?#]+?\.(?:js|mjs|css|json))(['"])""")
 templ = re.compile(r"(\bimport\(\s*`)(\.{1,2}/[^`?#]+?\.js)(`)")
+# bare relative attribute URLs too (e.g. sim.html: src="gate.js"); never absolute, protocol, root or fragment URLs
+bare = re.compile(r'''(\b(?:src|href)=["'])((?![a-zA-Z][\w+.-]*:|/|#|\.)[^"'?#\s]+\.(?:js|mjs|css))(["'])''')
 changed = 0
 for d, _, files in os.walk(root):
     if 'vendor' in d.split(os.sep):
@@ -18,7 +20,7 @@ for d, _, files in os.walk(root):
         p = os.path.join(d, f)
         s = open(p, encoding='utf-8').read()
         bump = lambda m: m.group(0) if 'vendor/' in m.group(2) else m.group(1) + m.group(2) + '?v=' + v + m.group(3)
-        n = templ.sub(bump, quoted.sub(bump, s))
+        n = bare.sub(bump, templ.sub(bump, quoted.sub(bump, s)))
         if n != s:
             open(p, 'w', encoding='utf-8').write(n); changed += 1
 print(f'versioned URLs in {changed} files (v={v})')

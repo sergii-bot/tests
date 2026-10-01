@@ -214,7 +214,7 @@ export default function mount(root, api) {
   const logoTex = canvasTex(1024, 320, (c, w, h) => { c.fillStyle = '#d9dcdf'; c.fillRect(0, 0, w, h); });
   const logo = new THREE.Mesh(new THREE.PlaneGeometry(5.6, 1.75), new THREE.MeshStandardMaterial({map: logoTex, roughness: .8})); logo.position.set(0, 2.7, -5.08); realG.add(logo);
   const img = new Image(); img.onload = () => { if (dead) return; const cv = logoTex.image, c = cv.getContext('2d'); c.fillStyle = '#d9dcdf'; c.fillRect(0, 0, cv.width, cv.height); const w = 820, h = w * (img.height || 40) / (img.width || 134); try { c.drawImage(img, (cv.width - w) / 2, (cv.height - h) / 2, w, h); } catch {} logoTex.needsUpdate = true; };
-  img.src = '../../assets/brand/skild-wordmark.svg';
+  img.src = new URL('../../assets/brand/skild-wordmark.svg', import.meta.url).href; // relative to this module, so it also works under /tests/ on Pages
   // ball + training trail
   const ball = soccerBall(); scene.add(ball);
   const trailGeo = new THREE.BufferGeometry(); trailGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(60 * 3), 3));

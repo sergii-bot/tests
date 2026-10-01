@@ -43,7 +43,7 @@ export function dressJapanLab(THREE, scene, {HX, HZ, HW, HD}) {
       im.data[o] = 128 + Math.max(-127, Math.min(127, (-dx + (edge && u < .5 ? -2 : edge && u > .5 ? 2 : 0)) * 60)); im.data[o + 1] = 128 + Math.max(-127, Math.min(127, (-dy + (edge && v < .5 ? -2 : edge && v > .5 ? 2 : 0)) * 60)); im.data[o + 2] = 255; im.data[o + 3] = 255; }
     x.putImageData(im, 0, 0); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.NoColorSpace; return t; })();
   const glassM = new THREE.MeshPhysicalMaterial({color: '#cdeedd', roughness: .08, metalness: 0, transmission: .92, thickness: .09, ior: 1.5, normalMap: ripple, normalScale: new THREE.Vector2(.9, .9), clearcoat: 1, clearcoatRoughness: .05, attenuationColor: new THREE.Color('#7fc79b'), attenuationDistance: .25, envMapIntensity: 1.3});
-  inst(new THREE.BoxGeometry(.1, B - .025, B - .025), glassM, cols * rows, (o, i) => o.position.set(x1 - .12, (Math.floor(i / cols) + .5) * B, z0 + (i % cols + .5) * B + (HD - cols * B) / 2));
+  const glass = inst(new THREE.BoxGeometry(.1, B - .025, B - .025), glassM, cols * rows, (o, i) => o.position.set(x1 - .12, (Math.floor(i / cols) + .5) * B, z0 + (i % cols + .5) * B + (HD - cols * B) / 2));
   inst(new THREE.BoxGeometry(.06, .02, HD), new THREE.MeshStandardMaterial({color: '#20302a', roughness: .6}), rows + 1, (o, i) => o.position.set(x1 - .12, i * B, HZ));
   const wash = new THREE.PointLight('#9fd8b0', 70, 22, 1.4); wash.position.set(x1 - 3, 6.2, HZ); g.add(wash);
 
@@ -84,5 +84,5 @@ export function dressJapanLab(THREE, scene, {HX, HZ, HW, HD}) {
   // warm work lights over the bench and the teleop desk, soft fill under the coffers
   for (const [x, z] of [[HX - 5, HZ + 1], [HX + 6, HZ + 2], [HX, z0 + 6.5]]) { const w = new THREE.SpotLight('#ffe2b8', 320, 14, .7, .7, 1.3); w.position.set(x, H - .7, z); w.target.position.set(x, 0, z); g.add(w, w.target); }
   const fill = new THREE.PointLight('#d9cbb4', 60, 30, 1); fill.position.set(HX, H - 1.2, HZ); g.add(fill);
-  return {group: g};
+  return {group: g, glass}; // glass: transmissive, so hall.js shows it only inside the lab
 }

@@ -1,6 +1,6 @@
 // CINEMA LOOK — the director's film grade as a post pipeline (see LOOK_BIBLE.md).
 // scene → HDR target (MSAA) → bloom/halation (¼ res) → grade pass (filmic tonemap, lifted blacks, teal split-tone,
-// chromatic aberration, barrel, vignette, motion smear via previous frame) → screen.
+// chromatic aberration, vignette, motion smear via previous frame) → screen.
 // Alpha is kept, so the CSS3D screens behind the canvas still show through their holes.
 // A DOM overlay adds 35 mm grain, gate weave and the thin grid on top of everything (WebGL and CSS layers alike).
 //   const cine = createCinema(THREE, renderer); cine.render(scene, camera, dt);  cine.setSize(w, h);  cine.enabled = false;
@@ -20,7 +20,7 @@ export function createCinema(THREE, renderer) {
 
   const bright = mat(`varying vec2 vUv; uniform sampler2D t; uniform float thr;
     void main(){ vec4 c = texture2D(t, vUv); float l = dot(c.rgb, vec3(.2126,.7152,.0722)); gl_FragColor = vec4(c.rgb * smoothstep(thr, thr + .6, l), 1.); }`,
-    {t: {value: null}, thr: {value: 2.2}});
+    {t: {value: null}, thr: {value: 1.6}});
   const blur = mat(`varying vec2 vUv; uniform sampler2D t; uniform vec2 d;
     void main(){ vec3 s = texture2D(t, vUv).rgb * .227;
       s += (texture2D(t, vUv + d * 1.385).rgb + texture2D(t, vUv - d * 1.385).rgb) * .316;
@@ -35,7 +35,7 @@ export function createCinema(THREE, renderer) {
     vec3 toSRGB(vec3 c){ return mix(c * 12.92, 1.055 * pow(c, vec3(1. / 2.4)) - .055, step(.0031308, c)); }
     void main(){
       vec2 p = vUv - .5; float r2 = dot(p, p);
-      vec2 uv = .5 + p * (1. + barrel * r2);                     // lens barrel
+      vec2 uv = vUv; // no lens warp: it would bend the alpha holes away from the straight CSS3D screens
       vec2 off = p * ca * r2;                                     // chromatic aberration grows to the edges
       vec4 c = texture2D(t, uv);
       vec3 col = vec3(texture2D(t, uv + off).r, c.g, texture2D(t, uv - off).b);
@@ -49,22 +49,21 @@ export function createCinema(THREE, renderer) {
       col = mix(col, col * col * (3. - 2. * col), .75); // denser, filmic mid contrast           // soft S for a print feel
       col *= 1. - vig * smoothstep(.12, .62, r2 * 1.6);           // vignette
       vec3 pr = texture2D(prev, vUv).rgb;
-      col = mix(col, pr, smear);                                  // motion smear: moving shapes leave a soft ghost
-      vec3 outc = mix(aces(c.rgb * exposure), col, on);
+      col = mix(col, pr, smear * c.a);                            // motion smear: moving shapes leave a soft ghost
+      vec3 outc = mix(aces(c.rgb * exposure), col, on) * c.a;    // premultiplied: holes (a = 0) stay exactly clear
       gl_FragColor = vec4(outc, c.a);
     }`, {t: {value: null}, bloom: {value: null}, prev: {value: null}, exposure: {value: 1.2}, smear: {value: .25}, ca: {value: .003},
     barrel: {value: .03}, vig: {value: .35}, bloomK: {value: .06}, time: {value: 0}, on: {value: 1},
     shadowTint: {value: new THREE.Color(.9, 1.0, .97)}, highTint: {value: new THREE.Color(1.0, .99, .95)}, liftC: {value: new THREE.Color(.018, .026, .024)}});
   const toScreen = mat(`varying vec2 vUv; uniform sampler2D t;
     vec3 toSRGB(vec3 c){ return mix(c * 12.92, 1.055 * pow(c, vec3(1. / 2.4)) - .055, step(.0031308, c)); }
-    void main(){ vec4 c = texture2D(t, vUv); gl_FragColor = vec4(toSRGB(max(c.rgb, 0.)), c.a); }`, {t: {value: null}});
+    void main(){ vec4 c = texture2D(t, vUv); vec3 s = toSRGB(clamp(c.rgb / max(c.a, 1e-4), 0., 1.)) * c.a; gl_FragColor = vec4(s, c.a); }`, {t: {value: null}}); // premultiplied out, like the canvas expects
 
   function pass(material, target) { quad.material = material; renderer.setRenderTarget(target); renderer.render(qScene, quadCam); }
 
   // DOM film layer: grain + gate weave + thin grid, over WebGL and CSS3D alike
   const film = document.createElement('div'); film.className = 'film-layer';
   const gc = document.createElement('canvas'); gc.width = gc.height = 192; film.append(gc);
-  const grid = document.createElement('div'); grid.className = 'film-grid'; film.append(grid);
   document.body.append(film);
   const gx = gc.getContext('2d'), img = gx.createImageData(192, 192);
   const tiles = Array.from({length: 6}, () => {
@@ -87,7 +86,7 @@ export function createCinema(THREE, renderer) {
     render(scene, camera, dt = 1 / 60) {
       frameN++;
       if (!api.enabled) { renderer.setRenderTarget(null); renderer.render(scene, camera); film.hidden = true; frameN = 0; return; }
-      film.hidden = false;
+      film.hidden = true; // grain is off (director) and the grid was invisible: no full-screen blend layer at all
       const tm = renderer.toneMapping; renderer.toneMapping = THREE.NoToneMapping;
       renderer.setRenderTarget(hdr); renderer.clear(); renderer.render(scene, camera);
       bright.uniforms.t.value = hdr.texture; pass(bright, bA);

@@ -48,7 +48,7 @@ export async function installLookdev(THREE, renderer, scene, M, {hallLen = 200, 
   scan(THREE, renderer, 'plastered_wall_04', [hallLen / 6, 7.5 / 6])(M.wall); M.wall.roughness = 1;
   M.wall.normalScale = new THREE.Vector2(.5, .5); M.wall.envMapIntensity = .6; M.wall.needsUpdate = true;
   scene.environment = await loadEnv(THREE, renderer, 'studio_small_09_2k.hdr');
-  scene.environmentIntensity = .9;
+  // intensity is set per theme by hall.js applyTheme (dark studio .12, light showroom .85)
 }
 
 // robot shells: satin plastic + clearcoat; dark parts become anodised metal (matches stills 9, 10, 11)

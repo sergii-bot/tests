@@ -9,7 +9,7 @@ let mujocoP = null, manifestP = null;
 const loaded = new Map(); // key -> Promise<void> (files written to MEMFS)
 // one compiled MjModel and one set of three.js geometries per robot type, shared by every instance
 // (compiling per instance ran the WASM heap past its 2 GB limit once heroes joined the exhibits)
-const models = new Map(), geoCache = new Map(), sharedData = new Map();
+const models = new Map(), geoCache = new Map(), sharedData = new Map(), sharedHome = new Map(), decalCache = new Map();
 const Z_UP_TO_Y_UP = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), -Math.PI / 2);
 
 async function mujoco() {
@@ -33,7 +33,7 @@ async function ensureFiles(key) {
       const parts = f.split('/'); let d = root; for (const p of parts.slice(0, -1)) { d += '/' + p; try { m.FS.mkdir(d); } catch {} }
       m.FS.writeFile(`${root}/${f}`, buf);
     }));
-  })());
+  })().catch(e => { loaded.delete(key); throw e; })); // a network hiccup can be retried later
   return loaded.get(key);
 }
 
@@ -60,7 +60,7 @@ function livery(color, plate = null, ratio = 1.76) {
     } else { x.globalCompositeOperation = 'source-in'; x.fillStyle = color; x.fillRect(0, 0, c.width, c.height); }
     tex.needsUpdate = true;
   });
-  liveryTex.set(id, tex); return tex;
+  tex.userData.shared = true; liveryTex.set(id, tex); return tex; // shared across robots: TRY stands must not dispose it
 }
 const CHEST = ['torso_link', 'torso', 'trunk', 'base_link', 'base', 'body', 'pelvis', 'shoulder_link'];
 
@@ -107,10 +107,10 @@ export async function spawn(key, {physics = false, tint = null, scale = 1, brand
   // ~20 private ones ran the 2 GB WASM heap out). Each robot keeps its own qpos and borrows the sim to pose itself.
   let sim;
   if (shared && !physics) {
-    if (!sharedData.has(key)) { const d = new m.MjData(model); if (model.nkey > 0) m.mj_resetDataKeyframe(model, d, 0); m.mj_forward(model, d); sharedData.set(key, d); }
+    if (!sharedData.has(key)) { const d = new m.MjData(model); if (model.nkey > 0) m.mj_resetDataKeyframe(model, d, 0); m.mj_forward(model, d); sharedData.set(key, d); sharedHome.set(key, Float64Array.from(d.qpos)); }
     sim = sharedData.get(key);
   } else { sim = new m.MjData(model); if (model.nkey > 0) m.mj_resetDataKeyframe(model, sim, 0); m.mj_forward(model, sim); }
-  const data = sim === sharedData.get(key) && shared && !physics ? {qpos: Float64Array.from(sim.qpos)} : sim;
+  const data = sim === sharedData.get(key) && shared && !physics ? {qpos: Float64Array.from(sharedHome.get(key))} : sim; // own pose, starting from the keyframe
   const pose = () => { if (data !== sim) sim.qpos.set(data.qpos); };
 
   const group = new THREE.Group(), inner = new THREE.Group(); inner.quaternion.copy(Z_UP_TO_Y_UP); inner.scale.setScalar(scale); group.add(inner);
@@ -119,7 +119,7 @@ export async function spawn(key, {physics = false, tint = null, scale = 1, brand
   for (let g = 0; g < model.ngeom; g++) {
     const grp = model.geom_group[g], type = model.geom_type[g];
     if (type === PLANE || grp >= 3 || isLogoGeom(model, g)) continue; // collision-only geoms live in group 3 in Menagerie
-    if (!geos.has(g)) geos.set(g, geomGeometry(model, g));
+    if (!geos.has(g)) { const gg0 = geomGeometry(model, g); if (gg0) gg0.userData.shared = true; geos.set(g, gg0); }
     const geo = geos.get(g); if (!geo) continue;
     let r = model.geom_rgba[g * 4], gg = model.geom_rgba[g * 4 + 1], b = model.geom_rgba[g * 4 + 2], a = model.geom_rgba[g * 4 + 3];
     const matId = model.geom_matid[g];
@@ -127,7 +127,11 @@ export async function spawn(key, {physics = false, tint = null, scale = 1, brand
     if (a === 0) continue;
     const keyC = `${r.toFixed(2)},${gg.toFixed(2)},${b.toFixed(2)}`;
     let mat = matCache.get(keyC);
-    if (!mat) { mat = new THREE.MeshStandardMaterial({color: tint || new THREE.Color(r, gg, b), roughness: .45, metalness: .25}); matCache.set(keyC, mat); }
+    if (!mat) { // satin plastic shells, anodised dark parts (the look lookdev.upgradeRobot used to apply later)
+      const c = tint ? new THREE.Color(tint) : new THREE.Color(r, gg, b), l = c.r * .3 + c.g * .59 + c.b * .11;
+      mat = new THREE.MeshPhysicalMaterial({color: c, roughness: l > .5 ? .38 : .28, metalness: l > .5 ? 0 : .65, clearcoat: l > .5 ? .35 : .15, clearcoatRoughness: .35, envMapIntensity: .9});
+      matCache.set(keyC, mat);
+    }
     const mesh = new THREE.Mesh(geo, mat); mesh.castShadow = true; mesh.receiveShadow = true; mesh.matrixAutoUpdate = false;
     mesh.userData = {g, body: model.geom_bodyid[g]}; inner.add(mesh); meshes.push(mesh);
   }
@@ -181,7 +185,10 @@ export async function spawn(key, {physics = false, tint = null, scale = 1, brand
       const mat = new THREE.MeshPhysicalMaterial({map: livery(ink, moulded ? paint : null, key === 'h1' ? 1.2 : 1.76), transparent: true, roughness: dark ? .28 : .38, metalness: dark ? .65 : 0, clearcoat: dark ? .2 : .6, clearcoatRoughness: .25, polygonOffset: true, polygonOffsetFactor: -4});
       // conformal decal: copy the shell triangles under the footprint, lift them 1.5 mm, map the wordmark across them
       // (it follows every curve of the body instead of sitting flat in front of it)
+      let slot = 0;
       const conform = (U, V, N, C, w, h, material) => {
+        const ck = `${key}:${slot++}`;
+        if (decalCache.has(ck)) { const m = new THREE.Mesh(decalCache.get(ck), material); m.matrixAutoUpdate = false; m.userData.decal = true; inner.add(m); decals.push({mesh: m, body: chest, local: new THREE.Matrix4()}); return; }
         const pos = [], uv = [], A = new THREE.Vector3(), B2 = new THREE.Vector3(), D = new THREE.Vector3(), e1 = new THREE.Vector3(), e2 = new THREE.Vector3(), fn = new THREE.Vector3(), t = new THREE.Vector3();
         for (const mesh of meshes) {
           const g = mesh.userData.g; if (mesh.userData.body !== chest || !mesh.visible) continue;
@@ -198,11 +205,12 @@ export async function spawn(key, {physics = false, tint = null, scale = 1, brand
           }
         }
         const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); geo.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2)); geo.computeVertexNormals();
+        geo.userData.shared = true; decalCache.set(ck, geo);
         material.map.wrapS = material.map.wrapT = THREE.ClampToEdgeWrapping;
         const m = new THREE.Mesh(geo, material); m.matrixAutoUpdate = false; m.userData.decal = true; inner.add(m);
         decals.push({mesh: m, body: chest, local: new THREE.Matrix4()});
       };
-      const long = size.x > size.z * 1.3; // quadruped body: plates on both flanks (covers the moulded model name)
+      const long = (key === 'go2' || key === 'spot') && size.x > size.z * 1.3; // quadruped body: plates on both flanks (covers the moulded model name)
       if (long) {
         const surfY = side => { let best = side > 0 ? -Infinity : Infinity;
           for (const mesh of meshes) { const g = mesh.userData.g; if (mesh.userData.body !== chest || !mesh.visible) continue;
@@ -249,10 +257,11 @@ export async function spawn(key, {physics = false, tint = null, scale = 1, brand
     kinematics() { pose(); m.mj_kinematics(model, sim); sync(); },
     step(n = 1) { for (let i = 0; i < n; i++) m.mj_step(model, data); sync(); },
     hideBody(pred) { for (const mesh of meshes) if (pred(mesh.userData.body)) mesh.visible = false; },
+    meshName(g) { const id = model.geom_dataid[g]; if (id < 0 || !model.name_meshadr) return ''; const adr = model.name_meshadr[id]; return names.slice(adr, names.indexOf('\0', adr)); },
     bodyName(b) { const adr = model.name_bodyadr?.[b]; if (adr == null) return ''; return names.slice(adr, names.indexOf('\0', adr)); },
     recipe: null,
     update(t, dt) { if (bot.recipe) { bot.reset(); bot.recipe(bot, t, dt); bot.kinematics(); } },
-    dispose() { group.removeFromParent(); for (const d of decals) { d.mesh.geometry.dispose(); d.mesh.material.dispose(); } if (data === sim) data.delete(); }, // model, geometries and shared sims stay
+    dispose() { group.removeFromParent(); for (const d of decals) d.mesh.material.dispose(); for (const mm of matCache.values()) mm.dispose(); if (data === sim) data.delete(); }, // model, geometries, decal shapes and shared sims stay
   };
   return bot;
 }
@@ -351,7 +360,7 @@ export async function bodyPart(key, name) {
   const model = models.get(key);
   if (!geoCache.has(key)) geoCache.set(key, new Map());
   const geos = geoCache.get(key);
-  if (!sharedData.has(key)) { const d = new m.MjData(model); if (model.nkey > 0) m.mj_resetDataKeyframe(model, d, 0); m.mj_forward(model, d); sharedData.set(key, d); }
+  if (!sharedData.has(key)) { const d = new m.MjData(model); if (model.nkey > 0) m.mj_resetDataKeyframe(model, d, 0); m.mj_forward(model, d); sharedData.set(key, d); sharedHome.set(key, Float64Array.from(d.qpos)); }
   const d = sharedData.get(key);
   if (model.nkey > 0) m.mj_resetDataKeyframe(model, d, 0); m.mj_kinematics(model, d);
   const names = new TextDecoder().decode(model.names || new Uint8Array());

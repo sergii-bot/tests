@@ -73,6 +73,13 @@ export async function loadComposed(config, opts = {}) {
 }
 
 // compose + load + three.js meshes (Y-up group) + fixed-step update
+// maker logos are separate meshes (H1/G1 "logo_link"): composed robots never draw them either (director: no maker names)
+function logoGeom(model, g) {
+  if (model.geom_type[g] !== 7 || !model.name_meshadr) return false;
+  const id = model.geom_dataid[g]; if (id < 0) return false;
+  const names = model.__names || (model.__names = new TextDecoder().decode(model.names || new Uint8Array()));
+  const adr = model.name_meshadr[id]; return /logo/i.test(names.slice(adr, names.indexOf('\0', adr)));
+}
 export async function spawnComposed(config, opts = {}) {
   const THREE = opts.THREE || await import(new URL('vendor/three.module.js', PUBLIC).href);
   const r = await loadComposed(config, opts);
@@ -82,12 +89,13 @@ export async function spawnComposed(config, opts = {}) {
   group.add(inner);
   const meshes = [], mats = new Map();
   for (let g = 0; g < model.ngeom; g++) {
-    if (model.geom_type[g] === 0 || model.geom_group[g] >= 3) continue; // floor plane, collision-only geoms
+    if (model.geom_type[g] === 0 || model.geom_group[g] >= 3 || logoGeom(model, g)) continue; // floor plane, collision-only geoms, maker logo plates
     const geo = geometry(THREE, model, g); if (!geo) continue;
     const mi = model.geom_matid[g], src = mi >= 0 ? model.mat_rgba : model.geom_rgba, o = (mi >= 0 ? mi : g) * 4;
     if (src[o + 3] === 0) continue;
     const k = `${src[o].toFixed(2)},${src[o + 1].toFixed(2)},${src[o + 2].toFixed(2)}`;
-    if (!mats.has(k)) mats.set(k, new THREE.MeshStandardMaterial({color: new THREE.Color(src[o], src[o + 1], src[o + 2]), roughness: .45, metalness: .25}));
+    if (!mats.has(k)) { const c = new THREE.Color(src[o], src[o + 1], src[o + 2]), l = c.r * .3 + c.g * .59 + c.b * .11; // same shell finish as hall/mj.js
+      mats.set(k, new THREE.MeshPhysicalMaterial({color: c, roughness: l > .5 ? .38 : .28, metalness: l > .5 ? 0 : .65, clearcoat: l > .5 ? .35 : .15, clearcoatRoughness: .35, envMapIntensity: .9})); }
     const mesh = new THREE.Mesh(geo, mats.get(k)); mesh.castShadow = mesh.receiveShadow = true; mesh.matrixAutoUpdate = false;
     mesh.userData.g = g; inner.add(mesh); meshes.push(mesh);
   }

@@ -293,8 +293,8 @@ export function groundPlane(set, size = 80) { return plane(size, size, set.groun
 
 export function disposeTree(obj) {
   obj.traverse(o => {
-    o.geometry?.dispose?.();
+    if (!o.geometry?.userData?.shared) o.geometry?.dispose?.(); // shared = owned by mj.js and still used by the hall
     const ms = Array.isArray(o.material) ? o.material : o.material ? [o.material] : [];
-    for (const m of ms) { m.map?.dispose?.(); m.dispose?.(); }   // cached textures re-upload on next use
+    for (const m of ms) { if (!m.map?.userData?.shared) m.map?.dispose?.(); m.dispose?.(); }   // cached textures re-upload on next use
   });
 }

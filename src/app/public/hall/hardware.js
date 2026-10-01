@@ -19,9 +19,9 @@ export const STATIONS = [
     points: [], videos: [yt('6jSM3-2yt2s', 'Series C: a look at the past results'), mp4('coffee-prompt', 'Prompt: coffee'), mp4('pancakes-prompt', 'Prompt: pancakes'), yt('YRmjBdKKLsc', 'Learning by watching human videos')],
     try: {module: 'hw-teleop', title: 'Teleoperate a robot', verb: 'Drive the arm', blurb: 'Control the arm, finish a task and record your demo into the dataset. Then see if a pure replay survives when the scene changes.'}},
   {id: 'hw-real', code: 'HW-03', kind: 'hardware', date: '2026-09-28', title: 'Real-parts builder', subtitle: 'Hardware Lab · MuJoCo',
-    url: 'https://github.com/google-deepmind/mujoco_menagerie', summary: 'Compose a robot from real parts of Skild quadruped/H1/G1, Skild quadruped L and a Skild arm, then test it in real MuJoCo physics.',
+    url: 'https://github.com/google-deepmind/mujoco_menagerie', summary: 'Compose a robot from open MuJoCo Menagerie parts of third-party robots (two quadrupeds, two humanoids, an arm), shown in Skild livery, then test it in real MuJoCo physics.',
     points: [], videos: [yt('p43pFxCFSzY', 'Adapting to loss of limbs'), yt('Z2chIArzLDk', 'Adapting to failed leg motors'), yt('BEqxERQXbMM', 'Adapting to stilts')],
-    try: {module: 'hw-real', title: 'Build from real parts', verb: 'Compose', blurb: 'Real meshes, masses, joints and motor limits from the official models. Your robot has to stand up in real physics. Then push it.'}},
+    try: {module: 'hw-real', title: 'Build from robot parts', verb: 'Compose', blurb: 'Meshes, masses, joints and motor limits from open Menagerie models of third-party robots (not Skild hardware specs). Your robot has to stand up in real physics. Then push it.'}},
 ];
 
 export function buildHardwareLab({scene, css3d, el, M, BRAND}) {

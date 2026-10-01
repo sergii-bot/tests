@@ -99,8 +99,8 @@ function onPresence(sock, text) {
   if (m.t !== 'state') return;
   const num = (v, a, b) => Math.max(a, Math.min(b, Number(v) || 0));
   sock.pid = sock.pid || safeId(m.id);
-  sock.state = {id: sock.pid, name: String(m.name || 'Visitor').slice(0, 24), x: num(m.x, -50, 50), z: num(m.z, -400, 50), yaw: num(m.yaw, -100, 100),
-    doing: String(m.doing || '').slice(0, 60), level: num(m.level, 0, 99), at: Date.now()};
+  sock.state = {id: sock.pid, name: String(m.name || 'Visitor').slice(0, 24), x: num(m.x, -130, 130), z: num(m.z, -400, 60), yaw: num(m.yaw, -100, 100), // wings sit at x = ±80
+    doing: String(m.doing || '').slice(0, 60), level: num(m.level, 0, 99), hero: /^(g1|h1|go2|spot|drone)$/.test(m.hero) ? m.hero : 'g1', at: Date.now()};
 }
 function presenceBroadcast(room) {
   const byId = new Map(); for (const s of room.sockets) if (s.state && (!byId.has(s.state.id) || byId.get(s.state.id).at < s.state.at)) byId.set(s.state.id, s.state);

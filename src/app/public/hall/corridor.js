@@ -2,7 +2,7 @@
 //   dark  = black product studio: near-black room, pools of spotlight on each robot and stand, floor fading to black
 //   light = bright showroom: the whole ceiling is a glowing light-box grid, cool white walls, blue-grey carpet,
 //           stands become light pillars with vertical LED strips
-// Shared: wall panels with seams, glossy/matte floor, live cube reflections around the player.
+// Shared: wall panels with seams, glossy/matte floor lit by the studio HDRI.
 export function dressCorridor(THREE, renderer, scene, {hallLen, hallMid, wallX, hallW, ceil, bays, stands}) {
   const seamM = new THREE.MeshStandardMaterial({roughness: .7});
   const panelM = new THREE.MeshStandardMaterial({roughness: .45, metalness: .05});
@@ -42,36 +42,27 @@ export function dressCorridor(THREE, renderer, scene, {hallLen, hallMid, wallX, 
   const key = new THREE.SpotLight('#fff6ec', 0, 14, .5, .8, 1.5); key.castShadow = true; key.shadow.mapSize.set(1024, 1024); key.shadow.bias = -.0005;
   scene.add(key, key.target);
 
-  const cubeRT = new THREE.WebGLCubeRenderTarget(256, {type: THREE.HalfFloatType});
-  const cubeCam = new THREE.CubeCamera(.1, 80, cubeRT);
-  const pm = new THREE.PMREMGenerator(renderer);
-  let envRT = null, n = 0, mode = 'dark', lastX = 1e9, lastZ = 1e9, lit = true;
+  let n = 0, mode = 'dark';
 
   const THEMES = {
     dark: {panel: '#0c0d0d', seam: '#030303', grid: '#060606', glow: [.24, .25, .26], led: [1.2, 1.15, 1.05], spot: 480},
     light: {panel: '#b4bac0', seam: '#7d848a', grid: '#6f767c', glow: [1.1, 1.13, 1.17], led: [2.0, 2.05, 2.1], spot: 0},
   };
   const api = {
-    setLit(on) { lit = on; api.setTheme(mode); },
+    setLit(on) { for (const s of spots) s.visible = on; key.visible = on; }, // whole lights off outside the hall (no shading, no shadow map)
     setTheme(t) {
       mode = t; const c = THEMES[t] || THEMES.dark;
       panelM.color.set(c.panel); seamM.color.set(c.seam); gridM.color.set(c.grid); glowM.color.setRGB(...c.glow); ledM.color.setRGB(...c.led);
-      for (const s of spots) s.intensity = lit ? c.spot : 0; key.intensity = lit ? c.spot * .4 : 0;
-      n = 0; lastX = 1e9; // re-capture reflections
+      for (const s of spots) s.intensity = c.spot; key.intensity = c.spot * .4; key.castShadow = c.spot > 0;
     },
     update(x, z, yaw = 0) {
       key.position.set(x - Math.sin(yaw) * 2.2, ceil - .4, z - Math.cos(yaw) * 2.2); key.target.position.set(x, .9, z);
-      if (mode === 'dark' && n % 20 === 0) { // nearest bays get the spot pools
+      if (mode === 'dark' && n++ % 20 === 0) { // nearest bays get the spot pools
         const near = targets.map(p => [p, Math.hypot(p.x - x, p.z - z)]).sort((a, b) => a[1] - b[1]).slice(0, spots.length);
         near.forEach(([p], i) => { spots[i].position.set(p.x * .8, ceil - .3, p.z); spots[i].target.position.set(p.x, 0, p.z); });
       }
-      // re-capture only when the player has moved a bay's worth, or the theme changed (n reset to 0)
-      if (n++ > 0 && Math.hypot(x - lastX, z - lastZ) < 6) return;
-      lastX = x; lastZ = z;
-      cubeCam.position.set(x, 1.4, z);
-      const env = scene.environment, sh = renderer.shadowMap.autoUpdate; scene.environment = null; renderer.shadowMap.autoUpdate = false;
-      cubeCam.update(renderer, scene); scene.environment = env; renderer.shadowMap.autoUpdate = sh;
-      const next = pm.fromCubemap(cubeRT.texture); envRT?.dispose(); envRT = next; scene.environment = envRT.texture;
+      // reflections come from the studio HDRI (lookdev.js): a live cube capture cost 6 extra scene renders,
+      // stuttered while walking and reflected the hero itself
     },
   };
   void box;

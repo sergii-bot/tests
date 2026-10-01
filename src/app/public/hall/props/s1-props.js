@@ -185,6 +185,6 @@ export function createProps() {
   build.gripper = () => { const g = new THREE.Group(); add(g, cyl(.035, .035, .03, 20), M.armJoint, 0, 0, .015, PI / 2); add(g, box(.1, .03, .05), M.armBody, 0, 0, .045);
     const f = [-1, 1].map(s => { const p = new THREE.Group(); g.add(p); add(p, box(.012, .02, .06), M.armJoint, 0, 0, .09); add(p, box(.012, .02, .02), M.rubber, 0, 0, .115); return p; }); g.userData.set = open => { f[0].position.x = -.012 - open * .03; f[1].position.x = .012 + open * .03; }; g.userData.set(1); return g; };
 
-  function disposeTree(o) { o.traverse(x => { x.geometry?.dispose?.(); }); }
+  function disposeTree(o) { o.traverse(x => { if (!x.geometry?.userData?.shared) x.geometry?.dispose?.(); }); } // shared: owned by mj.js
   return {M, T, build, env, disposeTree, add, box, cyl, dispose() { own.forEach(x => x.dispose?.()); }};
 }

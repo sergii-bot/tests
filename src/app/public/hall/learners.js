@@ -10,11 +10,11 @@ const THEME_SKILL = {
   dexterity: 'Dexterous hands', 'mobile-manipulation': 'Mobile manipulation', generalist: 'Generalist', hardware: 'Hardware sense',
 };
 const ROSTER = [
-  {name: 'Go2 · learner', kind: 'go2', walk: MJ.RECIPES.go2Trot(1.1), practice: {locomotion: MJ.RECIPES.go2Parkour(), default: MJ.RECIPES.go2Trot(1.6)}, speed: 1.7},
-  {name: 'G1 · learner', kind: 'g1', walk: MJ.RECIPES.humanoidWalk(1), practice: {default: MJ.RECIPES.humanoidWalk(1.5)}, speed: 1.2},
-  {name: 'H1 · learner', kind: 'h1', walk: MJ.RECIPES.humanoidWalk(.9), practice: {default: MJ.RECIPES.humanoidWalk(1.4)}, speed: 1.1},
-  {name: 'Maya · student', kind: 'person', color: '#5c6670', speed: 1.3},
-  {name: 'Arjun · student', kind: 'person', color: '#8e8177', speed: 1.25},
+  {id: 'go2', name: `${MJ.LABEL.go2} · learner`, kind: 'go2', walk: MJ.RECIPES.go2Trot(1.1), practice: {locomotion: MJ.RECIPES.go2Parkour(), default: MJ.RECIPES.go2Trot(1.6)}, speed: 1.7},
+  {id: 'g1', name: `${MJ.LABEL.g1} · learner`, kind: 'g1', walk: MJ.RECIPES.humanoidWalk(1), practice: {default: MJ.RECIPES.humanoidWalk(1.5)}, speed: 1.2},
+  {id: 'h1', name: `${MJ.LABEL.h1} · learner`, kind: 'h1', walk: MJ.RECIPES.humanoidWalk(.9), practice: {default: MJ.RECIPES.humanoidWalk(1.4)}, speed: 1.1},
+  {id: 'maya', name: 'Maya · student', kind: 'person', color: '#5c6670', speed: 1.3},
+  {id: 'arjun', name: 'Arjun · student', kind: 'person', color: '#8e8177', speed: 1.25},
 ];
 
 function person(color) {
@@ -43,11 +43,11 @@ function clumsy(recipe, L) {
 }
 export async function startLearners({scene, sceneTop, rw, getPlayer, onLearn}) {
   const saved = loadSaved();
-  const save = () => { try { sessionStorage.setItem(SKEY, JSON.stringify(Object.fromEntries(learners.map(L => [L.spec.name, {competence: L.competence, skills: L.skills, watched: [...L.watched], history: L.history}])))); } catch {} };
+  const save = () => { try { sessionStorage.setItem(SKEY, JSON.stringify(Object.fromEntries(learners.map(L => [L.spec.id, {competence: L.competence, skills: L.skills, watched: [...L.watched], history: L.history}])))); } catch {} };
   const ex = rw.exhibits; if (!ex.length) return {update() {}, nearest: () => null, teach() {}};
   const learners = [];
   for (const [i, spec] of ROSTER.entries()) {
-    const sv = saved[spec.name] || {};
+    const sv = saved[spec.id] || {};
     const L = {spec, x: rw.door.x + (i - 2) * 1.6, z: rw.door.z - 4 - i, yaw: Math.PI, target: null, state: 'walk', progress: 0, skills: sv.skills || [], watched: new Set(sv.watched || []), practiceT: 0, bot: null, fig: null,
       competence: sv.competence ?? (spec.kind === 'person' ? .9 : .06), history: sv.history || [], seed: i * 1.9};
     if (spec.kind === 'person') { L.fig = person(spec.color); scene.add(L.fig.group); }

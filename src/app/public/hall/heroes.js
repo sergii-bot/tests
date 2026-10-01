@@ -1,14 +1,13 @@
-import {upgradeRobot} from './lookdev.js';
 // HEROES — who you walk the lab as, seen from behind (third person) or through their eyes (first person).
 // Real robots are the official MuJoCo Menagerie models driven by mj.js recipes; the drone and the engineer are built here.
 // Gameplay is unchanged: the hero only follows the existing player position, yaw and speed.
 //   const heroes = createHeroes(THREE, scene, MJ);  await heroes.pick('g1');  heroes.update(player, dt, t);  heroes.cameraFor(player, camera)
 export const HEROES = [
-  {id: 'g1', name: 'Skild humanoid', role: 'Humanoid', mj: 'g1', recipe: 'humanoidWalk', eye: 1.3, dist: 3.8, rate: .9},
-  {id: 'h1', name: 'Skild humanoid XL', role: 'Tall humanoid', mj: 'h1', recipe: 'humanoidWalk', eye: 1.7, dist: 4.2, rate: .8},
-  {id: 'go2', name: 'Skild quadruped', role: 'Robot dog', mj: 'go2', recipe: 'go2Trot', eye: .45, dist: 2.4, rate: 1.1},
-  {id: 'spot', name: 'Skild quadruped L', role: 'Quadruped', mj: 'spot', recipe: 'spotTrot', eye: .75, dist: 2.9, rate: 1},
-  {id: 'drone', name: 'Scout drone', role: 'Game avatar · not a Skild product', eye: 2.3, dist: 3.0, fly: 2.2},
+  {id: 'g1', name: 'Skild humanoid', role: 'Humanoid · stand-in body', mj: 'g1', recipe: 'humanoidWalk', eye: 1.3, dist: 3.8, rate: .9},
+  {id: 'h1', name: 'Skild humanoid XL', role: 'Tall humanoid · stand-in body', mj: 'h1', recipe: 'humanoidWalk', eye: 1.7, dist: 4.2, rate: .8},
+  {id: 'go2', name: 'Skild quadruped', role: 'Robot dog · stand-in body', mj: 'go2', recipe: 'go2Trot', eye: .45, dist: 2.4, rate: 1.1},
+  {id: 'spot', name: 'Skild quadruped L', role: 'Quadruped · stand-in body', mj: 'spot', recipe: 'spotTrot', eye: .75, dist: 2.9, rate: 1},
+  {id: 'drone', name: 'Scout drone', role: 'Game avatar · not a Skild product', eye: .35, dist: 3.0, fly: 2.2},
 ];
 
 function droneMesh(THREE) {
@@ -63,28 +62,46 @@ function humanMesh(THREE) {
   }};
 }
 
+// another visitor's robot (presence): the same body as the hero they picked, walking when they move
+export async function heroBody(THREE, MJ, id) {
+  const h = HEROES.find(x => x.id === id) || HEROES[0];
+  if (!h.mj) { const d = droneMesh(THREE); d.group.position.y = h.fly; return {group: d.group, update: (t, speed) => d.update(t, speed), dispose() {}}; }
+  const bot = await MJ.spawn(h.mj, {shared: true}), walk = MJ.RECIPES[h.recipe](h.rate);
+  bot.group.rotation.y = Math.PI / 2; // MuJoCo robots face +x; the hall's forward is -z
+  let phase = 0, idle = false;
+  return {group: bot.group, dispose: () => bot.dispose(), update(t, speed, dt = 1 / 60) {
+    if (speed > .25) { phase += dt * (2 + speed * .9); bot.reset(); walk(bot, phase / 2.2 * (h.rate || 1)); bot.kinematics(); idle = false; }
+    else if (!idle) { bot.reset(); bot.kinematics(); idle = true; }
+  }};
+}
+
 export function createHeroes(THREE, scene, MJ) {
   const root = new THREE.Group(); scene.add(root);
   let hero = HEROES[0], body = null, bot = null, phase = 0, yawS = 0, token = 0;
-  const camPos = new THREE.Vector3(), camLook = new THREE.Vector3(), tmp = new THREE.Vector3();
+  const camPos = new THREE.Vector3(), camLook = new THREE.Vector3(), tmp = new THREE.Vector3(), target = new THREE.Vector3();
+  let lastP = null;
   const api = {
     hero: () => hero, view: 'third', ready: false,
     async pick(id) {
-      const h = HEROES.find(x => x.id === id) || HEROES[0], my = ++token; hero = h;
+      const h = HEROES.find(x => x.id === id) || HEROES[0], my = ++token; hero = h; api._init = false;
       root.clear(); bot?.dispose?.(); bot = null; body = null; api.ready = false;
       if (h.mj) {
         const b = await MJ.spawn(h.mj, {shared: true}); if (my !== token) { b.dispose(); return; }
         bot = b; bot.walk = MJ.RECIPES[h.recipe](h.rate); root.add(bot.group);
         bot.group.rotation.y = Math.PI / 2; // MuJoCo robots face +x; the hall's forward is -z
-        upgradeRobot(THREE, bot.group);
       } else {
         body = h.id === 'drone' ? droneMesh(THREE) : humanMesh(THREE); root.add(body.group);
       }
       api.ready = true; root.visible = api.view === 'third';
     },
     toggleView() { api.view = api.view === 'third' ? 'first' : 'third'; root.visible = api.view === 'third'; return api.view; },
+    snap() { api._init = false; }, // after a teleport the follow camera jumps instead of flying through walls
     update(player, dt, t) {
-      const speed = Math.hypot(player.vx, player.vz);
+      // speed from the real motion (Space glides move the player without velocity)
+      const moved = lastP ? Math.hypot(player.x - lastP.x, player.z - lastP.z) / Math.max(dt, 1e-3) : 0;
+      if (moved > 30) api._init = false; // a jump, not a walk
+      lastP = {x: player.x, z: player.z};
+      const speed = Math.max(Math.hypot(player.vx, player.vz), moved > 30 ? 0 : moved);
       // body faces where you move; when standing it turns to where you look
       const want = speed > .3 ? Math.atan2(-player.vx, -player.vz) : player.yaw;
       let d = want - yawS; d = Math.atan2(Math.sin(d), Math.cos(d)); yawS += d * (1 - Math.exp(-dt * 8));
@@ -107,7 +124,7 @@ export function createHeroes(THREE, scene, MJ) {
       while (dist > .8 && blocked && blocked(back(dist).x, tmp.z)) dist -= .2; // pull in instead of going through walls
       back(dist);
       const eyeY = (h.fly || 0) + h.eye;
-      const target = new THREE.Vector3(tmp.x + Math.cos(player.yaw) * .45, Math.max(.35, eyeY + .35 - Math.sin(pitch) * dist), tmp.z - Math.sin(player.yaw) * .45);
+      target.set(tmp.x + Math.cos(player.yaw) * .45, Math.max(.35, eyeY + .35 - Math.sin(pitch) * dist), tmp.z - Math.sin(player.yaw) * .45);
       const k = 1 - Math.exp(-dt * 7);
       if (!api._init) { camPos.copy(target); api._init = true; } else camPos.lerp(target, k);
       camLook.set(player.x - Math.sin(player.yaw) * 2, eyeY - Math.sin(pitch) * 1.2 + .1, player.z - Math.cos(player.yaw) * 2);

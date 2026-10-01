@@ -578,7 +578,8 @@ function ytCmd(f, func, args = []) { try { f.contentWindow?.postMessage(JSON.str
 function updateScreens() {
   let near = null, nd = 18;
   for (const p of pav) { const d = Math.hypot(player.x - p.L.watchSpot.x, player.z - p.L.watchSpot.z); if (d < nd) { nd = d; near = p; } }
-  const vol = near && !modalOpen && !isMuted() && audioOn ? Math.max(0, Math.min(1, 1 - (nd - 2) / 12)) : 0;
+  // the intro (name entry) shows the lab as a silent backdrop: screens play, but without sound
+  const vol = near && !modalOpen && !isMuted() && audioOn && $('intro').hidden ? Math.max(0, Math.min(1, 1 - (nd - 2) / 12)) : 0;
   for (const p of pav) {
     const want = p === near && !modalOpen, v0 = p.r.videos[0];
     if (p.screenVideo) {

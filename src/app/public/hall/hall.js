@@ -573,6 +573,11 @@ function interact() {
 }
 
 // ---------- in-world video: only the nearest mp4 screen plays ----------
+// a YouTube player that talks back is alive: fade it in over the poster
+addEventListener('message', e => {
+  if (!/youtube(-nocookie)?\.com$/.test(new URL(e.origin).hostname)) return;
+  for (const p of pav) if (p.yt && e.source === p.yt.contentWindow) { let d = {}; try { d = JSON.parse(e.data); } catch {} if (d.event === 'onError') { p.yt.remove(); p.yt = null; p.ytFailed = true; continue; } if (d.event === 'onReady' || d.event === 'infoDelivery' || d.event === 'initialDelivery') { p.ytOk = true; p.yt.style.opacity = 1; } }
+});
 function ytCmd(f, func, args = []) { try { f.contentWindow?.postMessage(JSON.stringify({event: 'command', func, args}), '*'); } catch {} }
 // nearest screen plays (mp4 and YouTube); its sound fades in with distance, like walking past a real screen
 function updateScreens() {
@@ -587,10 +592,14 @@ function updateScreens() {
       else if (!want && p.playing) { p.screenVideo.pause(); p.screenVideo.muted = true; p.playing = false; }
       if (want) { p.screenVideo.muted = vol <= 0; p.screenVideo.volume = vol * .8; }
     } else if (v0.type === 'youtube') {
-      if (want && !p.yt) {
-        const f = el('iframe'); f.allow = 'autoplay; encrypted-media'; f.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:0';
-        f.src = `https://www.youtube-nocookie.com/embed/${v0.id}?autoplay=1&mute=1&loop=1&playlist=${v0.id}&controls=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1`;
-        p.screenEl.append(f); p.yt = f; p.ytVol = -1;
+      if (want && !p.yt && !p.ytFailed) {
+        // YouTube needs to know the embedding site (origin + referrer) or it can stay black on a hosted page;
+        // if the player never answers, drop it and keep the poster ("Press E to watch") instead of a black screen
+        const f = el('iframe'); f.allow = 'autoplay; encrypted-media'; f.referrerPolicy = 'strict-origin-when-cross-origin'; f.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:0;opacity:0;transition:opacity .6s';
+        f.src = `https://www.youtube-nocookie.com/embed/${v0.id}?autoplay=1&mute=1&loop=1&playlist=${v0.id}&controls=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&origin=${encodeURIComponent(location.origin)}&widget_referrer=${encodeURIComponent(location.href.split('?')[0])}`;
+        f.onload = () => f.contentWindow?.postMessage(JSON.stringify({event: 'listening', id: v0.id}), '*'); // ask the player to report its state
+        p.screenEl.append(f); p.yt = f; p.ytVol = -1; p.ytOk = false;
+        const me = f; setTimeout(() => { if (p.yt === me && !p.ytOk) { me.remove(); p.yt = null; p.ytFailed = true; } }, 5000);
       } else if (!want && p.yt) { p.yt.remove(); p.yt = null; }
       if (want && p.yt) { const v = Math.round(vol * 80); if (v !== p.ytVol) { if (v > 0) { ytCmd(p.yt, 'unMute'); ytCmd(p.yt, 'setVolume', [v]); } else ytCmd(p.yt, 'mute'); p.ytVol = v; } }
     }

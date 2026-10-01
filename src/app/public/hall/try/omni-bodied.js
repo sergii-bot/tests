@@ -4,7 +4,7 @@
 // excluded from training (zero-shot); limb loss ~7-8 s to adapt, locked knees ~2-3 s; jammed wheels → it walks like a
 // legged biped, and rolls again when they free up; stilts → new step timing and foot placement; a failed trial prepended
 // as a prompt lets it succeed on the third attempt (in-context learning); a single-robot specialist flips over.
-// 3D: the real Unitree Go2 model (MuJoCo Menagerie) on its real joints. The stand's adaptation logic (gait search, support
+// 3D: a stand-in quadruped in Skild livery (MuJoCo Menagerie model) on its joints. The stand's adaptation logic (gait search, support
 // polygon, sag) drives a kinematic gait through a 2-link leg IK; sets follow the official clips (office carpet tiles, grass
 // and leaves, brick patio, café, red carpet + curtains). Optional "Real physics" toggle: composed Go2 in MuJoCo with the
 // stand-in controller (not the Skild Brain).
@@ -301,7 +301,7 @@ export default function mount(root, api) {
     for (let i = 0; i < b.model.nbody; i++) bodyIdx[b.bodyName(i)] = i;
     const grey = {ffffff: '#8d9297', d6d9e4: '#a2a8b0', f3f9f9: '#b3b9bd'};        // the video quadruped is grey with a boxy head
     for (const m of b.meshes) { const hex = m.material.color.getHexString(); if (grey[hex]) m.material.color.set(grey[hex]); m.material.metalness = .2; m.material.roughness = .5; const nm = b.bodyName(m.userData.body); if (/_calf$/.test(nm)) (calfMeshes[nm.slice(0, 2)] ||= []).push(m); }
-    buildRig(); refreshRig(); say('Unitree Go2 loaded · real model, kinematic gait on its joints');
+    buildRig(); refreshRig(); say('Stand-in quadruped loaded · MuJoCo model, kinematic gait on its joints');
   }).catch(e => { loadErr = String(e.message || e); console.warn('omni-bodied: Go2 load failed', e); say('Could not load the Go2 model'); });
 
   // things attached to a MuJoCo body (thigh, calf, base): wheels, stilts, knee lock, cut face, payload
@@ -549,7 +549,7 @@ export default function mount(root, api) {
     const x0 = PW + 16, S = sid ? SCEN[sid] : null, avail = k.w - x0 - 12;
     if (!renderer) { ctx.fillStyle = B.warm1; ctx.fillRect(PW, 0, k.w - PW, k.h); k.text('3D view unavailable (WebGL is off in this browser)', x0, 100, {size: 13, color: B.cool2}); }
     const goal = S ? `Goal: ${S.goal}.` : 'Goal: pick a scenario below and break the robot. It must walk on.';
-    const subs = [`3D · simulated · real Unitree Go2 on its real joints · drag across a leg to cut it · click a leg to ${tool === 'cut' ? 'cut' : 'lock'} it, again to repair`, `3D · simulated · drag across a leg to cut it · click a leg to ${tool === 'cut' ? 'cut' : 'lock'} it`, '3D · simulated · real Unitree Go2'];
+    const subs = [`3D · simulated · stand-in quadruped in Skild livery, on its MuJoCo joints · drag across a leg to cut it · click a leg to ${tool === 'cut' ? 'cut' : 'lock'} it, again to repair`, `3D · simulated · drag across a leg to cut it · click a leg to ${tool === 'cut' ? 'cut' : 'lock'} it`, '3D · simulated · stand-in quadruped in Skild livery'];
     const sub = subs.find(s => tw(s.toUpperCase(), 10, 500, true) < avail - 24) || subs[2];
     pill(x0 - 10, 8, Math.min(avail + 10, Math.max(tw(goal, 15, 600), tw(sub.toUpperCase(), 10, 500, true)) + 24), 46);
     k.text(goal, x0, 28, {size: 15, weight: 600}); k.label(sub, x0, 46);
@@ -562,7 +562,7 @@ export default function mount(root, api) {
     }
     chipRects = chips(k, list, x0, 62, k.w - 20);
     let sy = Math.max(62, ...chipRects.map(r => r.y + 26)) + 14;
-    if (!bot && !loadErr) { pill(x0 - 8, sy - 14, 250, 24); k.text('Loading Unitree Go2 · MuJoCo Menagerie…', x0, sy + 2, {size: 12, mono: true, color: B.cool2}); sy += 34; }
+    if (!bot && !loadErr) { pill(x0 - 8, sy - 14, 250, 24); k.text('Loading Skild quadruped · MuJoCo Menagerie…', x0, sy + 2, {size: 12, mono: true, color: B.cool2}); sy += 34; }
     if (loadErr) { pill(x0 - 8, sy - 14, 320, 24); k.text('Could not load the Go2 model', x0, sy + 2, {size: 12, mono: true, color: B.black}); sy += 34; }
     if (physOn || physMsg) {
       const lab = physMsg || `Real physics · MuJoCo · stand-in controller, not the Skild Brain`, w2 = tw(lab, 12, 600, true) + 24;

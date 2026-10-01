@@ -1,19 +1,19 @@
-// TRY · HW-03 — Real-parts builder: compose a robot from real parts (Unitree Go2/H1/G1, Boston Dynamics Spot, UR5e),
+// TRY · HW-03 — Real-parts builder: compose a robot from real parts (Skild quadruped/H1/G1, Skild quadruped L, UR5e),
 // load it into MuJoCo, and test it in real physics with a stand-in controller (not the Skild Brain). Specs come from the model.
 import * as THREE from '../../vendor/three.module.js';
 import {kit, B} from './kit.js';
 import {spawnComposed} from '../parts/loader.js';
 
-const TORSOS = [['go2_base', 'Unitree Go2 body'], ['spot_body', 'Boston Dynamics Spot body'], ['h1_torso', 'Unitree H1 torso'], ['g1_torso', 'Unitree G1 torso']];
-const LEGS = [['go2_leg', 'Unitree Go2 leg'], ['spot_leg', 'Spot leg'], ['h1_leg', 'Unitree H1 leg'], ['g1_leg', 'Unitree G1 leg']];
+const TORSOS = [['go2_base', 'Skild quadruped body'], ['spot_body', 'Skild quadruped L body'], ['h1_torso', 'Skild humanoid XL torso'], ['g1_torso', 'Skild humanoid torso']];
+const LEGS = [['go2_leg', 'Skild quadruped leg'], ['spot_leg', 'Skild quadruped L leg'], ['h1_leg', 'Skild humanoid XL leg'], ['g1_leg', 'Skild humanoid leg']];
 const LAYOUTS = [['quad', '4 legs'], ['hex', '6 legs'], ['biped', '2 legs']];
-const ARMS = [['none', 'No arm'], ['ur5e_arm', 'UR5e arm on top plate'], ['h1_arm', 'Unitree H1 arms (L+R)'], ['g1_arm', 'Unitree G1 arms (L+R)']];
+const ARMS = [['none', 'No arm'], ['ur5e_arm', 'Skild arm on top plate'], ['h1_arm', 'Skild humanoid XL arms (L+R)'], ['g1_arm', 'Skild humanoid arms (L+R)']];
 const PRESETS = {
-  'Unitree Go2': {torso: 'go2_base', leg: 'go2_leg', layout: 'quad', arm: 'none'},
-  'Boston Dynamics Spot': {torso: 'spot_body', leg: 'spot_leg', layout: 'quad', arm: 'none'},
-  'Unitree H1': {torso: 'h1_torso', leg: 'h1_leg', layout: 'biped', arm: 'h1_arm'},
-  'Unitree G1': {torso: 'g1_torso', leg: 'g1_leg', layout: 'biped', arm: 'g1_arm'},
-  'Go2 + UR5e': {torso: 'go2_base', leg: 'go2_leg', layout: 'quad', arm: 'ur5e_arm'},
+  'Skild quadruped': {torso: 'go2_base', leg: 'go2_leg', layout: 'quad', arm: 'none'},
+  'Skild quadruped L': {torso: 'spot_body', leg: 'spot_leg', layout: 'quad', arm: 'none'},
+  'Skild humanoid XL': {torso: 'h1_torso', leg: 'h1_leg', layout: 'biped', arm: 'h1_arm'},
+  'Skild humanoid': {torso: 'g1_torso', leg: 'g1_leg', layout: 'biped', arm: 'g1_arm'},
+  'Quadruped + arm': {torso: 'go2_base', leg: 'go2_leg', layout: 'quad', arm: 'ur5e_arm'},
   'Go2 hexapod': {torso: 'go2_base', leg: 'go2_leg', layout: 'hex', arm: 'none'},
 };
 const HUMAN = t => t === 'h1_torso' || t === 'g1_torso';
@@ -22,7 +22,7 @@ function check(c) {
   if (c.layout === 'biped' && !bipedLeg) return 'Biped layout needs H1 or G1 legs.';
   if (c.layout !== 'biped' && bipedLeg) return 'H1/G1 legs are humanoid legs: use the 2-leg layout.';
   if (c.layout === 'biped' && !HUMAN(c.torso)) return 'Two legs need a humanoid torso (H1 or G1).';
-  if ((c.arm === 'h1_arm' || c.arm === 'g1_arm') && !HUMAN(c.torso)) return 'Shoulder arms mount on a humanoid torso. Use the UR5e on a top plate instead.';
+  if ((c.arm === 'h1_arm' || c.arm === 'g1_arm') && !HUMAN(c.torso)) return 'Shoulder arms mount on a humanoid torso. Use the Skild arm on a top plate instead.';
   return null;
 }
 function toConfig(c) {
@@ -54,7 +54,7 @@ export default function mount(root, api) {
   const panel = document.createElement('div'); panel.className = 'hwr-panel'; wrap.append(panel);
   const sel = (label, opts, key) => `<label><span>${label}</span><select data-k="${key}">${opts.map(([v, t]) => `<option value="${v}">${t}</option>`).join('')}</select></label>`;
   panel.innerHTML = `<p class="hk">Real parts · MuJoCo Menagerie</p>${sel('Torso', TORSOS, 'torso')}${sel('Legs', LEGS, 'leg')}${sel('Layout', LAYOUTS, 'layout')}${sel('Arms', ARMS, 'arm')}<div class="hwr-msg"></div><div class="hwr-spec"></div><p class="hwr-note">Controller: stand-in (PD + gait generator), not the Skild Brain. Mass, joints and actuator limits come from the official models.</p>`;
-  const cfg = {...PRESETS['Unitree Go2']};
+  const cfg = {...PRESETS['Skild quadruped']};
   const syncSelects = () => panel.querySelectorAll('select').forEach(s => { s.value = cfg[s.dataset.k]; });
   panel.querySelectorAll('select').forEach(s => s.onchange = () => { cfg[s.dataset.k] = s.value; assemble(); });
   const msg = panel.querySelector('.hwr-msg'), specBox = panel.querySelector('.hwr-spec');

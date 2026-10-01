@@ -1,7 +1,7 @@
 // TRY · One policy — "Draw the terrain": the post's scenarios (stairs, a park full of stairs, stepping stones, unstructured
 // obstacles, a fire escape, tight stairs, payloads, pushes and pulls) plus your own drawn course. One humanoid policy picks
 // each foothold only from what its camera sees right now: no map, no footstep plan, no "stair mode".
-// 3D: the real Unitree G1 model (MuJoCo Menagerie, tinted black like the video robot) walks a kinematic gait on its real
+// 3D: a stand-in humanoid in Skild livery (MuJoCo Menagerie model, tinted black like the video robot) walks a kinematic gait on its real
 // joints: footholds come from the stand's terrain logic, hip/knee/ankle pitch from a 2-link sagittal leg IK.
 // Post facts used: vision + proprioception → motor commands; no terrain maps, no planning, no behavior switching;
 // parks, streets, fire escapes, pallets/gaps/uneven steps; stairs just 3 cm deeper than the foot; pushes and pulls on
@@ -13,7 +13,7 @@ import {SETS, block, mat, person, cardboardBox, disposeTree} from '../props/loco
 
 const CL = 10, DX = .01, N = Math.round(CL / DX), BASE = .4, PAD = .9, FIN = CL - .7, FOOT = .21;   // FOOT = G1 foot length
 const HIP = .73, TORSO = .5, PUSH_MAX = 1.2, PUSH_FALL = 1.0;
-// Unitree G1 leg geometry (from g1.xml): hip-pitch axis below the pelvis, thigh vector at zero angle, shank, ankle
+// Skild humanoid leg geometry (from g1.xml): hip-pitch axis below the pelvis, thigh vector at zero angle, shank, ankle
 const HIPZ = .1027, T0X = 0, T0Z = -.3366, L1 = Math.hypot(T0X, T0Z), L2 = .30001, ANK = .053, FOOTC = .038, LMAX = L1 + L2 - .006;
 const PHI_T0 = Math.atan2(T0Z, T0X), W = .8;             // W = half-width of the stair path (m)
 const ease = s => s * s * (3 - 2 * s);
@@ -221,7 +221,7 @@ export default function mount(root, api) {
     bot = b; scene3.add(bot.group);
     for (let i = 0; i < bot.model.nbody; i++) bodyId[bot.bodyName(i)] = i;
     for (const m of bot.meshes) { m.material.metalness = .35; m.material.roughness = .42; }
-    say('Unitree G1 loaded · real model, kinematic gait');
+    say('Stand-in humanoid loaded · MuJoCo model, kinematic gait');
   }).catch(e => { console.warn('one-policy: G1 load failed', e); say('Could not load the G1 model'); });
 
   const tY = x => { const g = gAt(x); return g == null ? null : g - BASE; };   // three-y of the terrain at x
@@ -404,10 +404,10 @@ export default function mount(root, api) {
     ctx.clearRect(0, 0, k.w, k.h);
     const x0 = PW + 16, a = analyse(), s = pxPerM();
     if (!renderer) { ctx.fillStyle = B.warm1; ctx.fillRect(PW, 0, k.w - PW, k.h); k.text('3D view unavailable (WebGL is off in this browser)', x0, 90, {size: 13, color: B.cool2}); }
-    const goal = `Goal: ${SCEN[sid][2]}`, sub = `3D · simulated · real Unitree G1 model, kinematic gait · drag to draw ${brush === 'gap' ? 'gaps' : 'ground'} · drag the robot to push or pull`;
+    const goal = `Goal: ${SCEN[sid][2]}`, sub = `3D · simulated · stand-in humanoid in Skild livery (MuJoCo model), kinematic gait · drag to draw ${brush === 'gap' ? 'gaps' : 'ground'} · drag the robot to push or pull`;
     pill(x0 - 10, 10, Math.min(k.w - x0 - 8, Math.max(tw(goal, 15, 600), tw(sub.toUpperCase(), 10, 500, true)) + 22), 48);
     k.text(goal, x0, 30, {size: 15, weight: 600}); k.label(sub, x0, 48);
-    if (!bot) k.text('Loading Unitree G1 · MuJoCo Menagerie…', x0, 80, {size: 12, mono: true, color: B.cool2});
+    if (!bot) k.text('Loading Skild humanoid · MuJoCo Menagerie…', x0, 80, {size: 12, mono: true, color: B.cool2});
     if (grab) {                                            // push / pull arrow
       const [bx, by] = toScreen(P3.x, P3.z + .15), v = clamp((grab.x - grab.x0) / Math.max(1, s) * 1.1, -PUSH_MAX, PUSH_MAX), ex = bx + v / 1.1 * s;
       ctx.strokeStyle = Math.abs(v) > PUSH_FALL ? B.black : B.orange; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(bx, by); ctx.lineTo(ex, by); ctx.stroke();

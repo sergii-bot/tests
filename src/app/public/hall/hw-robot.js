@@ -92,8 +92,8 @@ export function conflictHint(cat, id, cfg) {
 function className(c) {
   const arms = c.arms > 0;
   switch (c.loco) {
-    case 'legs4': return c.legLen > .6 ? 'Quadruped on stilts · experimental class' : arms ? 'Legged manipulator · quadruped-with-arm class' : c.torso === 'long' ? 'Quadruped · Spot class' : 'Quadruped · Unitree Go2 class';
-    case 'legs2': return !arms ? 'Bipedal walker · Cassie class' : c.legLen >= .7 ? 'Humanoid · Unitree H1 class' : 'Humanoid · Unitree G1 class';
+    case 'legs4': return c.legLen > .6 ? 'Quadruped on stilts · experimental class' : arms ? 'Legged manipulator · quadruped-with-arm class' : c.torso === 'long' ? 'Quadruped · long-body class' : 'Quadruped · Skild quadruped class';
+    case 'legs2': return !arms ? 'Bipedal walker class' : c.legLen >= .7 ? 'Humanoid · tall class' : 'Humanoid · compact class';
     case 'legs6': return arms ? 'Hexapod manipulator · research walker class' : 'Hexapod · research walker class';
     case 'wheels4': return arms ? 'Mobile manipulator · rover-with-arm class' : 'Wheeled rover · AMR class';
     default: return c.torso === 'humanoid' ? (arms ? 'Wheeled humanoid · mobile manipulator class' : 'Wheeled torso · telepresence class') : arms ? 'Mobile manipulator · AMR-with-arm class' : 'Mobile base · AMR class';

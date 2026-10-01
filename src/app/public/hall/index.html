@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#121212">
 <link rel="icon" href="../assets/favicon.png">
 <link rel="stylesheet" href="./hall.css">
-<script>try{var t=localStorage.getItem("skild-hall:theme")||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){}</script>
+<script>try{var t=localStorage.getItem("skild-hall:look")||"dark";document.documentElement.dataset.theme=t}catch(e){}</script>
 </head>
 <body>
 <div id="css3d"></div>
@@ -20,6 +20,8 @@
   <a class="brand" href="./" aria-label="Skild AI Release Hall"><img src="../assets/brand/skild-wordmark-mono.svg" alt="Skild AI" class="wordmark"><span class="brand-sep"></span><span class="brand-title">Robotics Lab · Releases</span></a>
   <span class="online" id="online">1 in the lab</span>
   <div class="passport" id="passport" title="Watched / tried"></div>
+  <button class="chip ghost" id="heroBtn">Robot <kbd>H</kbd></button>
+  <button class="chip ghost" id="viewBtn">3rd person <kbd>V</kbd></button>
   <button class="chip ghost" id="themeBtn">Dark</button>
   <button class="chip ghost" id="muteBtn">Sound on</button>
   <button class="chip ghost" id="datasetBtn">Dataset</button>
@@ -37,12 +39,16 @@
     <p class="eyebrow">Skild AI Robotics Lab · newest release first · walk back to where it began</p>
     <h1>Watch it. <span>Then try it.</span></h1>
     <p class="lead">Every Skild AI release has its own lab bay, with a live robot, the official video and a stand where you run the experiment. Read the plaque, watch the official video, then step up to the stand next to it and try the idea yourself.</p>
-    <div class="keys"><span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> walk</span><span><kbd>Mouse</kbd> look</span><span><kbd>E</kbd> watch / try</span><span><kbd>Space</kbd> guide me</span><span><kbd>Shift</kbd> run</span><span><kbd>N</kbd>/<kbd>B</kbd> next / back</span><span><kbd>T</kbd> timeline</span><span><kbd>G</kbd> dataset</span><span><kbd>M</kbd> sound</span><span><kbd>L</kbd> dark / light</span><span><kbd>Esc</kbd> free cursor</span></div>
+    <div class="keys"><span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> walk</span><span><kbd>Mouse</kbd> look</span><span><kbd>E</kbd> watch / try</span><span><kbd>Space</kbd> guide me</span><span><kbd>Shift</kbd> run</span><span><kbd>N</kbd>/<kbd>B</kbd> next / back</span><span><kbd>T</kbd> timeline</span><span><kbd>G</kbd> dataset</span><span><kbd>M</kbd> sound</span><span><kbd>L</kbd> dark / light</span><span><kbd>C</kbd> film look</span><span><kbd>Esc</kbd> free cursor</span></div>
+    <p class="hero-label">Choose your hero <kbd>H</kbd> · <kbd>V</kbd> third / first person</p>
+    <div class="hero-row" id="heroRow"></div>
     <label class="name-field"><span>Your name in the lab</span><input id="nameInput" maxlength="24" placeholder="e.g. Sergii" autocomplete="off"></label>
     <button class="btn primary" id="enter">Enter the lab</button>
     <button class="btn ghost" id="enterLatest">Start where it began (2024) →</button>
   </div>
 </section>
+
+<section class="modal" id="heroes" hidden><div class="hero-modal"><p class="eyebrow">Choose your hero</p><div class="hero-row" id="heroGrid"></div></div></section>
 
 <section class="modal" id="cinema" hidden>
   <div class="cinema">

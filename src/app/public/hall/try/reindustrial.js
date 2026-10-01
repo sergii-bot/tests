@@ -436,7 +436,7 @@ export default function mount(root, api) {
   Promise.all([0, 1].map(() => MJ.spawn('ur5e'))).then(bots => {
     if (dead) { bots.forEach(b => b.dispose()); return; }
     bots.forEach((b, i) => { styleUR(b); urs[i] = b; cell.add(b.group); urFollow[i] = follower(b, {site: 'attachment_site'}); urFollow[i].add(tools.ur[i].group); setUR(b, urQ[i]); urFollow[i].sync(); });
-  }).catch(e => { urErr = 'UR5e model failed to load'; console.warn(e); });
+  }).catch(e => { urErr = 'Arm model failed to load'; console.warn(e); });
 
   const V = (x, y, z) => new THREE.Vector3(x, y, z);
   const tmp = new THREE.Vector3(), tmpP = {x: 0, y: 0, ok: true};
@@ -648,9 +648,9 @@ export default function mount(root, api) {
     if (drag) k.label(isTray() ? 'Tray · dragging' : 'Board · dragging', x + 12, y + 50, {color: B.orange});
     else if (!run) k.label(fitL(isTray() ? '⇔ drag the tray · Shift tray (S) · drag empty space to orbit' : '⇔ drag the board · drag empty space to orbit', w - 20), x + 12, y + 50, {color: B.cool2});
     const hw = HW[hwId];
-    const model = hwId === 'abb' ? 'Procedural ABB-style arm' : `Universal Robots UR5e · MuJoCo Menagerie${hwId === 'mir' ? ' · on a MiR-style base' : ''}`;
+    const model = hwId === 'abb' ? 'Procedural ABB-style arm' : `Skild arm · MuJoCo Menagerie${hwId === 'mir' ? ' · on a MiR-style base' : ''}`;
     k.label(fitL(`${model} · analytic IK · stylized tray`, l.x1 - l.x0 - 12), l.x0 + 8, l.y1 - 6, {color: B.cool1, size: 9});
-    if ((hwId !== 'abb') && !urs[0]) { glass(l.x0 + 6, l.y1 - 44, 300, 26, 8); k.text(urErr || `Loading ${hw.tag} UR5e (MuJoCo Menagerie)…`, l.x0 + 18, l.y1 - 26, {size: 12, weight: 600}); }
+    if ((hwId !== 'abb') && !urs[0]) { glass(l.x0 + 6, l.y1 - 44, 300, 26, 8); k.text(urErr || `Loading ${hw.tag} Skild arm (MuJoCo Menagerie)…`, l.x0 + 18, l.y1 - 26, {size: 12, weight: 600}); }
     const st = stale();
     if (st && !isTray()) {
       const bw = Math.min(262, l.x1 - l.x0 - 28), bx = l.x1 - bw - 6, by = l.y0 + 4;

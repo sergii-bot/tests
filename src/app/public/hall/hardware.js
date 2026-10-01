@@ -19,7 +19,7 @@ export const STATIONS = [
     points: [], videos: [yt('6jSM3-2yt2s', 'Series C: a look at the past results'), mp4('coffee-prompt', 'Prompt: coffee'), mp4('pancakes-prompt', 'Prompt: pancakes'), yt('YRmjBdKKLsc', 'Learning by watching human videos')],
     try: {module: 'hw-teleop', title: 'Teleoperate a robot', verb: 'Drive the arm', blurb: 'Control the arm, finish a task and record your demo into the dataset. Then see if a pure replay survives when the scene changes.'}},
   {id: 'hw-real', code: 'HW-03', kind: 'hardware', date: '2026-09-28', title: 'Real-parts builder', subtitle: 'Hardware Lab · MuJoCo',
-    url: 'https://github.com/google-deepmind/mujoco_menagerie', summary: 'Compose a robot from real parts of Unitree Go2/H1/G1, Boston Dynamics Spot and a UR5e arm, then test it in real MuJoCo physics.',
+    url: 'https://github.com/google-deepmind/mujoco_menagerie', summary: 'Compose a robot from real parts of Skild quadruped/H1/G1, Skild quadruped L and a Skild arm, then test it in real MuJoCo physics.',
     points: [], videos: [yt('p43pFxCFSzY', 'Adapting to loss of limbs'), yt('Z2chIArzLDk', 'Adapting to failed leg motors'), yt('BEqxERQXbMM', 'Adapting to stilts')],
     try: {module: 'hw-real', title: 'Build from real parts', verb: 'Compose', blurb: 'Real meshes, masses, joints and motor limits from the official models. Your robot has to stand up in real physics. Then push it.'}},
 ];
@@ -49,13 +49,19 @@ export function buildHardwareLab({scene, css3d, el, M, BRAND}) {
     lidar: () => { const p = new THREE.Group(); const c = new THREE.Mesh(new THREE.CylinderGeometry(.09, .1, .12, 20), RM.body), r = new THREE.Mesh(new THREE.TorusGeometry(.095, .012, 6, 24), RM.joint); r.rotation.x = Math.PI / 2; p.add(c, r); return p; },
   };
   const kinds = Object.keys(part);
+  // shelving in the Japanese-tech look: oiled walnut boards on blackened steel posts
+  const walnut = new THREE.MeshPhysicalMaterial({color: '#4a2f1d', roughness: .42, clearcoat: .35, clearcoatRoughness: .4, sheen: .3});
+  const steel = new THREE.MeshStandardMaterial({color: '#111312', roughness: .35, metalness: .85});
+  const ledM = new THREE.MeshBasicMaterial({color: new THREE.Color(2.2, 1.7, 1.1), toneMapped: false}); // warm strip under each board
+  const rackSlots = []; // filled with real robot parts later (hall.js → MJ.bodyPart)
   for (let i = 0; i < 3; i++) {
     const rz = z0 + 6 + i * 6.2, rack = new THREE.Group(); rack.position.set(x0 + 1.1, 0, rz); g.add(rack);
-    for (const px of [-.8, .8]) for (const pz of [-2.6, 2.6]) { const post = new THREE.Mesh(new THREE.BoxGeometry(.06, 4.2, .06), M.black); post.position.set(px, 2.1, pz); rack.add(post); }
+    for (const px of [-.8, .8]) for (const pz of [-2.6, 2.6]) { const post = new THREE.Mesh(new THREE.BoxGeometry(.05, 4.2, .05), steel); post.position.set(px, 2.1, pz); rack.add(post); }
     for (let s = 0; s < 4; s++) {
-      const shelf = new THREE.Mesh(new THREE.BoxGeometry(1.7, .05, 5.3), M.grey); shelf.position.y = .5 + s * 1.1; shelf.receiveShadow = true; rack.add(shelf);
-      for (let k = 0; k < 5; k++) { const p = part[kinds[(i * 4 + s + k) % kinds.length]](); p.position.set((k % 2 ? .3 : -.3), .5 + s * 1.1 + .14, -2.1 + k * 1.05); p.rotation.y = k * .7; p.traverse(o => { if (o.isMesh) o.castShadow = true; }); rack.add(p); }
+      const shelf = new THREE.Mesh(new THREE.BoxGeometry(1.7, .045, 5.3), walnut); shelf.castShadow = true; if (s > 0) { const led = new THREE.Mesh(new THREE.BoxGeometry(.02, .012, 5.1), ledM); led.position.set(.78, .5 + s * 1.1 - .03, 0); rack.add(led); } shelf.position.y = .5 + s * 1.1; shelf.receiveShadow = true; rack.add(shelf);
+      for (let k = 0; k < 5; k++) { const p = part[kinds[(i * 4 + s + k) % kinds.length]](); p.position.set((k % 2 ? .3 : -.3), .5 + s * 1.1 + .14, -2.1 + k * 1.05); p.rotation.y = k * .7; p.traverse(o => { if (o.isMesh) o.castShadow = true; }); rack.add(p); rackSlots.push({rack: i, rackG: rack, placeholder: p, x: p.position.x, y: .5 + s * 1.1 + .025, z: p.position.z, rot: p.rotation.y}); }
     }
+    { const glow = new THREE.PointLight('#ffd2a0', 9, 4, 1.8); glow.position.set(.6, 3.2, 0); rack.add(glow); } // display light
     solids.push({x0: x0, x1: x0 + 2.2, z0: rz - 2.8, z1: rz + 2.8});
     const tag = el('div', 'w-rack', `<b>${['LOCOMOTION', 'MANIPULATION', 'SENSING & POWER'][i]}</b><span>${['legs · wheels · hips', 'arms · wrists · grippers', 'heads · LiDAR · batteries'][i]}</span>`);
     css3d(tag, new THREE.Vector3(x0 + .08, 5.1, rz), Math.PI / 2, .005);
@@ -112,7 +118,7 @@ export function buildHardwareLab({scene, css3d, el, M, BRAND}) {
 
   const bounds = {x0: x0 + .6, x1: x1 - .6, z0: z0 + .6, z1: z1 - .6};
   return {
-    stations, door, arena, bounds, refreshArena,
+    stations, door, arena, bounds, refreshArena, rackSlots,
     blocked(x, z) { if (x < bounds.x0 || x > bounds.x1 || z < bounds.z0 || z > bounds.z1) return true; if (Math.hypot(x - arena.x, z - arena.z) < arena.r - .2) return true; return solids.some(s => x > s.x0 && x < s.x1 && z > s.z0 && z < s.z1); },
     update(t, dt) { wip.update(t * .3); cell.update(t); arenaBot.update(t, dt); if (!arenaBot.custom) arenaBot.group.rotation.y = t * .2; },
   };

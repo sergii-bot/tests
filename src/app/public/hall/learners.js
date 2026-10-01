@@ -51,7 +51,7 @@ export async function startLearners({scene, sceneTop, rw, getPlayer, onLearn}) {
     const L = {spec, x: rw.door.x + (i - 2) * 1.6, z: rw.door.z - 4 - i, yaw: Math.PI, target: null, state: 'walk', progress: 0, skills: sv.skills || [], watched: new Set(sv.watched || []), practiceT: 0, bot: null, fig: null,
       competence: sv.competence ?? (spec.kind === 'person' ? .9 : .06), history: sv.history || [], seed: i * 1.9};
     if (spec.kind === 'person') { L.fig = person(spec.color); scene.add(L.fig.group); }
-    else { try { L.bot = await MJ.spawn(spec.kind); L.walkC = clumsy(spec.walk, L); L.practiceC = {}; for (const [th, rc] of Object.entries(spec.practice)) L.practiceC[th] = clumsy(rc, L); L.bot.recipe = L.walkC; scene.add(L.bot.group); } catch (e) { console.warn('learner', e); continue; } }
+    else { try { L.bot = await MJ.spawn(spec.kind, {shared: true}); L.walkC = clumsy(spec.walk, L); L.practiceC = {}; for (const [th, rc] of Object.entries(spec.practice)) L.practiceC[th] = clumsy(rc, L); L.bot.recipe = L.walkC; scene.add(L.bot.group); } catch (e) { console.warn('learner', e); continue; } }
     const tag = document.createElement('div'); tag.className = 'w-learner';
     L.tag = tag; L.label = new CSS3DObject(tag); L.label.scale.setScalar(.0045); sceneTop.add(L.label);
     pick(L, i * 3 % ex.length);

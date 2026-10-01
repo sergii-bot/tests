@@ -12,6 +12,11 @@ import {buildHardwareLab, HX} from './hardware.js';
 import {buildResearchWing, RX} from './research-wing.js';
 import {startLearners} from './learners.js';
 import * as MJ from './mj.js';
+import {createCinema} from './cinema.js';
+import {createHeroes, HEROES} from './heroes.js';
+import {installLookdev, upgradeRobot} from './lookdev.js';
+import {dressCorridor} from './corridor.js';
+import {dressJapanLab} from './japan.js';
 
 // real robots (MuJoCo Menagerie models) per bay, posed/animated to match what that release's video shows
 const BLACK = '#1d1f23';
@@ -67,6 +72,7 @@ renderer.setPixelRatio(Math.min(2, devicePixelRatio));
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
 renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+const cine = createCinema(THREE, renderer); // the director's film look (LOOK_BIBLE.md); C toggles it
 // Two CSS3D layers: 'under' (screens, plaques, posters) sits BELOW the WebGL canvas and shows through
 // transparent 'holes', so robots and glass correctly occlude it (true depth/parallax).
 // 'top' holds text-only elements (floor dates, stand signs, wall titles).
@@ -77,12 +83,17 @@ const sceneUnder = new THREE.Scene(), sceneTop = new THREE.Scene();
 const scene = new THREE.Scene();
 scene.background = null;
 scene.fog = new THREE.Fog(BRAND.warm1, 30, 95);
-const camera = new THREE.PerspectiveCamera(62, 1, 0.05, 250);
+const camera = new THREE.PerspectiveCamera(50, 1, 0.05, 250); // 50° reads like a 35 mm lens: truer proportions than the old 62°
 const player = {x: 0, z: START_Z + 9, yaw: 0, pitch: -0.02, vx: 0, vz: 0};
 const look = {yaw: 0, pitch: -0.02}; // mouse targets; the camera eases toward them
 
-function resize() { const w = innerWidth, h = innerHeight; renderer.setSize(w, h, false); css.setSize(w, h); cssTop.setSize(w, h); camera.aspect = w / h; camera.updateProjectionMatrix(); }
+function resize() { const w = innerWidth, h = innerHeight; renderer.setSize(w, h, false); css.setSize(w, h); cssTop.setSize(w, h); camera.aspect = w / h; camera.updateProjectionMatrix(); cine.setSize(w, h); }
 addEventListener('resize', resize); resize();
+
+// ---------- heroes: walk the lab as a robot, a drone or an engineer; V switches third / first person ----------
+const heroes = createHeroes(THREE, scene, MJ);
+let heroId = (() => { try { return localStorage.getItem('skild-hall:hero'); } catch { return null; } })() || 'g1';
+heroes.pick(heroId);
 
 // ---------- materials & architecture ----------
 const M = {
@@ -114,7 +125,7 @@ for (const z of [START_Z + 14, END_Z]) {
 const line = new THREE.Mesh(new THREE.PlaneGeometry(.08, hallLen - 20), M.orange);
 line.rotation.x = -Math.PI / 2; line.position.set(0, .004, hallMid - 4); scene.add(line);
 // ceiling light strips
-for (let z = START_Z + 8; z > END_Z; z -= 11) {
+for (let z = START_Z + 8; z > END_Z && false; z -= 11) { // replaced by the drop ceiling in corridor.js
   const strip = new THREE.Mesh(new THREE.BoxGeometry(HALL_W - 6, .05, .35), M.light);
   strip.position.set(0, 7.45, z); scene.add(strip);
 }
@@ -123,6 +134,10 @@ const sun = new THREE.DirectionalLight('#fff4e6', 1.6);
 sun.position.set(6, 14, 4); sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048);
 Object.assign(sun.shadow.camera, {left: -16, right: 16, top: 16, bottom: -16, near: 1, far: 40});
 scene.add(sun, sun.target);
+sun.shadow.mapSize.set(4096, 4096); sun.shadow.bias = -.0004; sun.shadow.normalBias = .02; sun.shadow.radius = 4;
+installLookdev(THREE, renderer, scene, M, {hallLen, hallW: HALL_W}).catch(e => console.warn('lookdev', e));
+const upgradeExhibits = () => { for (const p of pav) upgradeRobot(THREE, p.bot.group); };
+setTimeout(upgradeExhibits, 2500); setTimeout(upgradeExhibits, 9000);
 
 // ---------- CSS3D helpers ----------
 const PX = 0.01; // 100 css px = 1 world unit
@@ -183,7 +198,11 @@ const pav = layout.map(L => {
   const screenEl = el('div', 'w-screen');
   const v0 = r.videos[0];
   const posterImg = el('img'); posterImg.alt = r.title; posterImg.loading = 'lazy';
-  if (v0.poster) posterImg.src = v0.poster;
+  if (v0.poster) { // YouTube: ask for the 1280 px frame (a 10 m screen shows every pixel), fall back to the 480 px one
+    const hi = v0.poster.replace('/hqdefault.jpg', '/maxresdefault.jpg');
+    posterImg.src = hi; if (hi !== v0.poster) posterImg.onerror = () => { posterImg.onerror = null; posterImg.src = v0.poster; };
+    posterImg.addEventListener('load', () => { if (posterImg.naturalWidth === 120 && posterImg.src !== v0.poster) posterImg.src = v0.poster; }); // YouTube's 120 px "no image" stub
+  }
   screenEl.append(posterImg);
   if (v0.type === 'youtube') screenEl.append(el('div', 'play'), el('div', 'yt-badge', 'Press E to watch'));
   let screenVideo = null;
@@ -226,6 +245,7 @@ const pav = layout.map(L => {
   paint(p);
   return p;
 });
+const corridor = dressCorridor(THREE, renderer, scene, {hallLen, hallMid, wallX: WALL_X, hallW: HALL_W, ceil: 7.3, bays: layout.map(L => ({robot: {x: -L.side * 6.4, z: L.z + 1}, stand: L.stand})), stands: layout.map(L => L.stand)});
 const billboards = sceneTop.children.filter(o => o.userData?.billboard);
 // swap in the real robots lazily, nearest bays first (keeps the first frame fast)
 async function loadRealRobots() {
@@ -234,15 +254,15 @@ async function loadRealRobots() {
     const spec = REAL[p.r.id]; if (!spec) continue;
     try {
       for (const [key, recipe, opt = {}] of spec) {
-        const b = await MJ.spawn(key, {tint: opt.tint || null});
+        const b = await MJ.spawn(key, {tint: opt.tint || null, shared: true});
         if (opt.jersey || opt.shirt) dressTorso(b, opt);
         if (opt.hide) b.hideBody(id => b.bodyName(id).startsWith(opt.hide));
         b.recipe = recipe; b.group.position.set(opt.dx || 0, .12 + (opt.dy || 0), opt.dz || 0); b.group.rotation.y = opt.face || 0;
-        p.bot.group.add(b.group); p.real.push(b);
+        p.bot.group.add(b.group); p.real.push(b); p.bot.group.userData.robot.visible = false; // real robot in: placeholder out
       }
       p.bot.group.userData.robot.visible = false; // hide the stylized placeholder
       dressBay(p);
-      p.plaque.insertAdjacentHTML('beforeend', `<div class="model-tag">Stand-in model (Skild does not name its hardware): ${spec.map(s => MJ.LABEL[s[0]]).filter((v, i, a) => a.indexOf(v) === i).join(' · ')} · MuJoCo Menagerie</div>`);
+      p.plaque.insertAdjacentHTML('beforeend', `<div class="model-tag">Stand-in body: third-party robot in Skild livery. Skild builds the brain, not this hardware · ${spec.map(s => MJ.LABEL[s[0]]).filter((v, i, a) => a.indexOf(v) === i).join(' · ')} · MuJoCo Menagerie</div>`);
       syncHoles();
     } catch (e) { console.warn('real robot', p.r.id, e); }
   }
@@ -352,6 +372,28 @@ addGrid(-WALL_X, WALL_X, END_Z, START_Z + 14);
 
 // ---------- Hardware Lab (side room) + door from the hall's future zone ----------
 const hw = buildHardwareLab({scene, css3d, el, M, BRAND});
+const japanLab = dressJapanLab(THREE, scene, {HX, HZ: 0, HW: 28, HD: 26}); // Japanese-tech look (director's references)
+// shelves: swap the box placeholders for real robot parts (exact Menagerie meshes, one body each)
+const RACK_PARTS = [
+  [['go2', 'FL_thigh'], ['go2', 'FL_calf'], ['g1', 'left_knee_link'], ['g1', 'left_ankle_roll_link'], ['spot', 'fl_uleg'], ['spot', 'fl_lleg'], ['h1', 'left_knee_link'], ['g1', 'left_hip_pitch_link'], ['h1', 'left_ankle_link'], ['go2', 'RR_calf']],
+  [['ur5e', 'wrist_1_link'], ['ur5e', 'wrist_2_link'], ['ur5e', 'wrist_3_link'], ['ur5e', 'forearm_link'], ['g1', 'left_elbow_link'], ['g1', 'left_wrist_roll_link'], ['h1', 'left_elbow_link'], ['g1', 'left_shoulder_pitch_link'], ['ur5e', 'upper_arm_link'], ['h1', 'left_shoulder_pitch_link']],
+  [['ur5e', 'base'], ['ur5e', 'shoulder_link'], ['g1', 'pelvis'], ['h1', 'pelvis'], ['spot', 'fl_hip'], ['g1', 'waist_yaw_link'], ['go2', 'FL_hip'], ['g1', 'waist_roll_link'], ['h1', 'left_hip_yaw_link'], ['g1', 'left_hip_roll_link']],
+];
+async function fillRacks() {
+  const count = [0, 0, 0];
+  for (const slot of hw.rackSlots) {
+    const list = RACK_PARTS[slot.rack], [key, name] = list[count[slot.rack]++ % list.length];
+    try {
+      const part = await MJ.bodyPart(key, name); if (!part) continue;
+      // long parts lie down; small ones are shown a little larger so they read from across the lab
+      if (part.size.y > Math.max(part.size.x, part.size.z) * 1.3) { const inner = part.group.children[0]; part.group.remove(inner); const lay = new THREE.Group(); lay.rotation.z = Math.PI / 2; lay.add(inner); inner.position.x -= 0; part.group.add(lay); lay.position.y = Math.max(part.size.x, part.size.z) / 2; inner.position.y -= part.size.y / 2; }
+      const big = Math.max(part.size.x, part.size.y, part.size.z), fit = Math.max(1, Math.min(2.2, .42 / big));
+      part.group.scale.setScalar(Math.min(fit, .8 / big)); part.group.position.set(slot.x, slot.y, slot.z); part.group.rotation.y = slot.rot;
+      slot.rackG.add(part.group); slot.placeholder.visible = false;
+    } catch (e) { console.warn('rack part', key, name, e); }
+  }
+}
+setTimeout(fillRacks, 6000);
 hw.refreshArena();
 addGrid(HX - 14, HX + 14, -13, 13);
 const hallDoor = {x: -7, z: START_Z + 12.6};
@@ -432,6 +474,9 @@ addEventListener('keydown', e => {
   if (e.code === 'KeyG') openDataset();
   if (e.code === 'KeyM') $('muteBtn').click();
   if (e.code === 'KeyL') $('themeBtn').click();
+  if (e.code === 'KeyV') toggleView();
+  if (e.code === 'KeyC') { cine.enabled = !cine.enabled; toast(cine.enabled ? 'Film look on' : 'Film look off'); }
+  if (e.code === 'KeyH') openHeroes();
   if (e.code === 'Space') { e.preventDefault(); guideNext(); }
 });
 addEventListener('keyup', e => { if (KEYMAP[e.code]) held.delete(KEYMAP[e.code]); });
@@ -548,10 +593,10 @@ function openCinema(p) {
   const pl = $('playlist'); pl.replaceChildren();
   r.videos.forEach((v, i) => { const b = el('button', i === 0 ? 'active' : '', `${v.poster ? `<img src="${esc(v.poster)}" alt="">` : '<img alt="">'}${esc(v.title)}`); b.onclick = () => { pl.querySelectorAll('button').forEach(x => x.classList.remove('active')); b.classList.add('active'); playerFor(v); }; pl.append(b); });
   pl.hidden = r.videos.length < 2;
+  showModal('cinema'); sfx.open(); // first: showModal() clears every modal's player, so the video goes in after it
   playerFor(r.videos[0]);
   // "watched" = the cinema stayed open for a few seconds (or the visitor jumps to TRY from here)
   clearTimeout(cinemaTimer); cinemaTimer = setTimeout(() => markWatched(p), 6000);
-  showModal('cinema'); sfx.open();
 }
 function markWatched(p) {
   const st = stateOf(p.r.id); if (st.watched) return;
@@ -650,6 +695,7 @@ function updateGlide(dt) {
   if (glide.t >= 1) glide = null;
 }
 function openPaper(p) {
+  showModal('paperModal'); sfx.open(); // first: showModal() clears the media box
   $('paperMeta').textContent = `${p.year} · ${p.venue}${p.award ? ' · ' + p.award : ''}`;
   $('paperTitle').textContent = p.title; $('paperAuthors').textContent = p.authors; $('paperIdea').textContent = p.idea;
   $('paperRobot').textContent = p.robot ? `Robot: ${p.robot}` : ''; $('paperSkild').textContent = p.skild?.release ? `In Skild: ${p.skild.why || ''}` : '';
@@ -660,7 +706,6 @@ function openPaper(p) {
   const rel = p.skild?.release && pav.find(x => x.r.id === p.skild.release);
   const tryBtn = $('paperTry'); tryBtn.hidden = !(rel || p.try); tryBtn.textContent = p.try ? `Try it: ${p.tryTitle || 'the stand'} →` : rel ? `Try it: ${rel.r.try.title} →` : '';
   tryBtn.onclick = () => { closeModals(true); if (p.try) openTry({r: {id: 'rw-' + p.id, code: 'RW', kind: 'hardware', title: p.title, subtitle: 'Research Wing', url: p.links?.webpage, summary: p.idea, points: [], videos: p.videos || [{type: 'mp4', src: p.media.teaser, poster: null, title: p.title}], try: {module: p.try, title: p.tryTitle, blurb: p.tryBlurb || ''}}, L: {i: 200, side: 1}}); else if (rel) openTry(rel); };
-  showModal('paperModal'); sfx.open();
 }
 function openInvestors() {
   const list = $('invList'); list.replaceChildren();
@@ -709,7 +754,7 @@ function openResearch(r, ep) {
 }
 function closeModals(silent) {
   clearTimeout(cinemaTimer);
-  for (const id of ['cinema', 'try', 'timeline', 'dataset', 'investorsModal', 'paperModal']) $(id).hidden = true;
+  for (const id of ['heroes', 'cinema', 'try', 'timeline', 'dataset', 'investorsModal', 'paperModal']) $(id).hidden = true;
   $('paperMedia')?.replaceChildren();
   $('player').replaceChildren();
   if (unmountTry) { try { unmountTry(); } catch {} unmountTry = null; }
@@ -754,9 +799,18 @@ const deep = layout.findIndex(L => L.r.id === params.get('release'));
 if (deep < 0) teleport(0); // default: stand in front of the newest release
 if (deep >= 0) { teleport(deep); $('intro').hidden = true; if (params.has('present')) setTimeout(() => openCinema(pav[deep]), 300); }
 
+// debug: a turntable to inspect any robot from any side (?debug only)
+let debugCam = null, inspectBot = null;
+if (params.has('debug')) window.__inspect = async (key, angle = 0, dist = 1.6, h = 1.1) => {
+  if (!key) { debugCam = null; inspectBot?.dispose(); inspectBot = null; return 'off'; }
+  if (inspectBot?.key !== key) { inspectBot?.dispose(); inspectBot = await MJ.spawn(key, {shared: true}); upgradeRobot(THREE, inspectBot.group); scene.add(inspectBot.group); }
+  const c = new THREE.Vector3(player.x, 0, player.z - 4); inspectBot.group.position.copy(c);
+  debugCam = {pos: new THREE.Vector3(c.x + Math.sin(angle) * dist, h, c.z + Math.cos(angle) * dist), at: new THREE.Vector3(c.x, h * .85, c.z)};
+  return key + ' @ ' + angle.toFixed(2);
+};
 // debug hook for automated checks
 if (params.has('debug')) window.__hall = () => ({x: player.x, z: player.z, yaw: player.yaw, focus: focus && {kind: focus.kind, id: focus.p?.r.id || focus.to}, modalOpen, playing, progress});
-if (params.has('debug')) Object.assign(window, {__hallTeleport: teleport, __hallGo: (x, z, yaw = player.yaw) => { Object.assign(player, {x, z, yaw, vx: 0, vz: 0}); look.yaw = yaw; }, __flippers: flippers, __hallTry: id => openTry(pav.find(p => p.r.id === id) || hw.stations.find(s => s.r.id === id)), __hallWatch: id => openCinema(pav.find(p => p.r.id === id)), __hallLayout: layout.map(L => ({id: L.r.id, watch: [L.watchSpot.x, L.watchSpot.z], stand: [L.stand.x, L.stand.z], side: L.side}))});
+if (params.has('debug')) Object.assign(window, {__scene: scene, __camera: camera, __hallTeleport: teleport, __hallGo: (x, z, yaw = player.yaw) => { Object.assign(player, {x, z, yaw, vx: 0, vz: 0}); look.yaw = yaw; }, __flippers: flippers, __hallTry: id => openTry(pav.find(p => p.r.id === id) || hw.stations.find(s => s.r.id === id)), __hallWatch: id => openCinema(pav.find(p => p.r.id === id)), __hallLayout: layout.map(L => ({id: L.r.id, watch: [L.watchSpot.x, L.watchSpot.z], stand: [L.stand.x, L.stand.z], side: L.side}))});
 
 // ---------- presence: other visitors, live ----------
 let visitorName = (() => { try { return localStorage.getItem('skild-hall:name') || ''; } catch { return ''; } })();
@@ -771,24 +825,55 @@ const presenceLink = startPresence({scene, sceneTop, room: params.get('room') ||
 const LIGHT = {...BRAND};
 const DARK = {...BRAND, black: '#F2F0EB', ink: '#E6E4DD', white: '#262a2f', warm1: '#1e2125', warm2: '#363b41', warm3: '#474d54', warm4: '#8E8177', cool1: '#4A535C', cool2: '#9AA3AB', cool3: '#C7CDD2', cool4: '#E3E6E9'};
 const SCENE_THEME = {
-  light: {floor: '#e6e4dd', wall: '#f7f5f1', fog: '#f7f5f1', sky: '#ffffff', ground: '#c1bcb3', hemi: 1.25, sun: 1.6, glass: '#dfe6ea', dim: '#f3c79b', plinth: '#ece9e2', bench: '#d9d6cf', exposure: 1.05},
-  dark: {floor: '#4a4f56', wall: '#51565d', fog: '#2e3237', sky: '#d5dde5', ground: '#23262a', hemi: 1.25, sun: 1.0, glass: '#6b7580', dim: '#7a5430', plinth: '#3a3f45', bench: '#434950', exposure: 1.2},
+  // dark = black product studio (spot pools, floor fading to black); light = bright showroom (glowing ceiling, cool carpet)
+  dark: {floor: '#3a3b3c', wall: '#141617', fog: '#07090a', sky: '#ffffff', ground: '#000000', hemi: .12, sun: .2, glass: '#3a3f42', dim: '#e9c37a', plinth: '#1a1c1d', bench: '#222526', exposure: .9, near: 12, far: 85, line: '#b8883a', rough: .62,
+    grade: {shadowTint: [1, 1, 1], highTint: [1, .975, .93], liftC: [.004, .004, .004], vig: .7}},
+  light: {floor: '#7a8086', wall: '#b7bdc2', fog: '#c9ced2', sky: '#f2f4f6', ground: '#8a9096', hemi: .8, sun: .75, glass: '#dfe6ea', dim: '#f3c79b', plinth: '#e8edf0', bench: '#d0d8dd', exposure: .9, near: 26, far: 100, line: '#d9a441', rough: .95,
+    grade: {shadowTint: [.93, .97, 1.04], highTint: [.98, 1, 1.02], liftC: [.02, .024, .03], vig: .3}},
 };
 function applyTheme(t) {
   document.documentElement.dataset.theme = t;
   Object.assign(BRAND, t === 'dark' ? DARK : LIGHT);
+  document.documentElement.dataset.film = t === 'film' ? '1' : '';
   const s = SCENE_THEME[t];
   M.floor.color.set(s.floor); M.wall.color.set(s.wall); M.glass.color.set(s.glass); M.orangeDim.color.set(s.dim);
   scene.fog.color.set(s.fog); hemi.color.set(s.sky); hemi.groundColor.set(s.ground); hemi.intensity = s.hemi; sun.intensity = s.sun;
-  gridMat.color.set(t === 'dark' ? '#9aa3ab' : '#8e8177'); gridMat.opacity = t === 'dark' ? .22 : .13;
+  scene.fog.near = s.near || 30; scene.fog.far = s.far || 95; M.orange.color.set(s.line || BRAND.orange);
+  M.floor.roughness = s.rough ?? .5; corridor.setTheme(t); cine.set(s.grade || {});
+  gridMat.color.set(t === 'dark' ? '#9aa3ab' : '#8e8177'); gridMat.opacity = t === 'dark' ? 0 : .13;
   ROBOT_MAT.plinth.color.set(s.plinth); ROBOT_MAT.light.color.set(s.bench); renderer.toneMappingExposure = s.exposure;
   $('themeBtn').textContent = t === 'dark' ? 'Light' : 'Dark';
   for (const f of floorDates) f.draw();
-  try { localStorage.setItem('skild-hall:theme', t); } catch {}
+  try { localStorage.setItem('skild-hall:look', t); } catch {}
 }
-let theme = (() => { try { return localStorage.getItem('skild-hall:theme'); } catch { return null; } })() || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+let theme = (() => { try { return localStorage.getItem('skild-hall:look'); } catch { return null; } })(); if (theme !== 'light') theme = 'dark';
 applyTheme(theme);
 $('themeBtn').onclick = () => { theme = theme === 'dark' ? 'light' : 'dark'; applyTheme(theme); };
+
+// ---------- hero picker (intro card + H) ----------
+function heroButtons(box, after) {
+  box.replaceChildren(...HEROES.map(h => { const b = el('button', 'hero-btn' + (h.id === heroId ? ' on' : ''), `<b>${h.name}</b><span>${h.role}</span>`);
+    b.onclick = () => { heroId = h.id; try { localStorage.setItem('skild-hall:hero', h.id); } catch {} heroes.pick(h.id); box.querySelectorAll('.hero-btn').forEach(x => x.classList.toggle('on', x === b)); sfx.near(); after?.(); }; return b; }));
+}
+heroButtons($('heroRow'));
+function toggleView() { const v = heroes.toggleView(); $('viewBtn').firstChild.textContent = v === 'third' ? '3rd person ' : '1st person '; toast(v === 'third' ? 'Third person' : 'First person'); }
+$('viewBtn').onclick = toggleView; $('heroBtn').onclick = () => openHeroes();
+function openHeroes() { unlock(); modalOpen = true; document.body.classList.add('modal-open'); heroButtons($('heroGrid'), () => closeModals()); $('heroes').hidden = false; }
+
+// CSS3D ignores walls: signs from another room showed through them. Only the current room's signs stay visible.
+const roomOf = x => x > HX - 20 ? 'hw' : x < RX + 20 ? 'rw' : 'hall';
+const cssRoom = new Map(), wp = new THREE.Vector3();
+let litRoom = '';
+function cullCssByRoom() {
+  const here = roomOf(player.x);
+  if (here !== litRoom) { litRoom = here; japanLab.group.traverse(o => { if (o.isLight) { o.userData.on ??= o.intensity; o.intensity = here === 'hw' ? o.userData.on : 0; } }); corridor.setLit(here === 'hall'); } // lights only where you are
+  for (const sc of [sceneTop, sceneUnder]) sc.traverse(o => {
+    if (!o.isCSS3DObject || o.element.classList.contains('w-peer')) return; // visitors move: never cached
+    if (!cssRoom.has(o)) { o.getWorldPosition(wp); cssRoom.set(o, roomOf(wp.x)); }
+    const show = cssRoom.get(o) === here;
+    if (o.userData.roomHidden !== !show) { o.userData.roomHidden = !show; o.element.style.visibility = show ? '' : 'hidden'; }
+  });
+}
 
 // ---------- loop ----------
 let last = performance.now(), hereIdx = -2, frameCount = 0;
@@ -800,10 +885,12 @@ function frame(now) {
   updateGlide(dt);
   move(dt);
   presenceLink.update(dt, camera);
-  camera.position.set(player.x, 1.7, player.z);
-  camera.rotation.set(player.pitch, player.yaw, 0, 'YXZ');
-  if (flyT < 1) { flyT = Math.min(1, flyT + dt / 2.6); const e = 1 - (1 - flyT) ** 3; camera.position.set(player.x, 1.7 + (1 - e) * 4.2, player.z + (1 - e) * 3.5); camera.rotation.set(player.pitch - (1 - e) * .42, player.yaw, 0, 'YXZ'); }
+  heroes.update(player, dt, now / 1000);
+  heroes.cameraFor(player, camera, dt, blocked);
+  if (debugCam) { camera.position.copy(debugCam.pos); camera.lookAt(debugCam.at); }
+  if (flyT < 1) { flyT = Math.min(1, flyT + dt / 2.6); const e = 1 - (1 - flyT) ** 3; camera.position.y += (1 - e) * 4.2; camera.position.z += (1 - e) * 3.5; camera.rotateX(-(1 - e) * .42); }
   { const sx = Math.round(player.x / 2) * 2, sz = Math.round(player.z / 2) * 2; sun.position.set(sx + 6, 14, sz + 4); sun.target.position.set(sx, 0, sz - 4); }
+  if (!inHW() && !inRW()) corridor.update(player.x, player.z, player.yaw);
   if (player.z - START_Z > -40) core.update(now / 1000, dt);
   if (inHW()) hw.update(now / 1000, dt);
   if (inRW() && frameCount % 10 === 0) rw.update(player.x, player.z);
@@ -811,13 +898,14 @@ function frame(now) {
   for (const p of pav) { if (Math.abs(p.L.z - player.z) < 40) { p.bot.update(now / 1000, dt); for (const b of p.real) b.update(now / 1000, dt); animateDressing(p, now / 1000); } p.holo.rotation.y += dt * .8; p.holo.rotation.x += dt * .3; p.holo.position.y = 1.75 + Math.sin(now / 700 + p.L.i) * .06; }
   for (const b of billboards) b.rotation.y = Math.atan2(camera.position.x - b.position.x, camera.position.z - b.position.z);
   if (frameCount % 3 === 0) updateFlippers();
+  if (frameCount % 15 === 1) cullCssByRoom();
   if (frameCount % 6 === 0) {
     updateFocus(); updateScreens();
     const idx = layout.reduce((bi, L, i) => Math.abs(L.z + 4 - player.z) < Math.abs(layout[bi].z + 4 - player.z) ? i : bi, 0);
     if (inHW()) { $('where').textContent = 'HARDWARE LAB · build · teleoperate · test'; } else if (inRW()) { $('where').textContent = `RESEARCH WING · ${rw.lab.name}`; } else if (idx !== hereIdx) { hereIdx = idx; const r = layout[idx].r; renderPassport(r.id); $('where').textContent = `${r.code} · ${fmtDate(r.date)} · ${r.title}`; }
     $('miniDot').style.left = (100 * Math.max(0, Math.min(1, (START_Z - player.z) / (START_Z - layout.at(-1).z)))) + '%';
   }
-  renderer.render(scene, camera); css.render(sceneUnder, camera); cssTop.render(sceneTop, camera);
+  cine.render(scene, camera, dt); css.render(sceneUnder, camera); cssTop.render(sceneTop, camera);
   if (frameCount === 1) { syncHoles(); setTimeout(syncHoles, 800); setTimeout(syncHoles, 3000); document.fonts?.ready.then(syncHoles); }
 }
 requestAnimationFrame(frame);

@@ -213,7 +213,7 @@ export default function mount(root, api) {
   function header() {                                  // opaque band above the 3D view + honesty / loading labels
     const r = glRect(); ctx.fillStyle = B.warm1; ctx.fillRect(r.x - 1, 0, k.w - r.x + 1, r.y);
     card(r.x + 10, r.y + 8, 330, 20, .8); k.label('3D · simulated · stylized props · drag empty space to orbit', r.x + 18, r.y + 22, {color: B.cool3});
-    if (w3.rigState !== 'ok') { const txt = w3.rigState === 'loading' ? 'loading rig… (2× MuJoCo UR5e)' : 'rig failed to load · grippers only'; card(r.x + r.w - 250, r.y + 8, 240, 20, .9); k.label(txt, r.x + r.w - 18, r.y + 22, {align: 'right', color: B.orange}); }
+    if (w3.rigState !== 'ok') { const txt = w3.rigState === 'loading' ? 'loading rig… (2× Skild arm)' : 'rig failed to load · grippers only'; card(r.x + r.w - 250, r.y + 8, 240, 20, .9); k.label(txt, r.x + r.w - 18, r.y + 22, {align: 'right', color: B.orange}); }
   }
   // tasks: which prop builds each logic object
   const KIND = {filter: 'filter', dripper: 'dripper', kettle: 'kettle', batter: 'batter', pan: 'pan', plate: 'plate', pancake: 'pancake', spatula: 'spatula', plant: 'plant', pot: 'pot', scoop: 'trowel', bearing: 'bearing', tray: 'tray', bolt: 'bolt'};

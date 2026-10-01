@@ -2,7 +2,7 @@
 // Self-play with one objective, "score", against recent versions of itself pushes the rating past the human-data
 // ceiling and grows the skills the post names (get back up, dribble past the defender, shield, tackle). Then play the
 // trained policy in simulation or on the "real" pitch (sim → real). Stylized game, not the real model.
-// 3D: real Unitree G1 humanoids (MuJoCo Menagerie model, kinematic run / kick / fall / get-up on the real joints), one in
+// 3D: stand-in humanoids in Skild livery (MuJoCo Menagerie model, kinematic run / kick / fall / get-up on the real joints), one in
 // an Argentina-style striped jersey with a visor, a soccer ball, white goals. "Simulation" arena: bright sim pitch with
 // parallel training fields; "Real world": indoor pitch with the Skild logo on the wall.
 import {kit, B, lerp, clamp, rand} from './kit.js';
@@ -315,7 +315,7 @@ export default function mount(root, api) {
     k.text(`Goal: train ≥ ${READY} generations of self-play, then play a match against your latest policy.`, 16, 26, {size: 14, weight: 600});
     const {px, py, pw, ph} = PR(), real = M && M.arena === 'real';
     ctx.strokeStyle = B.warm2; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.roundRect(px, py, pw, ph, 14); ctx.stroke();
-    const lab = M && M.mode === 'play' ? `${ARENA[M.arena].name} · 3D · Unitree G1 (MuJoCo model) · stylized` : 'Self-play in simulation · 3D · Unitree G1 · stylized';
+    const lab = M && M.mode === 'play' ? `${ARENA[M.arena].name} · 3D · Skild humanoid (MuJoCo model) · stylized` : 'Self-play in simulation · 3D · Skild humanoid · stylized';
     ctx.fillStyle = 'rgba(18,18,18,.55)'; ctx.beginPath(); ctx.roundRect(px + 8, py + 8, Math.min(pw - 250, 380), 22, 11); ctx.fill();
     k.label(fit(lab, Math.min(pw - 270, 360)), px + 18, py + 23, {color: '#FFFFFF'});
     void real;
@@ -346,7 +346,7 @@ export default function mount(root, api) {
         const bl2 = best.latest; if (bl2) k.text(`Your best vs gen ≥ ${READY}: ${bl2.y}–${bl2.p}`, cx, py + ph / 2 + 44, {align: 'center', size: 12, mono: true, color: B.black});
       }
     }
-    if (!g1s[0]) { ctx.fillStyle = 'rgba(18,18,18,.6)'; ctx.beginPath(); ctx.roundRect(px + 14, py + ph - 60, 300, 26, 8); ctx.fill(); k.text(g1Err || 'Loading Unitree G1 (MuJoCo Menagerie)…', px + 26, py + ph - 42, {size: 12, weight: 600, color: '#FFFFFF'}); }
+    if (!g1s[0]) { ctx.fillStyle = 'rgba(18,18,18,.6)'; ctx.beginPath(); ctx.roundRect(px + 14, py + ph - 60, 300, 26, 8); ctx.fill(); k.text(g1Err || 'Loading Skild humanoid (MuJoCo Menagerie)…', px + 26, py + ph - 42, {size: 12, weight: 600, color: '#FFFFFF'}); }
     if (intro > 0 && gen === 0 && phase === 'train') {        // lineage card before the first run
       ctx.globalAlpha = intro; const cw = Math.min(520, pw - 40), chh = 176, cx0 = px + (pw - cw) / 2, cy0 = py + 52;
       ctx.fillStyle = 'rgba(255,255,255,.97)'; ctx.strokeStyle = B.warm2; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.roundRect(cx0, cy0, cw, chh, 14); ctx.fill(); ctx.stroke();

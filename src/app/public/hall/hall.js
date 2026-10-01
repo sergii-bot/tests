@@ -583,9 +583,14 @@ addEventListener('message', e => {
 });
 function ytCmd(f, func, args = []) { try { f.contentWindow?.postMessage(JSON.stringify({event: 'command', func, args}), '*'); } catch {} }
 // nearest screen plays (mp4 and YouTube); its sound fades in with distance, like walking past a real screen
+let audible = null;
 function updateScreens() {
   let near = null, nd = 18;
-  for (const p of pav) { const d = Math.hypot(player.x - p.L.watchSpot.x, player.z - p.L.watchSpot.z); if (d < nd) { nd = d; near = p; } }
+  const dist = p => Math.hypot(player.x - p.L.watchSpot.x, player.z - p.L.watchSpot.z);
+  for (const p of pav) { const d = dist(p); if (d < nd) { nd = d; near = p; } }
+  // one sound at a time: the screen that has the sound keeps it until another one is clearly (2 m) closer
+  if (audible && near !== audible && dist(audible) < 18 && dist(audible) - nd < 2) { near = audible; nd = dist(audible); }
+  audible = near;
   // the intro (name entry) shows the lab as a silent backdrop: screens play, but without sound
   const settle = Math.max(0, Math.min(1, (performance.now() - enteredAt - 1000) / 1500)); // 1 s of quiet, then 1.5 s fade-in
   const vol = near && !modalOpen && !isMuted() && audioOn && $('intro').hidden ? Math.max(0, Math.min(1, 1 - (nd - 2) / 12)) * settle : 0;
@@ -594,7 +599,7 @@ function updateScreens() {
     if (p.screenVideo) {
       if (want && !p.playing) { if (!p.screenVideo.src) p.screenVideo.src = p.screenVideo.dataset.src; p.screenVideo.play().catch(() => {}); p.playing = true; }
       else if (!want && p.playing) { p.screenVideo.pause(); p.screenVideo.muted = true; p.playing = false; }
-      if (want) { p.screenVideo.muted = vol <= 0; p.screenVideo.volume = vol * .8; }
+      if (want) { p.screenVideo.muted = vol <= 0; p.screenVideo.volume = vol * .8; } else if (!p.screenVideo.muted) p.screenVideo.muted = true; // never two voices
     } else if (v0.type === 'youtube') {
       if (want && !p.yt && !p.ytFailed) {
         // YouTube needs to know the embedding site (origin + referrer) or it can stay black on a hosted page;

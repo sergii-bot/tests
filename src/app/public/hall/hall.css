@@ -379,3 +379,16 @@ a.inv-link:hover { border-color: var(--sk-orange); transform: translateY(-2px); 
 .loading .load-track i { display: block; height: 100%; background: #e9eceb; transform: scaleX(.04); transform-origin: left; transition: transform .5s ease; }
 .loading p { margin: 0; font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; opacity: .6; }
 .loading.gone { opacity: 0; pointer-events: none; }
+
+/* topbar: two more buttons (Robot, view) since the upgrade — keep every label on one line */
+.brand-title, .online { white-space: nowrap; }
+.topbar .chip kbd { padding: 1px 5px; font-size: 10px; }
+@media (max-width: 1440px) {
+  .topbar { gap: 10px; }
+  .topbar .chip { padding: 8px 12px; font-size: 12px; }
+}
+@media (max-width: 1280px) {
+  .brand-title, .brand-sep { display: none; }
+  .topbar .chip kbd { display: none; }
+}
+@media (max-width: 1080px) { .online { display: none; } .online + .passport { margin-left: auto; } }

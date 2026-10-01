@@ -9,7 +9,7 @@ import {start as audioStart, sfx, toggleMute, isMuted} from './sound.js';
 import {startPresence} from './presence.js';
 import {INVESTORS, ROUNDS} from './investors.js';
 import {buildHardwareLab, HX} from './hardware.js';
-import {buildResearchWing, RX} from './research-wing.js';
+import {buildResearchWing, RX, RW} from './research-wing.js';
 import {startLearners} from './learners.js';
 import * as MJ from './mj.js';
 import {createCinema} from './cinema.js';
@@ -425,6 +425,15 @@ const hallDoor = {x: -7, z: START_Z + 12.6};
 const inHW = () => player.x > HX - 20;
 // ---------- Research Wing (Pathak Lab, CMU) + door on the right of the back wall ----------
 const rw = await buildResearchWing({scene, css3d, el, esc, M});
+// Research Wing in the dark theme: a wall-washer per paper card + a soft pool on the floor (the four nearest cards).
+// Fixed light count, intensity only (no shader recompiles); off in the light theme and outside the wing.
+const rwSpots = Array.from({length: 4}, () => { const s = new THREE.SpotLight('#fff3e2', 0, 14, .5, .75, 1.5); scene.add(s, s.target); return s; });
+function updateRwSpots() {
+  const on = inRW() && theme === 'dark';
+  const near = on ? [...rw.exhibits].sort((a, b) => Math.abs(a.z - player.z) - Math.abs(b.z - player.z)).slice(0, rwSpots.length) : [];
+  rwSpots.forEach((s, i) => { const e = near[i]; s.intensity = e ? 520 : 0; if (!e) return;
+    s.position.set(RX + e.side * (RW / 2 - 3.2), 6.9, e.z); s.target.position.set(RX + e.side * (RW / 2 - .3), 2.2, e.z); });
+}
 const rwDoor = {x: 7, z: START_Z + 12.6};
 { const f = new THREE.Mesh(new THREE.BoxGeometry(3.2, 4.2, .12), M.black); f.position.set(rwDoor.x, 2.1, START_Z + 13.94); scene.add(f);
   const h2 = new THREE.Mesh(new THREE.PlaneGeometry(2.8, 3.9), M.orange); h2.position.set(rwDoor.x, 1.95, START_Z + 13.87); h2.rotation.y = Math.PI; scene.add(h2);
@@ -935,6 +944,7 @@ function frame(now) {
   if (player.z - START_Z > -40) core.update(now / 1000, dt);
   if (inHW()) hw.update(now / 1000, dt);
   if (inRW() && frameCount % 10 === 0) rw.update(player.x, player.z);
+  if (frameCount % 20 === 5) updateRwSpots();
   if (inRW()) learners.update(now / 1000, dt, camera);
   for (const p of pav) { if (Math.abs(p.L.z - player.z) < 40) { p.bot.update(now / 1000, dt); for (const b of p.real) b.update(now / 1000, dt); animateDressing(p, now / 1000); } p.holo.rotation.y += dt * .8; p.holo.rotation.x += dt * .3; p.holo.position.y = 1.75 + Math.sin(now / 700 + p.L.i) * .06; }
   for (const b of billboards) b.rotation.y = Math.atan2(camera.position.x - b.position.x, camera.position.z - b.position.z);

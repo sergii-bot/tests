@@ -518,9 +518,12 @@ addEventListener('pointerup', () => drag = null);
 addEventListener('pointermove', e => { if (!drag || playing) return; look.yaw -= (e.clientX - drag.x) * .004; look.pitch = Math.max(-1.2, Math.min(1.2, look.pitch - (e.clientY - drag.y) * .004)); drag = {x: e.clientX, y: e.clientY}; });
 
 let audioOn = false;
-addEventListener('pointerdown', () => { audioOn = true; }, {once: true}); addEventListener('keydown', () => { audioOn = true; }, {once: true});
-$('enter').onclick = () => { $('intro').hidden = true; audioStart(); flyIn(); lock(); };
-$('enterLatest').onclick = () => { $('intro').hidden = true; audioStart(); teleport(layout.length - 1); sfx.whoosh(); lock(); };
+// the intro has the lab's own ambience (starts on the first click / key: browsers allow sound only after a gesture)
+const wake = () => { audioOn = true; audioStart(); };
+addEventListener('pointerdown', wake, {once: true}); addEventListener('keydown', wake, {once: true});
+let enteredAt = 0; // video sound waits a beat after you enter, then fades in
+$('enter').onclick = () => { $('intro').hidden = true; enteredAt = performance.now(); audioStart(); flyIn(); lock(); };
+$('enterLatest').onclick = () => { $('intro').hidden = true; enteredAt = performance.now(); audioStart(); teleport(layout.length - 1); sfx.whoosh(); lock(); };
 $('muteBtn').onclick = () => { $('muteBtn').textContent = toggleMute() ? 'Sound off' : 'Sound on'; };
 $('muteBtn').textContent = isMuted() ? 'Sound off' : 'Sound on';
 let flyT = 1; function flyIn() { flyT = 0; sfx.whoosh(); }
@@ -584,7 +587,8 @@ function updateScreens() {
   let near = null, nd = 18;
   for (const p of pav) { const d = Math.hypot(player.x - p.L.watchSpot.x, player.z - p.L.watchSpot.z); if (d < nd) { nd = d; near = p; } }
   // the intro (name entry) shows the lab as a silent backdrop: screens play, but without sound
-  const vol = near && !modalOpen && !isMuted() && audioOn && $('intro').hidden ? Math.max(0, Math.min(1, 1 - (nd - 2) / 12)) : 0;
+  const settle = Math.max(0, Math.min(1, (performance.now() - enteredAt - 1000) / 1500)); // 1 s of quiet, then 1.5 s fade-in
+  const vol = near && !modalOpen && !isMuted() && audioOn && $('intro').hidden ? Math.max(0, Math.min(1, 1 - (nd - 2) / 12)) * settle : 0;
   for (const p of pav) {
     const want = p === near && !modalOpen, v0 = p.r.videos[0];
     if (p.screenVideo) {

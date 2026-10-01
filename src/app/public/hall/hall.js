@@ -586,9 +586,22 @@ function interact() {
 
 // ---------- in-world video: only the nearest mp4 screen plays ----------
 // a YouTube player that talks back is alive: fade it in over the poster
+// YouTube players talk back over postMessage. "Ready" is not enough (on a hosted page YouTube can report ready
+// and still never play), so a player is shown only once it reports PLAYING with the clock moving.
+const ytPlaying = d => d.event === 'onStateChange' ? d.info === 1 : d.event === 'infoDelivery' && d.info && (d.info.playerState === 1 || d.info.currentTime > 0.3);
 addEventListener('message', e => {
-  if (!/youtube(-nocookie)?\.com$/.test(new URL(e.origin).hostname)) return;
-  for (const p of pav) if (p.yt && e.source === p.yt.contentWindow) { let d = {}; try { d = JSON.parse(e.data); } catch {} if (d.event === 'onError') { p.yt.remove(); p.yt = null; p.ytFailed = true; continue; } if (d.event === 'onReady' || d.event === 'infoDelivery' || d.event === 'initialDelivery') { p.ytOk = true; p.yt.style.opacity = 1; } }
+  let host = ''; try { host = new URL(e.origin).hostname; } catch { return; }
+  if (!/(^|\.)youtube(-nocookie)?\.com$/.test(host)) return;
+  let d = {}; try { d = typeof e.data === 'string' ? JSON.parse(e.data) : e.data || {}; } catch { return; }
+  for (const p of pav) if (p.yt && e.source === p.yt.contentWindow) {
+    if (d.event === 'onError') { p.yt.remove(); p.yt = null; p.ytFailed = true; }
+    else if (ytPlaying(d)) { p.ytOk = true; p.yt.style.opacity = 1; }
+    else if (!p.ytKick && (d.event === 'onReady' || d.event === 'initialDelivery')) { p.ytKick = true; ytCmd(p.yt, 'mute'); ytCmd(p.yt, 'playVideo'); } // a hidden player won't autoplay by itself
+  }
+  if (cinemaYT && e.source === cinemaYT.contentWindow) {
+    if (d.event === 'onError') cinemaFallback();
+    else if (d.event) { cinemaOk = true; cinemaYT.style.opacity = 1; } // alive: show it (the visitor may need to press play)
+  }
 });
 function ytCmd(f, func, args = []) { try { f.contentWindow?.postMessage(JSON.stringify({event: 'command', func, args}), '*'); } catch {} }
 // nearest screen plays (mp4 and YouTube); its sound fades in with distance, like walking past a real screen
@@ -616,9 +629,10 @@ function updateScreens() {
         const f = el('iframe'); f.allow = 'autoplay; encrypted-media'; f.referrerPolicy = 'strict-origin-when-cross-origin'; f.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:0;opacity:0;transition:opacity .6s';
         f.src = `https://www.youtube-nocookie.com/embed/${v0.id}?autoplay=1&mute=1&loop=1&playlist=${v0.id}&controls=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&origin=${encodeURIComponent(location.origin)}&widget_referrer=${encodeURIComponent(location.href.split('?')[0])}`;
         f.onload = () => f.contentWindow?.postMessage(JSON.stringify({event: 'listening', id: v0.id}), '*'); // ask the player to report its state
-        p.screenEl.append(f); p.yt = f; p.ytVol = -1; p.ytOk = false;
-        const me = f; setTimeout(() => { if (p.yt === me && !p.ytOk) { me.remove(); p.yt = null; p.ytFailed = true; } }, 5000);
+        p.screenEl.append(f); p.yt = f; p.ytVol = -1; p.ytOk = false; p.ytKick = false;
+        const me = f; setTimeout(() => { if (p.yt === me && !p.ytOk) { me.remove(); p.yt = null; p.ytFailed = true; } }, 8000);
       } else if (!want && p.yt) { p.yt.remove(); p.yt = null; }
+      if (!want) p.ytFailed = false; // walk away and back: try the live player again
       if (want && p.yt) { const v = Math.round(vol * 80); if (v !== p.ytVol) { if (v > 0) { ytCmd(p.yt, 'unMute'); ytCmd(p.yt, 'setVolume', [v]); } else ytCmd(p.yt, 'mute'); p.ytVol = v; } }
     }
   }
@@ -626,10 +640,23 @@ function updateScreens() {
 
 // ---------- cinema ----------
 let cinemaP = null, cinemaTimer = 0;
+let cinemaYT = null, cinemaOk = false, cinemaVid = null;
+function cinemaFallback() {
+  if (!cinemaYT) return; cinemaYT.remove(); cinemaYT = null;
+  const v = cinemaVid, a = el('a', 'player-fallback', `<span>▶</span>Watch on YouTube ↗`); a.href = `https://www.youtube.com/watch?v=${v.id}`; a.target = '_blank'; a.rel = 'noopener';
+  $('player').append(a);
+}
 function playerFor(v) {
-  const box = $('player'); box.replaceChildren();
+  const box = $('player'); box.replaceChildren(); box.style.background = ''; cinemaYT = null;
   if (v.type === 'youtube') {
-    const f = el('iframe'); f.src = `https://www.youtube-nocookie.com/embed/${v.id}?autoplay=1&rel=0&modestbranding=1`; f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen'; f.allowFullscreen = true; f.title = v.title; box.append(f);
+    // poster underneath, player on top only once it really plays; if it never does, a clear way out instead of black
+    const poster = `https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`;
+    box.style.background = `#000 center / cover no-repeat url("${poster}")`;
+    const f = el('iframe'); f.src = `https://www.youtube-nocookie.com/embed/${v.id}?autoplay=1&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&origin=${encodeURIComponent(location.origin)}&widget_referrer=${encodeURIComponent(location.href.split('?')[0])}`;
+    f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen'; f.allowFullscreen = true; f.title = v.title; f.referrerPolicy = 'strict-origin-when-cross-origin'; f.style.opacity = 0; f.style.transition = 'opacity .5s';
+    f.onload = () => f.contentWindow?.postMessage(JSON.stringify({event: 'listening', id: v.id}), '*');
+    box.append(f); cinemaYT = f; cinemaOk = false; cinemaVid = v;
+    setTimeout(() => { if (cinemaYT === f && !cinemaOk) cinemaFallback(); }, 8000);
   } else {
     const vid = el('video'); Object.assign(vid, {src: v.src, controls: true, autoplay: true, playsInline: true}); if (v.poster) vid.poster = v.poster; box.append(vid);
   }
@@ -860,7 +887,7 @@ if (params.has('debug')) window.__inspect = async (key, angle = 0, dist = 1.6, h
 };
 // debug hook for automated checks
 if (params.has('debug')) window.__hall = () => ({x: player.x, z: player.z, yaw: player.yaw, focus: focus && {kind: focus.kind, id: focus.p?.r.id || focus.to}, modalOpen, playing, progress});
-if (params.has('debug')) Object.assign(window, {__scene: scene, __camera: camera, __hallTeleport: teleport, __hallGo: (x, z, yaw = player.yaw) => { Object.assign(player, {x, z, yaw, vx: 0, vz: 0}); look.yaw = yaw; }, __flippers: flippers, __hallTry: id => openTry(pav.find(p => p.r.id === id) || hw.stations.find(s => s.r.id === id)), __hallWatch: id => openCinema(pav.find(p => p.r.id === id)), __hallLayout: layout.map(L => ({id: L.r.id, watch: [L.watchSpot.x, L.watchSpot.z], stand: [L.stand.x, L.stand.z], side: L.side}))});
+if (params.has('debug')) Object.assign(window, {__scene: scene, __camera: camera, __pav: pav, __hallTeleport: teleport, __hallGo: (x, z, yaw = player.yaw) => { Object.assign(player, {x, z, yaw, vx: 0, vz: 0}); look.yaw = yaw; }, __flippers: flippers, __hallTry: id => openTry(pav.find(p => p.r.id === id) || hw.stations.find(s => s.r.id === id)), __hallWatch: id => openCinema(pav.find(p => p.r.id === id)), __hallLayout: layout.map(L => ({id: L.r.id, watch: [L.watchSpot.x, L.watchSpot.z], stand: [L.stand.x, L.stand.z], side: L.side}))});
 
 // ---------- presence: other visitors, live ----------
 let visitorName = (() => { try { return localStorage.getItem('skild-hall:name') || ''; } catch { return ''; } })();

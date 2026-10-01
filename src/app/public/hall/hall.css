@@ -392,3 +392,8 @@ a.inv-link:hover { border-color: var(--sk-orange); transform: translateY(-2px); 
   .topbar .chip kbd { display: none; }
 }
 @media (max-width: 1080px) { .online { display: none; } .online + .passport { margin-left: auto; } }
+
+/* cinema: if YouTube refuses to play inside the page, the poster stays with a clear way to watch */
+.player { position: relative; }
+.player-fallback { position: absolute; inset: auto 0 0 0; margin: auto; top: 0; width: max-content; height: max-content; display: flex; align-items: center; gap: 12px; padding: 14px 22px; border-radius: 999px; background: rgba(10,10,10,.78); color: #fff; font-size: 15px; text-decoration: none; backdrop-filter: blur(6px); }
+.player-fallback span { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: #ff0033; font-size: 12px; }
